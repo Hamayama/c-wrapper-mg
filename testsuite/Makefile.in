@@ -1,0 +1,93 @@
+#
+# $Id: Makefile.in 63 2006-02-17 15:38:49Z naoki $
+#
+
+# General info
+SHELL       = @SHELL@
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+bindir      = @bindir@
+libdir      = @libdir@
+datadir     = @datadir@
+datarootdir = @datarootdir@
+srcdir      = @srcdir@
+VPATH       = $(srcdir)
+
+# These may be overridden by make invocators
+DESTDIR        =
+GOSH           = @GOSH@
+GAUCHE_CONFIG  = @GAUCHE_CONFIG@
+GAUCHE_PACKAGE = @GAUCHE_PACKAGE@
+INSTALL        = @GAUCHE_INSTALL@
+CC             = @CC@
+CFLAGS         = @TESTLIB_CFLAGS@
+LDFLAGS        = @TESTLIB_LDFLAGS@
+
+# Other parameters
+SOEXT  = @SOEXT@
+OBJEXT = @OBJEXT@
+EXEEXT = @EXEEXT@
+DYLIBEXT = @DYLIBEXT@
+
+# Module-specific stuff
+PACKAGE   = c-wrapper
+
+GENERATED = 
+CONFIG_GENERATED = Makefile 
+
+GAUCHE_PKGINCDIR  = @GAUCHE_PKGINCDIR@
+GAUCHE_PKGLIBDIR  = @GAUCHE_PKGLIBDIR@
+GAUCHE_PKGARCHDIR = @GAUCHE_PKGARCHDIR@
+
+CHECK_TARGET = check-c
+@OBJC_ENABLE_TRUE@CHECK_TARGET += check-objc
+
+.SUFFIXES: .m
+
+.c.o:
+	$(CC) $(CFLAGS) $@ $<
+.m.o:
+	$(CC) $(CFLAGS) $@ $<
+
+all : 
+
+ffitest.$(DYLIBEXT): ffitest.o
+	$(CC) $(LDFLAGS) $@ $< 
+
+fptr_array.$(DYLIBEXT): fptr_array.o
+	$(CC) $(LDFLAGS) $@ $<
+
+gcc_extension.$(DYLIBEXT): gcc_extension.o
+	$(CC) $(LDFLAGS) $@ $<
+
+objc-test.$(DYLIBEXT): objc-test.o
+	$(CC) $(LDFLAGS) $@ $< -framework Foundation
+
+check: $(CHECK_TARGET)
+
+check-c: ffitest.$(DYLIBEXT) fptr_array.$(DYLIBEXT) gcc_extension.$(DYLIBEXT)
+	@rm -f test.log
+	$(GOSH) -I../src -I../lib attr-test.scm >> test.log
+	$(GOSH) -I../src -I../lib ffitest.scm >> test.log
+	$(GOSH) -I../src -I../lib ctypestest.scm >> test.log
+	$(GOSH) -I../src -I../lib cwrappertest.scm >> test.log
+	$(GOSH) -I../src -I../lib struct_in_union-test.scm >> test.log
+	$(GOSH) -I../src -I../lib stdio-test.scm >> test.log
+	$(GOSH) -I../src -I../lib inline-test.scm >> test.log
+	$(GOSH) -I../src -I../lib fptr_array-test.scm >> test.log
+	$(GOSH) -I../src -I../lib array_qualifier-test.scm >> test.log
+	$(GOSH) -I../src -I../lib gcc_extension-test.scm >> test.log
+	$(GOSH) -I../src -I../lib typename_in_declaration-test.scm >> test.log
+
+check-objc: objc-test.$(DYLIBEXT)
+	$(GOSH) -I../src -I../lib -I../objc objc-test.scm >> test.log
+
+clean :
+	rm -rf core ffitest.$(DYLIBEXT) objc-test.$(DYLIBEXT) fptr_array.$(DYLIBEXT) gcc_extension.$(DYLIBEXT) *.o $(GENERATED) *~ test.log so_locations
+
+distclean : clean
+	rm -rf $(CONFIG_GENERATED)
+
+maintainer-clean : clean
+	rm -rf $(CONFIG_GENERATED) configure VERSION
+

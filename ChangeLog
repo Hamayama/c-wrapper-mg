@@ -1,0 +1,538 @@
+2012-07-19  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/Makefile.in: Fixed a build problem in parallel. (Reported
+	by Ryan Schmidt).
+
+2011-03-12  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-lex.c (read_identifier): Fixed to treat TYPENAME as
+	IDENTIFIER after "*", "." and "->". (Reported by rokujyouhitoma)
+
+2010-12-29  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac: Disable to make objc-wrapper in MacOSX, because
+	objc-wrapper uses old Objective-C API and doesn't work in
+	SnowLeopard.
+
+2010-08-11  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-ffi.c (Scm_MakeFFIArrayType): Reduce memory size of an
+	array type on x86_64. (Reported by Jens Thiele)
+
+2010-07-31  KOGURO, Naoki  <naoki@koguro.net>
+
+	* libffi/*: Added a support to SnowLeopard.
+
+	* lib/c-wrapper/c-ffi.scm (c-cast): Fixed a bug that c-cast
+	returns a wrong type. (Thanks to meter_k_second).
+
+2010-04-18  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac: Added a support to GNU/kfreebsd (Thanks to NIIBE
+	Yutaka).
+
+	* configure.ac: Removing lib64 directory from library search paths
+	on debian x86 (Thanks to NIIBE Yutaka).
+
+2009-08-08  KOGURO, Naoki  <naoki@koguro.net>
+
+	* doc/c-wrapper-ref.texi (Load a header file): Added a description
+	of c-load's :module keyword.
+
+	* configure.ac: version 0.6.1
+
+2009-08-05  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper.scm (c-load): Added a workaround for cwcompile in
+	cygwin.
+
+2009-08-04  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-ffi.c (lookup_symbol): Modified to work like dlsym's
+	RTLD_GLOBAL in cygwin.
+
+2009-08-02  KOGURO, Naoki  <naoki@koguro.net>
+
+	* testsuite/Makefile.in (.SUFFIXES): Added .m suffix.
+
+2009-08-01  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (c-load-library): Added a workaround for
+	cygwin. c-load-library tries to load "libfoo.dll", "cygfoo.dll"
+	and "foo.dll" when "-lfoo" is specified. And it ignores "libc" and
+	"libm" because they are in cygwin1.dll.
+
+2009-07-20  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (init-decl-alist!): Fixed a bug that
+	calculates a wrong bit-field offset after short or char.
+
+2009-07-13  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac, src/Makefile.in: Added a workaround for cygwin.
+
+2009-07-12  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (object-apply): Added object-apply for
+	c-promise object, because there is the case that c-promise returns
+	C function's #<subr>.
+
+2009-06-27  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac: version 0.6.0
+
+2009-06-21  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-grammar.scm: Fixed a bug that generates
+	#<unbounded>-included expr in macro parser.
+
+	* src/c-parser.c, src/c-parserlib.stub,
+	lib/c-wrapper/c-parser.scm: Removed ignore-dlsym-check? flag.
+
+2009-06-20  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (c-symbol): Added c-symbol macro to
+	lookup C symbol directly.
+	Here is an example of c-load's :hide-symbols keyword and c-symbol,
+	;; Hide read(2) and write(2) system calls.
+	(c-load "unistd.h" :hide-symbols '(read write))
+	;; If you want to call read(2), use c-symbol.
+	((c-symbol read) filedes buf nbyte)
+	;; And you can use original "read" procedure, of cource.
+	(read)
+
+	* lib/c-wrapper.scm (c-load, %c-include): Added :hide-symbols
+	keyword to prevent export of specified symbols (but the symbols
+	are defined).
+
+	* Modified to use sandbox module when c-ffi and c-parser defines
+	new symbols.
+
+2009-06-16  KOGURO, Naoki  <naoki@koguro.net>
+
+	* Rewrote emit-* functions with C.
+
+2009-06-04  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper.scm (%c-include): Added :module keyword option.
+
+2009-04-26  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-lex.c (read_identifier): Rewrote read-identifier with C.
+
+2009-04-22  KOGURO, Naoki  <naoki@koguro.net>
+
+	* Rewrote buf-* functions with C.
+
+2009-04-14  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-lex.scm (do-sharp-command): Rewrote
+	sharp-directive-parser without regexp.
+
+2009-04-12  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/genyacc.scm: Modified C code generator. genyacc replaces
+	Scheme functions with C ones if possible, by analyzing stub files.
+
+	* Rewrote some code with C.
+
+2009-04-10  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (parse-macro-body): Fixed a bug that
+	makes an infinite-loop c-promise object when a macro name is
+	equals to its body.
+
+2009-04-04  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (typespec->c-type): Fixed a bug that
+	typespec->c-type reports an error for an invalid
+	type_specifier. (Reported by Shoji Nishimura).
+
+2009-03-31  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/context.scm (c-lookup-value): Fixed a bug that
+	generating invalid scheme code if a name of function-like macro
+	and a name of function are same.
+
+2009-03-29  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (emit-typedef): Removed wordy code.
+
+	* lib/c-wrapper/c-parser.scm, lib/c-wrapper/c-grammar.scm:
+	Refactored.
+
+	* lib/c-wrapper/c-lex.scm (buf-read-line, buf-read-char,
+	buf-peek-char): Modified to use define-inline instead of define.
+
+	* src/genyacc.scm (ccode-action), src/c-ffi.c: Modified to use
+	Scm_ApplyRec[0-5] instead of Scm_ApplyRec.
+
+2009-03-28  KOGURO, Naoki  <naoki@koguro.net>
+
+	* Modified to use yacc instead of lalr.
+
+2009-03-21  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (make-var): Removed unused
+	information (typedef).
+
+	* lib/c-wrapper/c-ffi.scm, lib/c-wrapper/c-parser.scm: Added
+	object-+, object--, object-* and object-/ methods for <c-value>
+	and <c-promise>.
+
+2009-03-20  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-ffi.c (c_subr_proc): Fixed a bug that buffer overflow has
+	occurred in vaargs-call.
+
+2009-03-17  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-lex.scm, lib/c-wrapper/c-parser.scm,
+	lib/c-wrapper/context.scm: Made c-wrapper.c-lex module and
+	c-wrapper.context module.
+
+2009-03-15  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (write-object): Added a method for
+	<c-promise>.
+
+	* lib/c-wrapper/c-ffi.scm (object-apply): Fixed a bug when
+	<c-promise> returns non <c-value> object.
+
+	* src/c-ffi.c, lib/c-wrapper/c-ffi.scm,
+	lib/c-wrapper/c-parser.scm, lib/c-wrapper/stubgen.scm.in: Added a
+	support of variable-like macro
+	(for example, "#define FOO foo()" -> "(FOO)  ;is equal (foo)")
+
+	* src/c-ffi.c, src/c-ffilib.stub, src/c-ffi.h,
+	lib/c-wrapper/c-ffi.scm, lib/c-wrapper/c-parser.scm: Added lazy
+	initialization for C function and C variable.
+
+2009-03-14  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-ffi.c, src/c-ffilib.stub, src/c-ffi.h,
+	lib/c-wrapper/c-ffi.scm: Improved performance of calling C
+	function.
+
+2009-02-21  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac: version 0.5.6
+
+	* lib/c-wrapper/c-parser.scm (attribute-mode->typespec): Added
+	support of __byte__, __word__ and __pointer__ for the variable
+	attribute 'mode'.
+
+	* configure.ac: Added --with-rpath option.
+
+	* libffi/configure.ac: Added NetBSD x86_64 entry.
+
+2009-02-15  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm, lib/c-wrapper/c-lex.scm,
+	lib/c-wrapper/c-grammar.scm: Added '__attribute__' parser, and a
+	variable attribute 'mode' is used in parsing C header.
+
+2009-02-14  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (c-parse): Modified to print an error
+	message to current-error-port.
+
+	* configure.ac: version 0.5.5
+
+2009-02-11  KOGURO, Naoki  <naoki@koguro.net>
+
+	* libffi/src/prep_cif.c, libffi/src/x86/ffi.c: Fixed a bug that a
+	function can't return a struct-contains-array value in Windows
+	environment.
+
+	* src/c-ffi.c, src/closure_alloc.c: Fixed to work ffi_closure
+	under NX protection.
+
+	* src/c-ffi.c (Scm_MakeFFIArrayType): Modified to handle an array
+	type as FFI_TYPE_STRUCT in x86-64 environment. Before this change,
+	libffi can't pass an argument in some testcase (SEGFAULT occured
+	at 'add_struct_array_uint').
+
+2009-02-06  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (setter): Added (setter ref) for
+	<c-ptr>.
+
+2008-07-16  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac: Fixed the problem when PATH doesn't include
+	/sbin (Thanks to NIIBE Yutaka and Jens Thiele).
+
+2008-05-11  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/stubgen.scm.in (run-command): Fixed a typo.
+
+	* lib/c-wrapper/c-grammar.scm, lib/c-wrapper/c-lex.scm: Added
+	@optional and @required rule.
+
+	* Makefile.in, src/Makefile.in, testsuite/Makefile.in,
+	lib/Makefile.in, objc/Makefile.in: Added datarootdir.
+
+2008-05-10  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac: version 0.5.4
+
+	* lib/c-wrapper/c-parser.scm: Reverted workaround changes for
+	cygwin.
+
+	* src/c-ffilib.stub (<ffi-type>, <ffi-cif>, <ffi-closure>): Removed
+	Scm_TopClass from the define-cclass's cpa.
+
+2008-05-09  KOGURO, Naoki  <naoki@koguro.net>
+
+	* Makefile.in (install, uninstall): Added $(DESTDIR) to an install
+	directory (Reported by NIIBE Yutaka).
+
+	* src/Makefile.in (libffi/Makefile): Added --with-pic option to
+	libffi's configure (Suggested by NIIBE Yutaka).
+
+	* configure.ac: Made enable_objc flag be effective in Mac OSX.
+
+2008-05-06  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-grammar.scm, lib/c-wrapper/c-lex.scm: Added
+	@property, @synthesize and @dynamic rule.
+
+2007-10-30  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-ffilib.stub (<ffi-type>, <ffi-cif>, <ffi-closure>): Added
+	Scm_TopClass to the define-cclass's cpa. This is a workaround for
+	cygwin.
+
+	* configure.ac: Added a cygwin setting.
+
+	* c-parser.scm (typespec->c-type): Added "short unsigned int"
+	pattern.
+
+	* c-parser.scm (make-preprocessed-file,
+	make-macro-file&src-file&identifier-queue): Added a workaround for
+	cygwin.
+
+2007-10-30  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (c-load-library): Changed to hold a
+	handle object (this is for preparing to support Windows).
+
+2007-10-29  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/stubgen.scm.in (run-command): Changed to use
+	run-process instead of with-input-from-process.
+
+	* configure.ac: Stopped making objc-wrapper in MacOSX, because of
+	it doesn't support Objective-C 2.0.
+
+	* c-parser.scm (c-parse): Changed to use run-process instead of
+	call-with-process-io.
+
+	* configure.ac: version 0.5.3
+
+2007-09-15  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/c-ffilib.stub (ptr->string): Changed to use
+	SCM_MAKE_STR_COPYING instead of SCM_MAKE_STR_IMMUTABLE, because it
+	is difficult to avoid destroying the string body.
+
+2007-05-20  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (c-parse): Added ad-hoc support of
+	int*_t and u_int*_t for Linux.
+
+	* configure.ac: version 0.5.2
+
+	* lib/c-wrapper/c-ffi.scm: Added support of GCC's unnamed
+	struct/union fields within structs/unions (Reported by HIBINO Kei).
+
+2007-05-19  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (deref): Added deref for
+	<c-func-ptr>. (Patch from HIBINO Kei)
+
+	* lib/c-wrapper/c-ffi.scm (make-c-func, make-c-func-vaargs): Added
+	c++ keyword experimentally, to mangle a C++ function name.
+
+	* lib/c-wrapper/c-grammar.scm: Adapted to the C99 array type
+	qualifier and array size expression (Reported by HIBINO Kei).
+
+2007-01-13  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (c-closure-free): Added c-closure-free.
+
+2007-01-06  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (object-apply): Added object-apply
+	method for <c-func-ptr>.
+
+	* lib/c-wrapper/c-parser.scm, lib/c-wrapper/c-lex.scm: Modified to
+	improve performance.
+
+	* lib/c-wrapper/c-parser.scm (emit-definition): Fixed the import handling.
+
+2007-01-05  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac: version 0.5.1
+
+	* lib/c-wrapper/c-ffi.scm (c-load-library): Modified to recognize
+	'-Wl' option.
+
+	* lib/c-wrapper/c-parser.scm (c-parse): Added the flag that is
+	whether do check an existence of a symbol or not.
+
+2007-01-04  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (emit-define-extern): Don't check an
+	existence of symbols when :import is used.
+
+2007-01-02  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (make-c-var): Added make-c-var function.
+	(cast): Added the cast rule that converts a <foreign-pointer> to a
+	<c-ptr>.
+
+2007-01-01  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm (emit-define-inline): Modified to
+	define an inline function whose body can't be parsed. cwcompile
+	makes it available.
+
+2006-12-31  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (ref): Added a feature like the indirect
+	component selection operator (->).
+
+2006-12-23  KOGURO, Naoki  <naoki@koguro.net>
+
+	* objc/c-wrapper/objc-ffi.scm (c-load-library): Fixed the bug that
+	c-load doesn't works well using objc-wrapper.
+
+	* lib/c-wrapper/c-ffi.scm (c-load-library): Fixed the
+	c-load-library bug.
+
+2006-12-21  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm (c-load-library): Modified the library
+	search rule, the new rule is (1) search LD_LIBRARY_PATH, (2)
+	search the shared library cache (using ldconfig(8)), (3) search
+	/usr/lib and /lib.
+
+	* lib/c-wrapper/c-parser.scm (parameter-decl): Fixed to adjust a
+	'function returning type' parameter to 'pointer to function
+	returning type'.
+
+2006-12-20  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm,
+	lib/c-wrapper/c-lex.scm (<parse-context>): Collected some global
+	variables in <parse-context> class.
+
+	* lib/c-wrapper/c-ffi.scm (c-load-library): Changed the library
+	search rule to use ldconfig (in Linux and FreeBSD) or find (in
+	MacOSX).
+
+2006-12-19  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm, lib/c-wrapper/objc-ffi.scm,
+	lib/c-wrapper/stubgen.scm, lib/c-wrapper/c-parser.scm: Renamed
+	some function name for consistency.
+
+2006-12-18  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm, lib/c-wrapper/stubgen.scm (c-parse):
+	Modified to accept a procedure as :import parameter.
+
+	* lib/c-wrapper.scm, lib/c-wrapper/c-ffi.scm,
+	lib/c-wrapper/c-parser.scm: Added a feature to import enum symbols
+	automatically if the enum is used as a parameter type.
+
+	* lib/objc-wrapper.scm, lib/c-wrapper/objc-ffi.scm,
+	testsuite/objc-test.scm: Added define-objc-class and
+	define-objc-method.
+
+	* src/Makefile.in: Added the target to make objc-ffilib.so
+
+2006-12-16  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/objc-ffi.scm (c-load-library): c-load-library
+	recognizes '-framework' option when objc-wrapper is used.
+
+	* lib/c-wrapper.scm, lib/c-wrapper/stubgen.scm (c-load): Added
+	c-load macro.
+
+	* configure.ac: version 0.5.0
+
+	* lib/c-wrapper.scm (c-include): Added new keyword option
+	'compiled-lib'.
+
+	* lib/c-wrapper/c-ffi.scm: Renamed make-c-array to c-array.
+
+	* lib/c-wrapper/objc-ffi.scm (objc-lookup-class): Added
+	objc-lookup-class function, instead of objc_lookUpClass.
+
+	* Added cwcompile command, and removed genwrapper.
+
+2006-12-02  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/ffi.h, src/ffi.c, src/ffilib.stub: Changed the code to use
+	new Scm_ApplyRec.
+
+	* testsuite/ffitest.h, testsuite/ffitest.c,
+	testsuite/cwrappertest.scm: Added a test case about a function
+	pointer.
+
+	* lib/c-wrapper/c-parser.scm (%MACRO-BODY, %SCM-CAST): Added some
+	reduction rules.
+
+	* configure.ac: version 0.4.9
+
+2006-11-25  KOGURO, Naoki  <naoki@koguro.net>
+
+	* src/ffi.h, src/ffi.c, src/ffilib.stub: Changed the code to use
+	new Scm_Apply.
+
+2006-11-23  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-lex.scm: Changed a data type for operator and
+	keyword table from alist to hash table.
+
+	* lib/c-wrapper.scm (c-include): Added keyword option :import, to
+	import specified symbols only.
+
+2006-11-22  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-ffi.scm, lib/c-wrapper/c-parser.scm: Removed
+	deprecated functions and macros.
+
+2006-11-20  KOGURO, Naoki  <naoki@koguro.net>
+
+	* configure.ac, src/genwrapper.in: Removed GENWRAPPER_MODULE
+	substitution because c-wrapper.c-parser module can now parse both
+	C and Objective-C code.
+
+	* src/genwrapper.in, lib/c-wrapper.scm (generate-module): Move
+	generate-module from c-wrapper.scm to genwrapper.in.
+
+	* c-wrapper and objc-wrapper modules are divided into c-wrapper,
+	c-wrapper.c-parser, c-wrapper.c-ffi, objc-wrapper and
+	c-wrapper.objc-ffi.
+
+2006-11-14  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm, lib/c-wrapper.scm,
+	lib/objc-wrapper.scm: Added some macros for the preparation of
+	stub generator.
+
+2006-11-12  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-parser.scm, lib/c-wrapper/c-grammar.scm,
+	lib/objc-wrapper.scm: Cleaned up some codes.
+
+2006-11-05  KOGURO, Naoki  <naoki@koguro.net>
+
+	* lib/c-wrapper/c-grammar.scm, lib/c-wrapper/c-parser.scm: Fixed a
+	bug of interpretation of a complex function pointer
+	declaration (Reported by HIBINO Kei).
+

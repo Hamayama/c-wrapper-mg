@@ -1,0 +1,57 @@
+;; -*- coding: utf-8; mode: scheme -*-
+
+(define-module c-wrapper.config
+  (use gauche.process)
+  (use file.util)
+  (use srfi-13)
+  
+  (export GCC
+          DYLIBEXT
+          libname-prefix-list
+          ignore-libname-list
+          ignore-library-list
+          force-load-library-when-compiledlib-exists?
+          ld-library-paths
+          sys-library-paths
+          search-library-with-ldconfig
+          ))
+
+(select-module c-wrapper.config)
+
+(define GCC "@CC@")
+
+(define DYLIBEXT "@DYLIBEXT@")
+
+(define libname-prefix-list '("lib"))
+(define ignore-libname-list '())
+(define ignore-library-list '())
+(define force-load-library-when-compiledlib-exists? #f)
+
+(when @CYGWIN_FLAG@
+  (set! libname-prefix-list (append libname-prefix-list (list "cyg" "")))
+  (set! ignore-libname-list (append ignore-libname-list '("c" "m")))
+  (set! ignore-library-list (append ignore-library-list '("libc" "libm")))
+  (set! force-load-library-when-compiledlib-exists? #t))
+
+(define sys-library-paths
+  (let ((paths (string-split "@SYS_LIBRARY_PATHS@" #[\s])))
+    (lambda ()
+      paths)))
+
+(define (ld-library-paths)
+  (apply append (map (lambda (env)
+                       (or (and-let* ((paths (sys-getenv env)))
+                             (string-split paths ":"))
+                           '()))
+                     '(@LD_LIBRARY_PATH_ENVS@))))
+
+(define (search-library-with-ldconfig lib)
+  (let ((ldconfig-cmd "@LDCONFIG_CMD@"))
+    (and (< 0 (string-length ldconfig-cmd))
+         (find (lambda (pathname)
+                 (string-prefix? (path-swap-extension lib DYLIBEXT)
+                                 (sys-basename pathname)))
+               (process-output->string-list ldconfig-cmd)))))
+        
+(provide "c-wrapper/config")
+

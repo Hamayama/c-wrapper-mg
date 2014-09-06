@@ -1,0 +1,77 @@
+#!@GOSH@
+;; -*- coding: utf-8; mode: scheme -*-
+;;
+;; cwcompile - stub generator for c-wrapper
+;; 
+;;  Copyright (c) 2006 KOGURO, Naoki (naoki@koguro.net)
+;; 
+;;  Permission is hereby granted, free of charge, to any person 
+;;  obtaining a copy of this software and associated 
+;;  documentation files (the "Software"), to deal in the 
+;;  Software without restriction, including without limitation 
+;;  the rights to use, copy, modify, merge, publish, distribute, 
+;;  sublicense, and/or sell copies of the Software, and to 
+;;  permit persons to whom the Software is furnished to do so, 
+;;  subject to the following conditions:
+;; 
+;;  The above copyright notice and this permission notice shall 
+;;  be included in all copies or substantial portions of the 
+;;  Software.
+;; 
+;;  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+;;  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+;;  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+;;  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+;;  OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+;;  OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+;;  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+;;  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+;; 
+;;  $Id: $
+
+(use gauche.parseopt)
+(use c-wrapper.stubgen)
+
+(define (usage progname)
+  (format #t "Usage: ~a [options] <scheme-file> ...~%" (sys-basename progname))
+  (print  "  Generate .so file from scheme file(s).")
+  (print  "")
+  (print  "Options:")
+  (print  "  -v, --verbose        : reports commands being executed.")
+  (print  "  --clean              : removes the intermidiate and output files.")
+  (print  "  --cppflags=CPPFLAGS  : extra cpp flags for compile.")
+  (print  "  --cflags=CFLAGS      : extra cc flags for compile.")
+  (print  "  --ldflags=LDFLAGS    : extra ld flags.")
+  (print  "  --libs=LIBS          : extra libraries.")
+  (exit 1))
+
+(define (main args)
+  (let ((prognam (car args)))
+    (let-args (cdr args)
+        ((clean? "clean" #f)
+         (cppflags "cppflags=s" "")
+         (cflags "cflags=s" "")
+         (ldflags "ldflags=s" "")
+         (libs "libs=s" "")
+         (verbose? "v|verbose" #f)
+         (help? "h|help" => (cut usage prognam))
+         (else (option . _)
+               (format #t "unrecognized option: ~a" option)
+               (usage prognam))
+         . args)
+      (when (null? args)
+        (usage prognam))
+      (for-each (lambda (scm-file)
+                  (compile-wrapper scm-file
+                                   (if clean? 'clean 'compile)
+                                   cflags
+                                   cppflags
+                                   ldflags
+                                   (string-append libs " @CWCOMPILE_DEFAULT_LIBS@")
+                                   verbose?))
+                args)))
+  0)
+
+;; Local variables:
+;; mode: scheme
+;; end:

@@ -1,0 +1,1175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on December, 26 2006 by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>c-wrapper reference manual: Top</title>
+
+<meta name="description" content="c-wrapper reference manual: Top">
+<meta name="keywords" content="c-wrapper reference manual: Top">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Top"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1 class="settitle">c-wrapper reference manual
+</h1>
+
+<p>This is a reference manual of c-wrapper.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#SEC1">1. c-wrapper</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                   
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC5">2. objc-wrapper</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC9">A. Function and Syntax Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">   
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC10">B. Class Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">                 
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC11">C. Variable Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">              
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+ --- The Detailed Node Listing ---
+
+c-wrapper
+
+</pre></th></tr><tr><td align="left" valign="top"><a href="#SEC2">1.1 Load a shared library</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">       
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC3">1.2 Load a header file</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">          
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+objc-wrapper
+
+</pre></th></tr><tr><td align="left" valign="top"><a href="#SEC6">2.1 Load a framework library</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">    
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC7">2.2 Load an Objective-C header file</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC8">2.3 Functions about Objective-C objects</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  
+</td></tr>
+<tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
+</pre></th></tr></table>
+
+<hr size="1">
+<a name="c_002dwrapper"></a>
+<a name="SEC1"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[ &lt;&lt; ]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1 class="chapter"> 1. c-wrapper </h1>
+
+<p><code>c-wrapper</code> is the module which enables to use C libraries.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#SEC2">1.1 Load a shared library</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">       
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC3">1.2 Load a header file</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">          
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Load-a-shared-library"></a>
+<a name="SEC2"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC1" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 1.1 Load a shared library </h2>
+
+<dl>
+<dt><u>Function:</u> <b>c-load-library</b><i> file-or-list &amp;keyword</i>
+<a name="IDX1"></a>
+</dt>
+<dd><p>Load one or more shared libraries. If you omit the extension, c-wrapper add
+a extension (.so, .dylib, and so on) automatically.
+</p>
+<p>Keyword arguments are:
+</p><dl compact="compact">
+<dt> <code>:option option-string</code></dt>
+<dd><p>Specify library names and library load paths with ld like option.
+</p><dl compact="compact">
+<dt> <code>-llibrary</code>       </dt>
+<dd><p>Load the library named <var>library</var>. For example, -lc means to load 'libc'.
+</p></dd>
+<dt> <code>-Ldir</code></dt>
+<dd><p>Add directory <var>dir</var> to the library search paths.
+</p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>c-ld</b><i> option-string</i>
+<a name="IDX2"></a>
+</dt>
+<dd><p>This function is the same (c-load-library '() :option option-string). and is designed to use with a command returning linker flags like pkg-config.
+</p><table><tr><td>&nbsp;</td><td><pre class="example">(c-ld (process-output-&gt;string &quot;pkg-config Wand --libs&quot;))
+</pre></td></tr></table></dd></dl>
+
+<hr size="6">
+<a name="Load-a-header-file"></a>
+<a name="SEC3"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC4" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC1" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 1.2 Load a header file </h2>
+
+<dl>
+<dt><u>Macro:</u> <b>c-include</b><i> file-or-list &amp;keyword</i>
+<a name="IDX3"></a>
+</dt>
+<dd><p>Load one or more header files and define functions, global variables, constants
+, type definitions and macros in the current module. 
+Keyword arguments are:
+</p><dl compact="compact">
+<dt> <code>:include-dirs</code></dt>
+<dd><p>Sets up include directories. You can specify either a string file name or a list of string file names.
+</p></dd>
+<dt> <code>:option</code></dt>
+<dd><p>Sets up C preprocessor options.
+</p></dd>
+<dt> <code>:import</code></dt>
+<dd><p>Sets up symbols which you want to define. You can specify a symbol, a string, a regexp, a procedure or a list of them.
+If you put a procedure, it is called with two arguments, a header file name and a symbol. When the procedure returns <code>#f</code>, the symbol is ignored, and the symbol is defined otherwise.
+</p></dd>
+<dt> <code>:export?</code></dt>
+<dd><p>Specifies whether symbols in header files are exported or not. If you put <code>#t</code>, the symbols are exported automatically, and otherwise they are not exported.
+</p></dd>
+<dt> <code>:compiled-lib</code> </dt>
+<dd><p>Sets up a shared library file name which cwcompile command generates.
+At runtime, if the library is exists, loads it instead of parsing the header files. Otherwise, parses the header files.
+</p></dd>
+</dl>
+
+<p>In loading header files, <code>c-include</code> gets these information and defines symbols.
+</p><dl compact="compact">
+<dt> Function prototype</dt>
+<dd><p>Defines a function with the same name. It applies <code>cast</code> to its arguments and <code>scm-cast</code> to its return value.
+</p></dd>
+<dt> External variable</dt>
+<dd><p>Defines an object with the same name.
+</p></dd>
+<dt> <code>enum</code></dt>
+<dd><p>Defines a constant value with the same name.
+</p></dd>
+<dt> <code>struct</code></dt>
+<dd><p>Defines a struct class. You can use it with <code>(c-struct tagname)</code>.
+</p></dd>
+<dt> <code>union</code></dt>
+<dd><p>Defines a union class. You can use it with <code>(c-union tagname)</code>.
+</p></dd>
+<dt> <code>typedef</code></dt>
+<dd><p>Defines a class with the name <code>&lt;typename&gt;</code>.
+</p></dd>
+<dt> Objectlike macro</dt>
+<dd><p>Defines a value with the same name if the macro body is an expression, all identifiers in the body have been defined and the expression has no side-effect.
+</p>
+<p>You have to be careful to use the value because it is the header-load-time value, not macro-use-time value. It may be different from one you expected.
+</p></dd>
+<dt> Functionlike macro</dt>
+<dd><p>Defines a macro with the same name if the macro body is an expression or statements and all identifiers in the body have been defined.
+</p></dd>
+</dl>
+
+</dd></dl>
+
+<dl>
+<dt><u>Macro:</u> <b>c-load</b><i> file-or-list &amp;keyword</i>
+<a name="IDX4"></a>
+</dt>
+<dd><p>Loads libraries, parses header files and defines functions, global variables, constants, type definitions and macros in current module.
+This macro does <code>c-load-library</code> and <code>c-include</code> at once.
+</p>
+<p>Keyword arguments are:
+</p><dl compact="compact">
+<dt> <code>:cflags</code></dt>
+<dt> <code>:cppflags</code></dt>
+<dt> <code>:ldflags</code></dt>
+<dt> <code>:libs</code></dt>
+<dd><p>Sets up flags for parsing header files and loading libraries, <code>:cppflags</code> is passed to the preprocessor and <code>:ldflags</code> and <code>:libs</code> are used for loading libraries. cwcompile uses these flags, too.
+</p></dd>
+<dt> <code>:cflags-cmd</code></dt>
+<dt> <code>:cppflags-cmd</code></dt>
+<dt> <code>:ldflags-cmd</code></dt>
+<dt> <code>:libs-cmd</code></dt>
+<dd><p>Sets up commands which returns the flags. For example, if you want to parse gtk's header file, you can do the following:
+</p><table><tr><td>&nbsp;</td><td><pre class="example">(c-load &quot;gtk/gtk/h&quot;
+        :cppflags-cmd &quot;pkg-config gtk+-2.0 --cflags-only-I&quot;
+        :cflags-cmd   &quot;pkg-config gtk+-2.0 --cflags-only-other&quot;
+        :libs-cmd     &quot;pkg-config gtk+-2.0 --libs&quot;
+        :compiled-lib &quot;gtklib&quot;)
+</pre></td></tr></table>
+</dd>
+<dt> <code>:import</code></dt>
+<dd><p>Sets up symbols which you want to define. You can specify a symbol, a string, a regexp, a procedure or a list of them.
+If you put a procedure, it is called with two arguments, a header file name and a symbol. When the procedure returns <code>#f</code>, the symbol is ignored, and the symbol is defined otherwise.
+</p></dd>
+<dt> <code>:export?</code></dt>
+<dd><p>Specifies whether symbols in header files are exported or not. If you put <code>#t</code>, the symbols are exported automatically, and otherwise they are not exported.
+</p></dd>
+<dt> <code>:compiled-lib</code> </dt>
+<dd><p>Sets up a shared library file name which cwcompile command generates.
+At runtime, if the library is exists, loads it instead of parsing the header files. Otherwise, parses the header files.
+</p></dd>
+</dl>
+
+</dd></dl>
+
+<hr size="6">
+<a name="Classes-and-function-about-C-types-and-values"></a>
+<a name="SEC4"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC3" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC1" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 1.3 Classes and functions about C types </h2>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-type&gt;</b>
+<a name="IDX5"></a>
+</dt>
+<dd><p>This is a basic class for the classes related with C types.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-type-meta&gt;</b>
+<a name="IDX6"></a>
+</dt>
+<dd><p>This is a meta class for the classes related with C types. All the classes are instances of <code>&lt;c-type-meta&gt;</code>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-char&gt;</b>
+<a name="IDX7"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-uchar&gt;</b>
+<a name="IDX8"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-short&gt;</b>
+<a name="IDX9"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-ushort&gt;</b>
+<a name="IDX10"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-int&gt;</b>
+<a name="IDX11"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-uint&gt;</b>
+<a name="IDX12"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-long&gt;</b>
+<a name="IDX13"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-ulong&gt;</b>
+<a name="IDX14"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-longlong&gt;</b>
+<a name="IDX15"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-ulonglong&gt;</b>
+<a name="IDX16"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-float&gt;</b>
+<a name="IDX17"></a>
+</dt>
+<dt><u>Class:</u> <b>&lt;c-double&gt;</b>
+<a name="IDX18"></a>
+</dt>
+<dd><a name="IDX19"></a>
+<a name="IDX20"></a>
+<a name="IDX21"></a>
+<a name="IDX22"></a>
+<a name="IDX23"></a>
+<a name="IDX24"></a>
+<a name="IDX25"></a>
+<a name="IDX26"></a>
+<a name="IDX27"></a>
+<a name="IDX28"></a>
+<a name="IDX29"></a>
+<a name="IDX30"></a>
+<p>These are classes for arithmetic types in C. you can use <code>make</code> to make an instance of the class.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-value-meta&gt;</b>
+<a name="IDX31"></a>
+</dt>
+<dd><a name="IDX32"></a>
+<p>This is a meta class for the classes related with C arithmetic types.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>ref</b><i> (obj &lt;c-value-meta&gt;)</i>
+<a name="IDX33"></a>
+</dt>
+<dd><p>Returns the value of <var>obj</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>(setter</b><i> ref) (obj &lt;c-value-meta&gt;) value</i>
+<a name="IDX34"></a>
+</dt>
+<dd><p>Sets <var>value</var> to <var>obj</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-void&gt;</b>
+<a name="IDX35"></a>
+</dt>
+<dd><p>This is a class for void type in C.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-ptr&gt;</b>
+<a name="IDX36"></a>
+</dt>
+<dd><p>This is an abstract class for pointer type in C. If you use a pointer type, make a concrete class with <code>ptr</code>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>ptr</b><i> (class &lt;c-type-meta&gt;)</i>
+<a name="IDX37"></a>
+</dt>
+<dd><p>Makes a class for a pointer type of <var>class</var>, and it is a subclass of <code>&lt;c-ptr&gt;</code>. You can use <code>make</code> to make an instance of the class.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>ptr</b><i> (obj &lt;c-type&gt;) </i>
+<a name="IDX38"></a>
+</dt>
+<dd><p>Returns a pointer object for <var>obj</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-array&gt;</b>
+<a name="IDX39"></a>
+</dt>
+<dd><p>This is an abstract class for array type in C. If you use an array type, make a concrete class with <code>c-array</code>.
+</p>
+<p><code>&lt;c-array&gt;</code> is a subclass of <code>&lt;sequence&gt;</code>, and you can use the operations of sequence framework (<code>gauche.sequence</code> module).
+</p></dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>c-array</b><i> (class &lt;c-type-meta&gt;) size</i>
+<a name="IDX40"></a>
+</dt>
+<dd><p>Makes a class for an array type of <var>class</var>, and it is a subclass of <code>&lt;c-array&gt;</code>. You can use <code>make</code> to make an instance of the class.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-struct&gt;</b>
+<a name="IDX41"></a>
+</dt>
+<dd><p>This is an abstract class for struct type in C. 
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-union&gt;</b>
+<a name="IDX42"></a>
+</dt>
+<dd><p>This is an abstract class for union type in C. 
+</p></dd></dl>
+
+<dl>
+<dt><u>Macro:</u> <b>c-struct</b><i> tagname</i>
+<a name="IDX43"></a>
+</dt>
+<dd><p>Returns the struct class named <var>tagname</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Macro:</u> <b>c-union</b><i> tagname</i>
+<a name="IDX44"></a>
+</dt>
+<dd><p>Returns the union class named <var>tagname</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>ref</b><i> (obj &lt;c-struct&gt;) member</i>
+<a name="IDX45"></a>
+</dt>
+<dt><u>Method:</u> <b>ref</b><i> (obj &lt;c-union&gt;) member</i>
+<a name="IDX46"></a>
+</dt>
+<dd><p>Returns the value of the <var>member</var> of the struct or union <var>obj</var>. If the type of the member is arithmetic type, the type of the return value is casted to <code>&lt;real&gt;</code> or <code>&lt;integer&gt;</code>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>(setter</b><i> ref) (obj &lt;c-struct&gt;) member value</i>
+<a name="IDX47"></a>
+</dt>
+<dt><u>Method:</u> <b>(setter</b><i> ref) (obj &lt;c-union&gt;) member value</i>
+<a name="IDX48"></a>
+</dt>
+<dd><p>Sets <var>value</var> to the <var>member</var> of the struct or union <var>obj</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Class:</u> <b>&lt;c-func-ptr&gt;</b>
+<a name="IDX49"></a>
+</dt>
+<dd><p>This is an abstract class for function pointer in C.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>deref</b><i> ptrobj</i>
+<a name="IDX50"></a>
+</dt>
+<dd><p>Returns a deference object of <var>ptrobj</var>. ('*' operator in C)
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>c-sizeof</b><i> (class &lt;c-type-meta&gt;)</i>
+<a name="IDX51"></a>
+</dt>
+<dt><u>Method:</u> <b>c-sizeof</b><i> (obj &lt;c-type&gt;)</i>
+<a name="IDX52"></a>
+</dt>
+<dd><p>Returns a size of <var>class</var> or <var>obj</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>cast</b><i> class obj</i>
+<a name="IDX53"></a>
+</dt>
+<dd><p>Makes an instance of <var>class</var> from <var>obj</var>. The following rules are applied to make an instance.
+</p>
+<table>
+<tr><td><p> <var>class</var> </p></td><td><p> Type of <var>obj</var> </p></td><td><p> Description
+</p>
+</td></tr>
+<tr><td><p> Subclasses of <code>&lt;c-value&gt;</code>
+</p></td><td><p> <code>&lt;real&gt;</code>
+</p></td><td><p> Makes an instance of <var>class</var> which is the same value of <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> Subclasses of <code>&lt;c-value&gt;</code>
+</p></td><td><p> <code>&lt;boolean&gt;</code>
+</p></td><td><p> Makes an instance of <var>class</var> which is 1 (if <var>obj</var> is <code>#t</code>) or 0 (if <var>obj</var> is <code>#f</code>).
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-ptr&gt;</code> or <code>&lt;c-func-ptr&gt;</code>
+</p></td><td><p> <code>&lt;integer&gt;</code>
+</p></td><td><p> Makes a pointer object whose address is <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-ptr&gt;</code> or <code>&lt;c-func-ptr&gt;</code>
+</p></td><td><p> <code>&lt;c-ptr&gt;</code> or <code>&lt;c-func-ptr&gt;</code>
+</p></td><td><p> Makes a pointer object whose address is the same of <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-ptr&gt;</code> or <code>&lt;c-func-ptr&gt;</code>
+</p></td><td><p> <code>&lt;c-array&gt;</code>
+</p></td><td><p> Makes a pointer object whose address is the same of the first address of <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-ptr&gt;</code>
+</p></td><td><p> <code>&lt;string&gt;</code>
+</p></td><td><p> Makes a pointer object whose address points an internally-generated C string.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-ptr&gt;</code>
+</p></td><td><p> <code>&lt;uvector&gt;</code>
+</p></td><td><p> Makes a pointer object whose address points the buffer of <code>&lt;uvector&gt;</code>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-ptr&gt;</code>
+</p></td><td><p> <code>&lt;sequence&gt;</code>
+</p></td><td><p> Makes a pointer object whost address points an internally-generated array which contains the same elements of <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-array&gt;</code>
+</p></td><td><p> <code>&lt;sequence&gt;</code>
+</p></td><td><p> Makes an array which contains the same elements of <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-array&gt;</code>
+</p></td><td><p> <code>&lt;c-ptr&gt;</code>
+</p></td><td><p> Makes an array object whose first address is <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;c-func-ptr&gt;</code>
+</p></td><td><p> <code>&lt;procedure&gt;</code>
+</p></td><td><p> Makes a pointer of a function which executes calls the procedure <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;integer&gt;</code> or <code>&lt;real&gt;</code>
+</p></td><td><p> <code>&lt;c-value&gt;</code>
+</p></td><td><p> Makes the value of <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;boolean&gt;</code>
+</p></td><td><p> <code>&lt;c-value&gt;</code> or <code>&lt;real&gt;</code>
+</p></td><td><p> Makes #f if the value of <var>obj</var> is 0, #t otherwise.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;integer&gt;</code>
+</p></td><td><p> <code>&lt;c-ptr&gt;</code> or <code>&lt;c-func-ptr&gt;</code>
+</p></td><td><p> Makes the pointer address of <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;integer&gt;</code>
+</p></td><td><p> <code>&lt;c-array&gt;</code>
+</p></td><td><p> Makes the first address of the array <var>obj</var>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;string&gt;</code>
+</p></td><td><p> <code>&lt;c-ptr&gt;</code> or <code>&lt;c-func-ptr&gt;</code>
+</p></td><td><p> Makes a string from the address of <var>obj</var>. 
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;string&gt;</code>
+</p></td><td><p> <code>&lt;c-array&gt;</code>
+</p></td><td><p> Makes a string from the array <var>obj</var>. It must be 0 terminated string.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;collection&gt;</code>
+</p></td><td><p> <code>&lt;c-array&gt;</code>
+</p></td><td><p> Makes an instance of <var>class</var> which contains the same values of <var>obj</var>, which are casted with <code>scm-cast</code>. 
+</p></td></tr>
+</table>
+
+</dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>scm-cast</b><i> obj</i>
+<a name="IDX54"></a>
+</dt>
+<dd><p>Returns the value of <var>obj</var> if <var>obj</var> is an instance of <code>&lt;c-value&gt;</code>. Otherwise, returns <var>obj</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>make-null-ptr</b>
+<a name="IDX55"></a>
+</dt>
+<dd><p>Returns NULL pointer.
+</p></dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>null-ptr?</b><i> obj</i>
+<a name="IDX56"></a>
+</dt>
+<dd><p>Returns <code>#t</code> if <var>obj</var> is a NULL pointer, <code>#f</code> otherwise.
+</p></dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>register-finalizer!</b><i> ptrobj proc</i>
+<a name="IDX57"></a>
+</dt>
+<dd><p>Register the finalizer <var>proc</var> to <var>ptrobj</var>. It is called when <var>ptrobj</var> is GCed.
+</p></dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>unregister-finalizer!</b><i> ptrobj</i>
+<a name="IDX58"></a>
+</dt>
+<dd><p>Deletes the finalizer of <var>ptrobj</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>finalize!</b><i> ptrobj</i>
+<a name="IDX59"></a>
+</dt>
+<dd><p>Calls the finalizer of <var>ptrobj</var>, and deletes it from <var>ptrobj</var>.
+</p></dd></dl>
+
+<hr size="6">
+<a name="objc_002dwrapper"></a>
+<a name="SEC5"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC4" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC6" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC1" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1 class="chapter"> 2. objc-wrapper </h1>
+
+<p><code>objc-wrapper</code> is the module which enables to use Objective-C libraries.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#SEC6">2.1 Load a framework library</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">    
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC7">2.2 Load an Objective-C header file</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  
+</td></tr>
+<tr><td align="left" valign="top"><a href="#SEC8">2.3 Functions about Objective-C objects</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">  
+</td></tr>
+</table>
+
+<hr size="6">
+<a name="Load-a-framework-library"></a>
+<a name="SEC6"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC5" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC7" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 2.1 Load a framework library </h2>
+
+<dl>
+<dt><u>Function:</u> <b>c-load-framework</b><i> framework</i>
+<a name="IDX60"></a>
+</dt>
+<dd><p>Load a framework library <var>framework</var>.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">(c-load-framework &quot;Foundation&quot;)
+</pre></td></tr></table>
+</dd></dl>
+
+<hr size="6">
+<a name="Load-an-Objectice_002dC-header-file"></a>
+<a name="SEC7"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC6" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC8" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 2.2 Load an Objective-C header file </h2>
+
+<dl>
+<dt><u>Function:</u> <b>Macro</b><i> c-include file-or-list &amp;keyword</i>
+<a name="IDX61"></a>
+</dt>
+<dd><p>This extends the <code>c-include</code> in <code>c-wrapper</code> module. it defines classes and methods of Objective-C code.
+</p>
+<p>If Objective-C class <code>Foo</code> is defined in the header file, <code>c-include</code> defines two symbols <code>Foo</code> and <code>&lt;Foo&gt;</code>. <code>Foo</code> is an instance of <code>&lt;c-struct:objc_object&gt;</code> and indicates the Objective-C class <code>Foo</code>. <code>&lt;Foo&gt;</code> is an alias of the type <code>&lt;id&gt;</code>.
+</p></dd></dl>
+
+<hr size="6">
+<a name="Functions-about-Objective_002dC-objects"></a>
+<a name="SEC8"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC7" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 2.3 Functions about Objective-C objects </h2>
+
+<dl>
+<dt><u>Macro:</u> <b>define-objc-class</b><i> class-name super-class-name</i>
+<a name="IDX62"></a>
+</dt>
+<dd><p>Defines Objective-C class <var>class-name</var> whose super class is <var>super-class-name</var>.
+</p></dd></dl>
+
+<dl>
+<dt><u>Macro:</u> <b>define-objc-method</b><i> objc-class ret-type (message-keyword varspec ...) body ...</i>
+<a name="IDX63"></a>
+</dt>
+<dd><p>Defines an Objective-C method whose message keyword is <var>message-keyword</var> and return type is <var>ret-type</var>. <var>varspec</var> is a list, (variable-name variable-type).
+</p>
+<p>In the body, you can use two variables <var>self</var> and <var>super</var>. <var>self</var> is the receiver object and <var>super</var> is the object which is casted to its super class.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">(define-objc-method MyFooClass &lt;id&gt; [:doSomething (v &lt;c-int&gt;)]
+  [super :doSomething v]
+  [self :foo v]
+  (bar v) ;; The result of (bar v) is the return value of this method.
+  )
+</pre></td></tr></table></dd></dl>
+
+<dl>
+<dt><u>Method:</u> <b>object-apply</b><i> (obj &lt;c-struct:objc_object&gt;) selector-or-args ...</i>
+<a name="IDX64"></a>
+</dt>
+<dd><p>Calls the method of <var>obj</var>.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">[[NSString :alloc) :init]
+
+[[NSString :startWithCString (&nbsp;&quot;Hello, world&quot;) :encoding NSASCIIStringEncoding]]
+</pre></td></tr></table>
+</dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>@</b><i> str</i>
+<a name="IDX65"></a>
+</dt>
+<dd><p>Returns Objective-C string.
+</p></dd></dl>
+
+<dl>
+<dt><u>Function:</u> <b>@selector</b><i> method-name</i>
+<a name="IDX66"></a>
+</dt>
+<dd><p>Returns a selector of <var>method-name</var>.
+</p></dd></dl>
+
+<hr size="6">
+<a name="Function-and-Syntax-Index"></a>
+<a name="SEC9"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC8" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC10" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC5" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC10" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1 class="appendix"> A. Function and Syntax Index </h1>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a href="#SEC9_0" class="summary-letter"><b>(</b></a>
+ &nbsp; 
+<a href="#SEC9_1" class="summary-letter"><b>@</b></a>
+ &nbsp; 
+<br>
+<a href="#SEC9_2" class="summary-letter"><b>C</b></a>
+ &nbsp; 
+<a href="#SEC9_3" class="summary-letter"><b>D</b></a>
+ &nbsp; 
+<a href="#SEC9_4" class="summary-letter"><b>F</b></a>
+ &nbsp; 
+<a href="#SEC9_5" class="summary-letter"><b>M</b></a>
+ &nbsp; 
+<a href="#SEC9_6" class="summary-letter"><b>N</b></a>
+ &nbsp; 
+<a href="#SEC9_7" class="summary-letter"><b>O</b></a>
+ &nbsp; 
+<a href="#SEC9_8" class="summary-letter"><b>P</b></a>
+ &nbsp; 
+<a href="#SEC9_9" class="summary-letter"><b>R</b></a>
+ &nbsp; 
+<a href="#SEC9_10" class="summary-letter"><b>S</b></a>
+ &nbsp; 
+<a href="#SEC9_11" class="summary-letter"><b>U</b></a>
+ &nbsp; 
+</td></tr></table>
+<table border="0" class="index-fn">
+<tr><td></td><th align="left">Index Entry</th><th align="left"> Section</th></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_0">(</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX34"><code>(setter</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX47"><code>(setter</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX48"><code>(setter</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_1">@</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX65"><code>@</code></a></td><td valign="top"><a href="#SEC8">2.3 Functions about Objective-C objects</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX66"><code>@selector</code></a></td><td valign="top"><a href="#SEC8">2.3 Functions about Objective-C objects</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_2">C</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX40"><code>c-array</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX3"><code>c-include</code></a></td><td valign="top"><a href="#SEC3">1.2 Load a header file</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX2"><code>c-ld</code></a></td><td valign="top"><a href="#SEC2">1.1 Load a shared library</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX4"><code>c-load</code></a></td><td valign="top"><a href="#SEC3">1.2 Load a header file</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX60"><code>c-load-framework</code></a></td><td valign="top"><a href="#SEC6">2.1 Load a framework library</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX1"><code>c-load-library</code></a></td><td valign="top"><a href="#SEC2">1.1 Load a shared library</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX51"><code>c-sizeof</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX52"><code>c-sizeof</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX43"><code>c-struct</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX44"><code>c-union</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX53"><code>cast</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_3">D</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX62"><code>define-objc-class</code></a></td><td valign="top"><a href="#SEC8">2.3 Functions about Objective-C objects</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX63"><code>define-objc-method</code></a></td><td valign="top"><a href="#SEC8">2.3 Functions about Objective-C objects</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX50"><code>deref</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_4">F</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX59"><code>finalize!</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_5">M</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX61"><code>Macro</code></a></td><td valign="top"><a href="#SEC7">2.2 Load an Objective-C header file</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX55"><code>make-null-ptr</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_6">N</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX56"><code>null-ptr?</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_7">O</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX64"><code>object-apply</code></a></td><td valign="top"><a href="#SEC8">2.3 Functions about Objective-C objects</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_8">P</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX37"><code>ptr</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX38"><code>ptr</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_9">R</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX33"><code>ref</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX45"><code>ref</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX46"><code>ref</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX57"><code>register-finalizer!</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_10">S</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX54"><code>scm-cast</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC9_11">U</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX58"><code>unregister-finalizer!</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+</table>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a href="#SEC9_0" class="summary-letter"><b>(</b></a>
+ &nbsp; 
+<a href="#SEC9_1" class="summary-letter"><b>@</b></a>
+ &nbsp; 
+<br>
+<a href="#SEC9_2" class="summary-letter"><b>C</b></a>
+ &nbsp; 
+<a href="#SEC9_3" class="summary-letter"><b>D</b></a>
+ &nbsp; 
+<a href="#SEC9_4" class="summary-letter"><b>F</b></a>
+ &nbsp; 
+<a href="#SEC9_5" class="summary-letter"><b>M</b></a>
+ &nbsp; 
+<a href="#SEC9_6" class="summary-letter"><b>N</b></a>
+ &nbsp; 
+<a href="#SEC9_7" class="summary-letter"><b>O</b></a>
+ &nbsp; 
+<a href="#SEC9_8" class="summary-letter"><b>P</b></a>
+ &nbsp; 
+<a href="#SEC9_9" class="summary-letter"><b>R</b></a>
+ &nbsp; 
+<a href="#SEC9_10" class="summary-letter"><b>S</b></a>
+ &nbsp; 
+<a href="#SEC9_11" class="summary-letter"><b>U</b></a>
+ &nbsp; 
+</td></tr></table>
+
+<hr size="6">
+<a name="Class-Index"></a>
+<a name="SEC10"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC9" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC11" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="#SEC11" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1 class="appendix"> B. Class Index </h1>
+<p>For readability, the surrounding <code>&lt;</code> and <code>&gt;</code> are stripped off.
+</p><table><tr><th valign="top">Jump to: &nbsp; </th><td><a href="#SEC10_0" class="summary-letter"><b>C</b></a>
+ &nbsp; 
+</td></tr></table>
+<table border="0" class="index-cl">
+<tr><td></td><th align="left">Index Entry</th><th align="left"> Section</th></tr>
+<tr><td colspan="3"> <hr></td></tr>
+<tr><th><a name="SEC10_0">C</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX19"><code>c-char</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX30"><code>c-double</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX29"><code>c-float</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX23"><code>c-int</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX25"><code>c-long</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX27"><code>c-longlong</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX21"><code>c-short</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX20"><code>c-uchar</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX24"><code>c-uint</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX26"><code>c-ulong</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX28"><code>c-ulonglong</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX22"><code>c-ushort</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td></td><td valign="top"><a href="#IDX32"><code>c-value-meta</code></a></td><td valign="top"><a href="#SEC4">1.3 Classes and functions about C types</a></td></tr>
+<tr><td colspan="3"> <hr></td></tr>
+</table>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a href="#SEC10_0" class="summary-letter"><b>C</b></a>
+ &nbsp; 
+</td></tr></table>
+
+<hr size="6">
+<a name="Variable-Index"></a>
+<a name="SEC11"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#SEC10" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ &gt; ]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#SEC10" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="#Top" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[ &gt;&gt; ]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1 class="appendix"> C. Variable Index </h1>
+
+<hr size="6">
+<a name="SEC_Contents"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1>Table of Contents</h1>
+<div class="contents">
+
+<ul class="toc">
+  <li><a name="TOC1" href="#SEC1">1. c-wrapper</a>
+  <ul class="toc">
+    <li><a name="TOC2" href="#SEC2">1.1 Load a shared library</a></li>
+    <li><a name="TOC3" href="#SEC3">1.2 Load a header file</a></li>
+    <li><a name="TOC4" href="#SEC4">1.3 Classes and functions about C types</a></li>
+  </ul></li>
+  <li><a name="TOC5" href="#SEC5">2. objc-wrapper</a>
+  <ul class="toc">
+    <li><a name="TOC6" href="#SEC6">2.1 Load a framework library</a></li>
+    <li><a name="TOC7" href="#SEC7">2.2 Load an Objective-C header file</a></li>
+    <li><a name="TOC8" href="#SEC8">2.3 Functions about Objective-C objects</a></li>
+  </ul></li>
+  <li><a name="TOC9" href="#SEC9">A. Function and Syntax Index</a></li>
+  <li><a name="TOC10" href="#SEC10">B. Class Index</a></li>
+  <li><a name="TOC11" href="#SEC11">C. Variable Index</a></li>
+</ul>
+</div>
+<hr size="1">
+<a name="SEC_About"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="#Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC9" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h1>About This Document</h1>
+<p>
+  This document was generated by <em>KOGURO, Naoki</em> on <em>December, 26 2006</em> using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+</p>
+<p>
+  The buttons in the navigation panels have the following meaning:
+</p>
+<table border="1">
+  <tr>
+    <th> Button </th>
+    <th> Name </th>
+    <th> Go to </th>
+    <th> From 1.2.3 go to</th>
+  </tr>
+  <tr>
+    <td align="center"> [ &lt; ] </td>
+    <td align="center">Back</td>
+    <td>previous section in reading order</td>
+    <td>1.2.2</td>
+  </tr>
+  <tr>
+    <td align="center"> [ &gt; ] </td>
+    <td align="center">Forward</td>
+    <td>next section in reading order</td>
+    <td>1.2.4</td>
+  </tr>
+  <tr>
+    <td align="center"> [ &lt;&lt; ] </td>
+    <td align="center">FastBack</td>
+    <td>beginning of this chapter or previous chapter</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td align="center"> [ Up ] </td>
+    <td align="center">Up</td>
+    <td>up section</td>
+    <td>1.2</td>
+  </tr>
+  <tr>
+    <td align="center"> [ &gt;&gt; ] </td>
+    <td align="center">FastForward</td>
+    <td>next chapter</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td align="center"> [Top] </td>
+    <td align="center">Top</td>
+    <td>cover (top) of document</td>
+    <td> &nbsp; </td>
+  </tr>
+  <tr>
+    <td align="center"> [Contents] </td>
+    <td align="center">Contents</td>
+    <td>table of contents</td>
+    <td> &nbsp; </td>
+  </tr>
+  <tr>
+    <td align="center"> [Index] </td>
+    <td align="center">Index</td>
+    <td>index</td>
+    <td> &nbsp; </td>
+  </tr>
+  <tr>
+    <td align="center"> [ ? ] </td>
+    <td align="center">About</td>
+    <td>about (help)</td>
+    <td> &nbsp; </td>
+  </tr>
+</table>
+
+<p>
+  where the <strong> Example </strong> assumes that the current position is at <strong> Subsubsection One-Two-Three </strong> of a document of the following structure:
+</p>
+
+<ul>
+  <li> 1. Section One
+    <ul>
+      <li>1.1 Subsection One-One
+        <ul>
+          <li>...</li>
+        </ul>
+      </li>
+      <li>1.2 Subsection One-Two
+        <ul>
+          <li>1.2.1 Subsubsection One-Two-One</li>
+          <li>1.2.2 Subsubsection One-Two-Two</li>
+          <li>1.2.3 Subsubsection One-Two-Three &nbsp; &nbsp;
+            <strong>&lt;== Current Position </strong></li>
+          <li>1.2.4 Subsubsection One-Two-Four</li>
+        </ul>
+      </li>
+      <li>1.3 Subsection One-Three
+        <ul>
+          <li>...</li>
+        </ul>
+      </li>
+      <li>1.4 Subsection One-Four</li>
+    </ul>
+  </li>
+</ul>
+
+<hr size="1">
+<p>
+ <font size="-1">
+  This document was generated by <em>KOGURO, Naoki</em> on <em>December, 26 2006</em> using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

@@ -1,0 +1,895 @@
+\input texinfo @c -*-texinfo-*-
+@comment %**start of header
+@c EN
+@setfilename c-wrapper-refe.info
+@settitle c-wrapper reference manual
+@dircategory The Algorithmic Language Scheme
+@direntry
+* c-wrapper reference: (c-wrapper-refe.info).	A generic wrapper for C libraries.
+@end direntry
+@c JP
+@setfilename c-wrapper-refj.info
+@settitle c-wrapper リファレンスマニュアル
+@dircategory The Algorithmic Language Scheme
+@direntry
+* c-wrapper reference: (c-wrapper-refj.info).	A generic wrapper for C libraries.
+@end direntry
+@documentencoding euc-jp
+@c COMMON
+@comment %**end of header
+
+@c $Id: c-wrapper-ref.texi 13 2005-09-29 15:31:11Z naoki $
+
+@c module and class index
+@defcodeindex md
+@defcodeindex cl
+
+@iftex
+@finalout
+@parskip 4pt plus 1pt
+@end iftex
+
+@titlepage
+@c EN
+@title c-wrapper reference manual
+@subtitle version @VERSION@
+@author KOGURO, Naoki (naoki@@koguro.net)
+@c JP
+@title c-wrapper リファレンスマニュアル
+@subtitle version @VERSION@
+@author KOGURO, Naoki (naoki@@koguro.net)
+@c COMMON
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 2006 KOGURO, Naoki(naoki@@koguro.net)
+
+@end titlepage
+
+@node Top, c-wrapper, (dir), (dir)
+
+@ifnottex
+@c EN
+This is a reference manual of c-wrapper.
+@c JP
+本ドキュメントはc-wrapperのリファレンスマニュアルです。
+@c COMMON
+@end ifnottex
+
+@menu
+* c-wrapper::                   
+* objc-wrapper::                
+* Function and Syntax Index::   
+* Class Index::                 
+* Variable Index::              
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+c-wrapper
+
+* Load a shared library::       
+* Load a header file::          
+* Classes and function about C types and values::  
+
+objc-wrapper
+
+* Load a framework library::    
+* Load an Objectice-C header file::  
+* Functions about Objective-C objects::  
+
+@end detailmenu
+@end menu
+
+@node c-wrapper, objc-wrapper, Top, Top
+@comment  node-name,  next,  previous,  up
+@chapter c-wrapper
+
+@c EN
+@code{c-wrapper} is the module which enables to use C libraries.
+@c JP
+@code{c-wrapper}とは、CのライブラリをGaucheから使えるようにするためのモジュールです。
+@c COMMON
+
+@menu
+* Load a shared library::       
+* Load a header file::          
+* Classes and function about C types and values::  
+@end menu
+
+@node Load a shared library, Load a header file, c-wrapper, c-wrapper
+@comment  node-name,  next,  previous,  up
+@section Load a shared library
+
+@defun c-load-library file-or-list &keyword
+@c EN
+Load one or more shared libraries. If you omit the extension, c-wrapper add
+a extension (.so, .dylib, and so on) automatically.
+@c JP
+共有ライブラリを読み込みます。 @var{file-or-list} でリストを渡すと複数のライブラリが読み込まれます。
+また拡張子を省略した場合、環境に応じた拡張子 (.so や .dylib など ) が付加されます。
+@c COMMON
+
+@c EN
+Keyword arguments are:
+@c JP
+キーワード引数には以下のものを与えることができます。
+@c COMMON
+@table @code
+@item :option option-string
+@c EN
+Specify library names and library load paths with ld like option.
+@c JP
+ldに与えるオプションのような形式で共有ライブラリや読み込みパスの指定を行います。現状使えるのは以下のオプションです。
+@c COMMON
+@table @code
+@item -llibrary       
+@c EN
+Load the library named @var{library}. For example, -lc means to load 'libc'.
+@c JP
+共有ライブラリ @var{library} を読み込みます。例えば、-lc のように指定すると libc が読み込まれます。
+@c COMMON
+@item -Ldir
+@c EN
+Add directory @var{dir} to the library search paths.
+@c JP
+共有ライブラリのサーチリストにディレクトリ @var{dir} を追加します。
+@c COMMON
+@end table
+@end table
+@end defun
+
+@defun c-ld option-string
+@c EN
+This function is the same (c-load-library '() :option option-string). and is designed to use with a command returning linker flags like pkg-config.
+@c JP
+(c-load-library '() :option option-string) と同じです。この関数は pkg-config などのようなリンカのフラグを返すコマンドと組み合わせて使うことを想定しています。
+@c COMMON
+@example
+(c-ld (process-output->string "pkg-config Wand --libs"))
+@end example
+@end defun
+
+@node Load a header file, Classes and function about C types and values, Load a shared library, c-wrapper
+@comment  node-name,  next,  previous,  up
+@section Load a header file
+
+@deffn {Macro} c-include file-or-list &keyword
+@c EN
+Load one or more header files and define functions, global variables, constants
+, type definitions and macros in the current module. 
+@c JP
+指定されたヘッダファイルを読み込み、関数・グローバル変数・定数・型定義・マクロをカレントモジュールに定義します。
+
+@c EN
+Keyword arguments are:
+@c JP
+keyword 引数には以下のものを指定することができます。
+@c COMMON
+@table @code
+@item :include-dirs
+@c EN
+Sets up include directories. You can specify either a string file name or a list of string file names.
+@c JP
+インクルードパスを指定します。文字列もしくは文字列のリストが指定可能です。
+@c COMMON
+@item :option
+@c EN
+Sets up C preprocessor options.
+@c JP
+ Cプリプロセッサに渡すオプションを指定します。文字列が指定可能です。
+@c COMMON
+@item :import
+@c EN
+Sets up symbols which you want to define. You can specify a symbol, a string, a regexp, a procedure or a list of them.
+If you put a procedure, it is called with two arguments, a header file name and a symbol. When the procedure returns @code{#f}, the symbol is ignored, and the symbol is defined otherwise.
+@c JP
+ヘッダファイルから読み込むシンボルを指定します。
+引数として、シンボル、文字列、正規表現、手続きと、それらのリストが指定可能です。
+手続きが渡された場合は、シンボルが見つかるたびにヘッダファイルのパス名とシンボル名を引数として、その手続きが呼び出されます。
+手続きが@code{#f}を返した場合そのシンボルは無視され、それ以外の値の場合にシンボルが定義されます。
+@c COMMON
+@item :export?
+@c EN
+Specifies whether symbols in header files are exported or not. If you put @code{#t}, the symbols are exported automatically, and otherwise they are not exported.
+@c JP
+定義したシンボルを@code{export}するかどうかを指定します。
+@code{#t}の場合は定義したシンボルに対し自動的に@code{export}が実行されます。@code{#f}の場合は何もしません。
+@c COMMON
+@item :compiled-lib 
+@c EN
+Sets up a shared library file name which cwcompile command generates.
+At runtime, if the library is exists, loads it instead of parsing the header files. Otherwise, parses the header files.
+@c JP
+cwcompileコマンドにより作成されるパーズ済みの共有ライブラリの名前を指定します。
+ここで指定された共有ライブラリが存在する場合、ヘッダファイルをパーズする代わりにその共有ライブラリを読み込みます。共有ライブラリが存在しない場合は、ヘッダファイルのパーズが行われます。
+@c COMMON
+@end table
+
+@c EN
+In loading header files, @code{c-include} gets these information and defines symbols.
+@table @asis
+@item Function prototype
+Defines a function with the same name. It applies @code{cast} to its arguments and @code{scm-cast} to its return value.
+@item External variable
+Defines an object with the same name.
+@item @code{enum}
+Defines a constant value with the same name.
+@item @code{struct}
+Defines a struct class. You can use it with @code{(c-struct tagname)}.
+@item @code{union}
+Defines a union class. You can use it with @code{(c-union tagname)}.
+@item @code{typedef}
+Defines a class with the name @code{<typename>}.
+@item Objectlike macro
+Defines a value with the same name if the macro body is an expression, all identifiers in the body have been defined and the expression has no side-effect.
+
+You have to be careful to use the value because it is the header-load-time value, not macro-use-time value. It may be different from one you expected.
+@item Functionlike macro
+Defines a macro with the same name if the macro body is an expression or statements and all identifiers in the body have been defined.
+@end table
+
+@c JP
+ヘッダファイル読み込み時に、以下の情報を収集し関数や変数などを定義していきます。
+@table @asis
+@item 関数のプロトタイプ宣言
+関数名と同名のシンボルで関数が定義されます。なおこの関数は引数に対して@code{cast}を戻り値に対して@code{scm-cast}を適用します。
+@item 外部変数定義
+変数名と同名のシンボルで外部変数を参照するオブジェクトが定義されます。
+@item @code{enum}
+定数名と同名のシンボルで定数が定義されます。
+@item @code{struct}
+構造体のクラスを定義します。このクラスは@code{(c-struct tagname)}で参照することができます。
+@item @code{union}
+共用体のクラスを定義します。このクラスは@code{(c-union tagname)}で参照することができます。
+@item @code{typedef}
+@code{<typename>}というシンボルでCの型に対応するクラスを定義します。
+@item オブジェクト形式 (objectlike) のマクロ
+マクロの内容が式であり、使用されている識別子がすべて宣言済みであり、かつ副作用を及ぼす式でない場合に、マクロ名と同名のシンボルで値が定義されます。なお、C言語でのマクロとは意味が異なり、この値はヘッダファイル読み込み時点での値であり、マクロ使用時点での値ではありません。
+@item 関数形式 (functionlike) のマクロ
+マクロの内容が式もしくは文であり使用されている識別子がすべて宣言済みの場合にのみ、マクロ名と同名のシンボルでマクロが定義されます。
+@end table
+
+@c COMMON
+@end deffn
+
+@deffn {Macro} c-load file-or-list &keyword
+@c EN
+Loads libraries, parses header files and defines functions, global variables, constants, type definitions and macros in current module.
+This macro does @code{c-load-library} and @code{c-include} at once.
+@c JP
+指定されたヘッダファイルとライブラリを読み込み、関数・グローバル変数・定数・型定義・マクロをカレントモジュールに定義します。
+@code{c-load-library}と@code{c-include}を一度に行うものです。
+@c COMMON
+
+@c EN
+Keyword arguments are:
+@c JP
+keyword 引数には以下のものを指定することができます。
+@c COMMON
+@table @code
+@item :cflags
+@itemx :cppflags
+@itemx :ldflags
+@itemx :libs
+@c EN
+Sets up flags for parsing header files and loading libraries, @code{:cppflags} is passed to the preprocessor and @code{:ldflags} and @code{:libs} are used for loading libraries. cwcompile uses these flags, too.
+@c JP
+ヘッダファイルのパーズとライブラリのロードで使うための各種フラグを指定します。@code{:cppflags}はプリプロセッサに渡され、@code{:ldflags}, @code{:libs}はライブラリのロードで使用されます。これらのフラグはcwcompileでも使われます。
+@c COMMON
+@item :cflags-cmd
+@itemx :cppflags-cmd
+@itemx :ldflags-cmd
+@itemx :libs-cmd
+@c EN
+Sets up commands which returns the flags. For example, if you want to parse gtk's header file, you can do the following:
+@c JP
+各種フラグを取得するためのコマンドを指定します。例えば、gtkのヘッダファイルをパーズするときにpkg-configを使って以下のようにオプションを指定することができます。
+@c COMMON
+@example
+(c-load "gtk/gtk/h"
+        :cppflags-cmd "pkg-config gtk+-2.0 --cflags-only-I"
+        :cflags-cmd   "pkg-config gtk+-2.0 --cflags-only-other"
+        :libs-cmd     "pkg-config gtk+-2.0 --libs"
+        :compiled-lib "gtklib")
+@end example
+
+@item :import
+@c EN
+Sets up symbols which you want to define. You can specify a symbol, a string, a regexp, a procedure or a list of them.
+If you put a procedure, it is called with two arguments, a header file name and a symbol. When the procedure returns @code{#f}, the symbol is ignored, and the symbol is defined otherwise.
+@c JP
+ヘッダファイルから読み込むシンボルを指定します。
+引数として、シンボル、文字列、正規表現、手続きと、それらのリストが指定可能です。
+手続きが渡された場合は、シンボルが見つかるたびにヘッダファイルのパス名とシンボル名を引数として、その手続きが呼び出されます。
+手続きが@code{#f}を返した場合そのシンボルは無視され、それ以外の値の場合にシンボルが定義されます。
+@c COMMON
+@item :hide-symbols
+@c EN
+Specifies symbols which doesn't export to other module. These symbols are defined internally, so you can lookup them with @code{c-symbol}.
+@c JP
+外部に公開しないシンボルをリストで指定します。定義は内部的に行われるので、@code{c-symbol}で参照することができます。
+@c COMMON
+@item :compiled-lib 
+@c EN
+Sets up a shared library file name which cwcompile command generates.
+At runtime, if the library is exists, loads it instead of parsing the header files. Otherwise, parses the header files.
+@c JP
+cwcompileコマンドにより作成されるパーズ済みの共有ライブラリの名前を指定します。
+ここで指定された共有ライブラリが存在する場合、ヘッダファイルをパーズする代わりにその共有ライブラリを読み込みます。共有ライブラリが存在しない場合は、ヘッダファイルのパーズが行われます。
+@c COMMON
+@item :module
+@c EN
+Controlls a sandbox module for C object. You can specify @code{#t}, @code{#f} or a module.
+@code{#t} means that @code{c-load} makes its original sandbox module and import it. This is the default behavior.
+@code{#f} means that @code{c-load} defines symbols in current module.
+a module means that @code{c-load} defines symbols in the specified module and doesn't import it.
+@c JP
+Cオブジェクトのサンドボックスモジュールを制御します。引数として、@code{#t}、@code{#f}、モジュールが指定可能です。
+@code{#t}を指定した場合は、@code{c-load}を実行するたびにサンドボックスモジュールが作成され、その中にCのオブジェクトが定義されます。そして、自動的にカレントモジュールへインポートされます。これが、デフォルトの動作です。
+@code{#f}を指定した場合は、Cのオブジェクトはカレントモジュールに定義されます。
+モジュールが指定された場合は、Cのオブジェクトは指定されたモジュールに定義されます。なお、@code{c-load}では、インポートを行ないません。
+@c COMMON
+@end table
+
+@c COMMON
+@end deffn
+
+@node Classes and function about C types and values,  , Load a header file, c-wrapper
+@comment  node-name,  next,  previous,  up
+@section Classes and functions about C types
+
+@deftp {Class} <c-type>
+@c EN
+This is a basic class for the classes related with C types.
+@c JP
+Cの型に対応したクラスの基底クラスです。
+@c COMMON
+@end deftp
+
+@deftp {Class} <c-type-meta>
+@c EN
+This is a meta class for the classes related with C types. All the classes are instances of @code{<c-type-meta>}.
+@c JP
+Cの型に対応したクラスのメタクラスです。Cの型のクラスはすべて @code{<c-type-meta>} のインスタンスとなります。
+@c COMMON
+@end deftp
+
+@deftp {Class} <c-char>
+@deftpx {Class} <c-uchar>
+@deftpx {Class} <c-short>
+@deftpx {Class} <c-ushort>
+@deftpx {Class} <c-int>
+@deftpx {Class} <c-uint>
+@deftpx {Class} <c-long>
+@deftpx {Class} <c-ulong>
+@deftpx {Class} <c-longlong>
+@deftpx {Class} <c-ulonglong>
+@deftpx {Class} <c-float>
+@deftpx {Class} <c-double>
+@clindex c-char
+@clindex c-uchar
+@clindex c-short
+@clindex c-ushort
+@clindex c-int
+@clindex c-uint
+@clindex c-long
+@clindex c-ulong
+@clindex c-longlong
+@clindex c-ulonglong
+@clindex c-float
+@clindex c-double
+@c EN
+These are classes for arithmetic types in C. you can use @code{make} to make an instance of the class.
+@c JP
+C言語の算術型 (Arithmetic types) に対応するクラスです。 @code{make} を使ってインスタンスを作成することができます。
+@c COMMON
+@end deftp
+
+@deftp {Class} <c-value-meta>
+@clindex c-value-meta
+@c EN
+This is a meta class for the classes related with C arithmetic types.
+@c JP
+C言語の算術型 (Arithmetic types) に対応するクラスのメタクラスです。
+@c COMMON
+@end deftp
+
+@deffn {Method} ref (obj <c-value-meta>)
+@c EN
+Returns the value of @var{obj}.
+@c JP
+@var{obj} の値を返します。
+@c COMMON
+@end deffn
+
+@deffn {Method} (setter ref) (obj <c-value-meta>) value
+@c EN
+Sets @var{value} to @var{obj}.
+@c JP
+@var{obj} に値 @var{value} を設定します。
+@c COMMON
+@end deffn
+
+@deftp {Class} <c-void>
+@c EN
+This is a class for void type in C.
+@c JP
+C言語の void 型に対応するクラスです。
+@c COMMON
+@end deftp
+
+@deftp {Class} <c-ptr>
+@c EN
+This is an abstract class for pointer type in C. If you use a pointer type, make a concrete class with @code{ptr}.
+@c JP
+C言語のポインタ型に対応する抽象クラスです。実際にポインタ型を使用する場合は、後述する @code{ptr} を使用して @code{<c-ptr>} の具象クラスを作成する必要があります。
+@c COMMON
+@end deftp
+
+@deffn {Method} ptr (class <c-type-meta>)
+@c EN
+Makes a class for a pointer type of @var{class}, and it is a subclass of @code{<c-ptr>}. You can use @code{make} to make an instance of the class.
+@c JP
+@var{class} で指定された型のポインタ型に対応するクラスを生成します。このクラスは @code{<c-ptr>} のサブクラスとなります。@code{make} を使って作成したクラスのインスタンスを作成することができます。
+@c COMMON
+@end deffn
+
+@deffn {Method} ptr (obj <c-type>) 
+@c EN
+Returns a pointer object for @var{obj}.
+@c JP
+@var{obj} のポインタオブジェクトを返します。
+@c COMMON
+@end deffn
+
+@deftp {Class} <c-array>
+@c EN
+This is an abstract class for array type in C. If you use an array type, make a concrete class with @code{c-array}.
+
+@code{<c-array>} is a subclass of @code{<sequence>}, and you can use the operations of sequence framework (@code{gauche.sequence} module).
+@c JP
+C言語の配列に対応する抽象クラスです。実際に配列を使用する場合は、後述する @code{c-array} を使用して、@code{<c-array>} の具象クラスを作成する必要があります。
+
+また @code{<c-array>} は @code{<sequence>} を継承しており、シーケンスフレームワーク (@code{gauche.sequence} モジュール) で定義されている操作を使用することができます。
+@c COMMON
+@end deftp
+
+@defun c-array (class <c-type-meta>) size
+@c EN
+Makes a class for an array type of @var{class}, and it is a subclass of @code{<c-array>}. You can use @code{make} to make an instance of the class.
+@c JP
+@var{class} 型で大きさ @var{size} の配列クラスを生成します。このクラスは @code{<c-array>} のサブクラスとなります。@code{make} を使って作成したクラスのインスタンスを作成することができます。
+@c COMMON
+@end defun
+
+@deftp {Class} <c-struct>
+@c EN
+This is an abstract class for struct type in C. 
+@c JP
+C言語の構造体に対応する抽象クラスです。
+@c COMMON
+@end deftp
+
+@deftp {Class} <c-union>
+@c EN
+This is an abstract class for union type in C. 
+@c JP
+C言語の共用体に対応する抽象クラスです。
+@c COMMON
+@end deftp
+
+@deffn {Macro} c-struct tagname
+@c EN
+Returns the struct class named @var{tagname}.
+@c JP
+@var{tagname}という名前の構造体クラスを返します。
+@c COMMON
+@end deffn
+
+@deffn {Macro} c-union tagname
+@c EN
+Returns the union class named @var{tagname}.
+@c JP
+@var{tagname}という名前の共用体クラスを返します。
+@c COMMON
+@end deffn
+
+@deffn {Method} ref (obj <c-struct>) member
+@deffnx {Method} ref (obj <c-union>) member
+@c EN
+Returns the value of the @var{member} of the struct or union @var{obj}. If the type of the member is arithmetic type, the type of the return value is casted to @code{<real>} or @code{<integer>}.
+@c JP
+構造体もしくは共用体のメンバ @var{member} の値を返します。メンバが算術型 (Arithmetic types) の場合は @code{<real>} もしくは @code{<integer>} へ変換された値が返ります。
+@c COMMON
+@end deffn
+
+@deffn {Method} (setter ref) (obj <c-struct>) member value
+@deffnx {Method} (setter ref) (obj <c-union>) member value
+@c EN
+Sets @var{value} to the @var{member} of the struct or union @var{obj}.
+@c JP
+構造体もしくは共用体のメンバ @var{member} へ値をセットします。
+@c COMMON
+@end deffn
+
+@deftp {Class} <c-func-ptr>
+@c EN
+This is an abstract class for function pointer in C.
+@c JP
+C言語の関数ポインタに対応する抽象クラスです。
+@c COMMON
+@end deftp
+
+@deffn {Method} deref ptrobj
+@c EN
+Returns a deference object of @var{ptrobj}. ('*' operator in C)
+@c JP
+ポインタオブジェクト @var{ptrobj} の参照を返します。
+@c COMMON
+@end deffn
+
+@deffn {Method} c-sizeof (class <c-type-meta>)
+@deffnx {Method} c-sizeof (obj <c-type>)
+@c EN
+Returns a size of @var{class} or @var{obj}.
+@c JP
+@var{class}もしくは@var{obj}のサイズを返します。
+@c COMMON
+@end deffn
+
+@deffn {Method} cast class obj
+@c EN
+Makes an instance of @var{class} from @var{obj}. The following rules are applied to make an instance.
+
+@multitable @columnfractions 0.2 0.2 0.6
+@item @var{class} @tab Type of @var{obj} @tab Description
+
+@item Subclasses of @code{<c-value>}
+@tab @code{<real>}
+@tab Makes an instance of @var{class} which is the same value of @var{obj}.
+
+@item Subclasses of @code{<c-value>}
+@tab @code{<boolean>}
+@tab Makes an instance of @var{class} which is 1 (if @var{obj} is @code{#t}) or 0 (if @var{obj} is @code{#f}).
+
+@item @code{<c-ptr>} or @code{<c-func-ptr>}
+@tab @code{<integer>}
+@tab Makes a pointer object whose address is @var{obj}.
+
+@item @code{<c-ptr>} or @code{<c-func-ptr>}
+@tab @code{<c-ptr>} or @code{<c-func-ptr>}
+@tab Makes a pointer object whose address is the same of @var{obj}.
+
+@item @code{<c-ptr>} or @code{<c-func-ptr>}
+@tab @code{<c-array>}
+@tab Makes a pointer object whose address is the same of the first address of @var{obj}.
+
+@item @code{<c-ptr>}
+@tab @code{<string>}
+@tab Makes a pointer object whose address points an internally-generated C string.
+
+@item @code{<c-ptr>}
+@tab @code{<uvector>}
+@tab Makes a pointer object whose address points the buffer of @code{<uvector>}.
+
+@item @code{<c-ptr>}
+@tab @code{<sequence>}
+@tab Makes a pointer object whost address points an internally-generated array which contains the same elements of @var{obj}.
+
+@item @code{<c-array>}
+@tab @code{<sequence>}
+@tab Makes an array which contains the same elements of @var{obj}.
+
+@item @code{<c-array>}
+@tab @code{<c-ptr>}
+@tab Makes an array object whose first address is @var{obj}.
+
+@item @code{<c-func-ptr>}
+@tab @code{<procedure>}
+@tab Makes a pointer of a function which executes calls the procedure @var{obj}.
+
+@item @code{<integer>} or @code{<real>}
+@tab @code{<c-value>}
+@tab Makes the value of @var{obj}.
+
+@item @code{<boolean>}
+@tab @code{<c-value>} or @code{<real>}
+@tab Makes #f if the value of @var{obj} is 0, #t otherwise.
+
+@item @code{<integer>}
+@tab @code{<c-ptr>} or @code{<c-func-ptr>}
+@tab Makes the pointer address of @var{obj}.
+
+@item @code{<integer>}
+@tab @code{<c-array>}
+@tab Makes the first address of the array @var{obj}.
+
+@item @code{<string>}
+@tab @code{<c-ptr>} or @code{<c-func-ptr>}
+@tab Makes a string from the address of @var{obj}. 
+
+@item @code{<string>}
+@tab @code{<c-array>}
+@tab Makes a string from the array @var{obj}. It must be 0 terminated string.
+
+@item @code{<collection>}
+@tab @code{<c-array>}
+@tab Makes an instance of @var{class} which contains the same values of @var{obj}, which are casted with @code{scm-cast}. 
+@end multitable
+
+@c JP
+@var{obj} から @var{class} 型のインスタンスを生成します。生成のルールは以下の通りです。
+
+@multitable @columnfractions 0.2 0.2 0.6
+@item @var{class} @tab @var{obj}の型 @tab 説明
+
+@item @code{<c-value>} を継承したクラス
+@tab @code{<real>}
+@tab @var{obj} と同じ値を持つ @var{class} のインスタンスを生成します
+
+@item @code{<c-value>} を継承したクラス
+@tab @code{<boolean>}
+@tab @var{obj} が @code{#t} の時は 1、@code{#f} の時は 0 の値を持つ @var{class} のインスタンスを生成します。
+
+@item @code{<c-ptr>} または @code{<c-func-ptr>}
+@tab @code{<integer>}
+@tab @var{obj} のアドレスを持つポインタを生成します
+
+@item @code{<c-ptr>} または @code{<c-func-ptr>}
+@tab @code{<c-ptr>} または @code{<c-func-ptr>}
+@tab @var{obj} と同じアドレスを持つポインタを生成します
+
+@item @code{<c-ptr>} または @code{<c-func-ptr>}
+@tab @code{<c-array>}
+@tab @var{obj} の先頭アドレスを持つポインタを生成します。
+
+@item @code{<c-ptr>}
+@tab @code{<string>}
+@tab Cの文字列を生成し、その先頭アドレスを持つポインタを生成します。
+
+@item @code{<c-ptr>}
+@tab @code{<uvector>}
+@tab @var{obj} の先頭アドレスを持つポインタを生成します。
+
+@item @code{<c-ptr>}
+@tab @code{<sequence>}
+@tab @var{obj} と同じ内容の配列を生成し、その先頭アドレスを持つポインタを生成します。
+
+@item @code{<c-array>}
+@tab @code{<sequence>}
+@tab @var{obj} と同じ内容の配列を生成します。
+
+@item @code{<c-array>}
+@tab @code{<c-ptr>}
+@tab ポインタが指すメモリ領域を配列と見なして @var{class} のインスタンスを生成します。
+
+@item @code{<c-func-ptr>}
+@tab @code{<procedure>}
+@tab @var{obj} を実行する関数のポインタを生成します。
+
+@item @code{<integer>} または @code{<real>}
+@tab @code{<c-value>}
+@tab @var{obj} と同じ値の数値を返します。
+
+@item @code{<boolean>}
+@tab @code{<c-value>} または @code{<real>}
+@tab 値が 0 のとき @code{#f} が、そうでなければ @var{#t} が返ります。
+
+@item @code{<integer>}
+@tab @code{<c-ptr>} または @code{<c-func-ptr>}
+@tab ポインタのアドレスが返ります。
+
+@item @code{<integer>}
+@tab @code{<c-array>}
+@tab 配列の先頭アドレスが返ります。
+
+@item @code{<string>}
+@tab @code{<c-ptr>} または @code{<c-func-ptr>}
+@tab ポインタが指し示す領域が0終端された文字列と見なし、文字列を生成します。
+
+@item @code{<string>}
+@tab @code{<c-array>}
+@tab 配列の内容が0終端された文字列と見なし、文字列を生成します。
+
+@item @code{<collection>}
+@tab @code{<c-array>}
+@tab 配列の内容を持つ @var{class} のインスタンスを生成します。各要素の値は @code{scm-cast} でキャストされます。
+@end multitable
+
+@c COMMON
+@end deffn
+
+@defun scm-cast obj
+@c EN
+Returns the value of @var{obj} if @var{obj} is an instance of @code{<c-value>}. Otherwise, returns @var{obj}.
+@c JP
+@var{obj} が @code{<c-value>} 型である時は数値を返します。そうでなければ @var{obj} をそのまま返します。
+@c COMMON
+@end defun
+
+@defun make-null-ptr
+@c EN
+Returns NULL pointer.
+@c JP
+NULLポインタを返します。
+@c COMMON
+@end defun
+
+@defun null-ptr? obj
+@c EN
+Returns @code{#t} if @var{obj} is a NULL pointer, @code{#f} otherwise.
+@c JP
+@var{obj} がNULLポインタであれば @code{#t} が、そうでなければ @code{#f} が返されます。
+@c COMMON
+@end defun
+
+@defun register-finalizer! ptrobj proc
+@c EN
+Register the finalizer @var{proc} to @var{ptrobj}. It is called when @var{ptrobj} is GCed.
+@c JP
+@var{ptrobj} にファイナライザ @var{proc} を登録します。@var{ptrobj} がGCされるときに @var{proc} が呼ばれます。
+@c COMMON
+@end defun
+
+@defun unregister-finalizer! ptrobj
+@c EN
+Deletes the finalizer of @var{ptrobj}.
+@c JP
+@var{ptrobj} のファイナライザを削除します。
+@c COMMON
+@end defun
+
+@defun finalize! ptrobj
+@c EN
+Calls the finalizer of @var{ptrobj}, and deletes it from @var{ptrobj}.
+@c JP
+@var{ptrobj} のファイナライザを実行します。これにより @var{ptrobj} のファイナライザは削除されます。
+@c COMMON
+@end defun
+
+@node objc-wrapper, Function and Syntax Index, c-wrapper, Top
+@comment  node-name,  next,  previous,  up
+@chapter objc-wrapper
+
+@c EN
+@code{objc-wrapper} is the module which enables to use Objective-C libraries.
+@c JP
+@code{objc-wrapper} とは Objective-C のライブラリを Gauche から使えるようにするためのモジュールです。
+@c COMMON
+
+@menu
+* Load a framework library::    
+* Load an Objectice-C header file::  
+* Functions about Objective-C objects::  
+@end menu
+
+@node Load a framework library, Load an Objectice-C header file, objc-wrapper, objc-wrapper
+@comment  node-name,  next,  previous,  up
+@section Load a framework library
+
+@defun c-load-framework framework
+@c EN
+Load a framework library @var{framework}.
+
+@example
+(c-load-framework "Foundation")
+@end example
+
+@c JP
+フレームワークライブラリ @var{framework} を読み込みます。
+
+@example
+(c-load-framework "Foundation")
+@end example
+
+@c COMMON
+@end defun
+
+@node Load an Objectice-C header file, Functions about Objective-C objects, Load a framework library, objc-wrapper
+@comment  node-name,  next,  previous,  up
+@section Load an Objective-C header file
+
+@defun {Macro} c-include file-or-list &keyword
+@c EN
+This extends the @code{c-include} in @code{c-wrapper} module. it defines classes and methods of Objective-C code.
+
+If Objective-C class @code{Foo} is defined in the header file, @code{c-include} defines two symbols @code{Foo} and @code{<Foo>}. @code{Foo} is an instance of @code{<c-struct:objc_object>} and indicates the Objective-C class @code{Foo}. @code{<Foo>} is an alias of the type @code{<id>}.
+@c JP
+@code{objc-wrapper} モジュールの @code{c-include} では Objective-C のクラス定義やメソッド定義の拡張が行われています。
+
+Objective-C のクラス @code{Foo} がヘッダファイルで定義されていた場合、 @code{Foo} と @code{<Foo>} の2つのシンボルが定義されます。@code{Foo} は @code{<c-struct:objc_objcect>} 型のオブジェクトでクラス @code{Foo} そのものを指しています。@code{<Foo>} は @code{<id>} のエイリアスとなります。
+@c COMMON
+@end defun
+
+@node Functions about Objective-C objects,  , Load an Objectice-C header file, objc-wrapper
+@comment  node-name,  next,  previous,  up
+@section Functions about Objective-C objects
+
+@deffn {Macro} define-objc-class class-name super-class-name
+@c EN
+Defines Objective-C class @var{class-name} whose super class is @var{super-class-name}.
+@c JP
+@var{super-class-name}を継承したObjective-Cのクラス@var{class-name}を定義します。
+@c COMMON
+@end deffn
+
+@deffn {Macro} define-objc-method objc-class ret-type (message-keyword varspec ...) body ...
+@c EN
+Defines an Objective-C method whose message keyword is @var{message-keyword} and return type is @var{ret-type}. @var{varspec} is a list, (variable-name variable-type).
+
+In the body, you can use two variables @var{self} and @var{super}. @var{self} is the receiver object and @var{super} is the object which is casted to its super class.
+@c JP
+メッセージキーワードが@var{message-keyword}であり戻り値の型が@var{ret-type}であるような@var{objc-class}のメソッドを定義します。@var{varspec}は(変数名 変数型)のリストを指定します。
+
+@var{body}では@var{self}と@var{super}の2つの変数が使えます。それぞれ、レシーバオブジェクト、レシーバをスーパクラスにキャストしたオブジェクトを指しています。
+@c COMMON
+
+@example
+(define-objc-method MyFooClass <id> [:doSomething (v <c-int>)]
+  [super :doSomething v]
+  [self :foo v]
+  (bar v) ;; The result of (bar v) is the return value of this method.
+  )
+@end example
+@end deffn
+
+@deffn {Method} object-apply (obj <c-struct:objc_object>) selector-or-args ...
+@c EN
+Calls the method of @var{obj}.
+
+@example
+[[NSString :alloc) :init]
+
+[[NSString :startWithCString (@ "Hello, world") :encoding NSASCIIStringEncoding]]
+@end example
+
+@c JP
+@var{obj} のメソッドを呼び出します。
+
+@example
+[[NSString :alloc] :init]
+
+[[NSString :startWithCString (@ "Hello, world") :encoding NSASCIIStringEncoding]]
+@end example
+@c COMMON
+@end deffn
+
+@defun @@ str
+@c EN
+Returns Objective-C string.
+@c JP
+Objective-C文字列を返します。
+@c COMMON
+@end defun
+
+@defun @@selector method-name
+@c EN
+Returns a selector of @var{method-name}.
+@c JP
+メソッド名 @var{method-name} のセレクタを返します。
+@c COMMON
+@end defun
+
+@node Function and Syntax Index, Class Index, objc-wrapper, Top
+@comment  node-name,  next,  previous,  up
+@appendix Function and Syntax Index
+@printindex fn
+
+@node Class Index, Variable Index, Function and Syntax Index, Top
+@comment  node-name,  next,  previous,  up
+@appendix Class Index
+For readability, the surrounding @code{<} and @code{>} are stripped off.
+@printindex cl
+
+@node Variable Index,  , Class Index, Top
+@comment  node-name,  next,  previous,  up
+@appendix Variable Index
+@printindex vr
+
+@contents
+@bye
+
+@c Local variables:
+@c outline-regexp: "@chap\\|@unnu\\|@\\(sub\\)*section"
+@c end:

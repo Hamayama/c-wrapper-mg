@@ -1,0 +1,100 @@
+#
+# $Id$
+#
+
+# General info
+SHELL       = @SHELL@
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+bindir      = @bindir@
+libdir      = @libdir@
+datadir     = @datadir@
+datarootdir = @datarootdir@
+srcdir      = @srcdir@
+VPATH       = $(srcdir)
+
+# These may be overridden by make invocators
+DESTDIR        =
+GOSH           = @GOSH@
+GAUCHE_CONFIG  = @GAUCHE_CONFIG@
+GAUCHE_PACKAGE = @GAUCHE_PACKAGE@
+INSTALL        = @GAUCHE_INSTALL@
+
+CPPFLAGS       = -I./libffi/include -DGAUCHE_API_0_8_8 @CPPFLAGS@
+LDFLAGS        = @LDFLAGS@
+LIBS           = libffi/.libs/libffi.a @LIBS@
+
+YACC           = @YACC@
+
+# Other parameters
+SOEXT  = @SOEXT@
+OBJEXT = @OBJEXT@
+EXEEXT = @EXEEXT@
+
+# Module-specific stuff
+PACKAGE   = c-wrapper
+
+ARCHFILES = c-ffi.$(SOEXT) c-lex.$(SOEXT) c-parser.$(SOEXT)
+SCMFILES  = 
+HEADERS   = 
+
+TARGET    = libffi/.libs/libffi.a $(ARCHFILES)
+GENERATED = libffi
+CONFIG_GENERATED = libffi/Makefile Makefile cwcompile
+
+GAUCHE_PKGINCDIR  = @GAUCHE_PKGINCDIR@
+GAUCHE_PKGLIBDIR  = @GAUCHE_PKGLIBDIR@
+GAUCHE_PKGARCHDIR = @GAUCHE_PKGARCHDIR@
+
+ffi_SRCS = c-ffi.c c-ffilib.stub closure_alloc.c
+@OBJC_ENABLE_TRUE@ffi_SRCS += ObjCError.c
+clex_SRCS = c-lex.c c-lexlib.stub
+cparser_SRCS = c-parser.c c-parserlib.stub
+cparser_LIBS = @CPARSER_LIBS@
+
+all : $(TARGET)
+
+libffi/Makefile:
+	mkdir -p libffi
+	cd libffi; ../../libffi/configure --with-pic
+
+libffi/.libs/libffi.a: libffi/Makefile
+	cd libffi; $(MAKE)
+
+c-ffi.$(SOEXT): $(ffi_SRCS) libffi/.libs/libffi.a
+	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS)" --verbose c-ffi $(ffi_SRCS)
+
+c-lex.$(SOEXT): $(clex_SRCS) libffi/.libs/libffi.a
+	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS)" --verbose c-lex $(clex_SRCS)
+
+c-parser.$(SOEXT): $(cparser_SRCS) y.tab.c libffi/.libs/libffi.a
+	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS) $(cparser_LIBS)" --verbose c-parser $(cparser_SRCS)
+
+c-grammar.y: c-grammar.scm genyacc.scm
+	$(GOSH) genyacc.scm --outfile=c-grammar.y $<
+
+y.tab.c: c-grammar.y
+	$(YACC) $<
+
+install : all
+	$(INSTALL) -m 444 -T $(DESTDIR)$(GAUCHE_PKGINCDIR) $(HEADERS)
+	$(INSTALL) -m 555 -T $(DESTDIR)$(GAUCHE_PKGARCHDIR) $(ARCHFILES)
+	$(INSTALL) -m 555 -T $(DESTDIR)$(bindir) cwcompile
+
+uninstall :
+	$(INSTALL) -U $(DESTDIR)$(GAUCHE_PKGINCDIR) $(HEADERS)
+	$(INSTALL) -U $(DESTDIR)$(GAUCHE_PKGARCHDIR) $(ARCHFILES)
+	$(INSTALL) -U $(DESTDIR)$(bindir) cwcompile
+
+clean :
+	$(GAUCHE_PACKAGE) compile --clean c-ffi $(ffi_SRCS)
+	$(GAUCHE_PACKAGE) compile --clean c-lex $(clex_SRCS)
+	$(GAUCHE_PACKAGE) compile --clean c-parser $(cparser_SRCS)
+	rm -rf core $(TARGET) $(GENERATED) *.o *~ so_locations
+
+distclean : clean
+	rm -rf $(CONFIG_GENERATED)
+
+maintainer-clean : clean
+	rm -rf $(CONFIG_GENERATED) libffi c-grammar.y y.tab.c
+

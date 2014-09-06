@@ -1,0 +1,357 @@
+;; -*- coding: utf-8; mode: scheme -*-
+;;
+;; c-parserlib.stub
+;; 
+;;  Copyright (c) 2009 KOGURO, Naoki (naoki@koguro.net)
+;; 
+;;  Permission is hereby granted, free of charge, to any person 
+;;  obtaining a copy of this software and associated 
+;;  documentation files (the "Software"), to deal in the 
+;;  Software without restriction, including without limitation 
+;;  the rights to use, copy, modify, merge, publish, distribute, 
+;;  sublicense, and/or sell copies of the Software, and to 
+;;  permit persons to whom the Software is furnished to do so, 
+;;  subject to the following conditions:
+;; 
+;;  The above copyright notice and this permission notice shall 
+;;  be included in all copies or substantial portions of the 
+;;  Software.
+;; 
+;;  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+;;  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+;;  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+;;  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+;;  OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+;;  OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+;;  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+;;  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+;; 
+
+"
+#include \"c-parser.h\"
+"
+
+;; (define-cproc pointer-size ()
+;;   (code "int dmy __attribute__((__mode__(__pointer__)));"
+;;         "SCM_RETURN(SCM_MAKE_INT(sizeof(dmy)));"))
+
+;; (define-cproc word-size ()
+;;   (code "int dmy __attribute__((__mode__(__word__)));"
+;;         "SCM_RETURN(SCM_MAKE_INT(sizeof(dmy)));"))
+
+(define-cclass <declarator> :built-in
+  "ScmDeclarator*" "Scm_DeclaratorClass"
+  ()
+  ())
+
+(define-cclass <type-decl> :built-in
+  "ScmTypeDecl*" "Scm_TypeDeclClass"
+  ()
+  ())
+
+(define-cclass <struct-allocator> :built-in
+  "ScmStructAllocator*" "Scm_StructAllocatorClass"
+  ()
+  ())
+
+(define-cclass <struct-initializer> :built-in
+  "ScmStructInitializer*" "Scm_StructInitializerClass"
+  ()
+  ())
+
+(define-cclass <union-allocator> :built-in
+  "ScmUnionAllocator*" "Scm_UnionAllocatorClass"
+  ()
+  ())
+
+(define-cclass <union-initializer> :built-in
+  "ScmUnionInitializer*" "Scm_UnionInitializerClass"
+  ()
+  ())
+
+(define-cclass <enum-initializer> :built-in
+  "ScmEnumInitializer*" "Scm_EnumInitializerClass"
+  ()
+  ())
+
+(define-cclass <typedef-definer> :built-in
+  "ScmTypedefDefiner*" "Scm_TypedefDefinerClass"
+  ()
+  ())
+
+(define-cclass <inline-function-definer> :built-in
+  "ScmInlineFunctionDefiner*" "Scm_InlineFunctionDefinerClass"
+  ()
+  ())
+
+(define-cclass <extern-definer> :built-in
+  "ScmExternDefiner*" "Scm_ExternDefinerClass"
+  ()
+  ())
+
+(define-cclass <objc-class-definer> :built-in
+  "ScmObjCClassDefiner*" "Scm_ObjCClassDefinerClass"
+  ()
+  ())
+
+(define-cclass <objc-method-definer> :built-in
+  "ScmObjCMethodDefiner*" "Scm_ObjCMethodDefinerClass"
+  ()
+  ())
+
+(define-cclass <cmacro-definer> :built-in
+  "ScmCMacroDefiner*" "Scm_CMacroDefinerClass"
+  ()
+  ())
+
+(define-cclass <funclike-cmacro-definer> :built-in
+  "ScmFunclikeCMacroDefiner*" "Scm_FunclikeCMacroDefinerClass"
+  ()
+  ())
+
+(define-cproc %LIST (v)
+  (call "CParser_List"))
+
+(define-cproc %APPEND (v0 v1)
+  (call "CParser_Append"))
+
+(define-cproc %ADD-LIST (v0 v1)
+  (call "CParser_AddList"))
+
+(define-cproc %TYPENAME (v)
+  (call "CParser_Typename"))
+
+(define-cproc c-type->class-symbol (sym)
+  (call "CParser_ctype2class_symbol"))
+
+(define-cproc make-type-decl (type_spec_list declarator)
+  (call "Scm_MakeTypeDecl"))
+
+(define-cproc name-of (v)
+  (call "SCM_TYPE_DECL_NAME"))
+
+(define-cproc set-name! (v name)
+  (code "SCM_TYPE_DECL_NAME(v) = name;"
+        "SCM_RETURN(SCM_UNDEFINED);"))
+
+(define-cproc type-of (v)
+  (call "SCM_TYPE_DECL_CTYPE"))
+
+(define-cproc set-type! (v type)
+  (code "SCM_TYPE_DECL_CTYPE(v) = type;"
+        "SCM_RETURN(SCM_UNDEFINED);"))
+
+(define-cproc value-of (v)
+  (call "SCM_TYPE_DECL_INIT_VALUE"))
+
+(define-cproc set-value! (v val)
+  (code "SCM_TYPE_DECL_INIT_VALUE(v) = val;"
+        "SCM_RETURN(SCM_UNDEFINED);"))
+
+(define-cproc arg-pool ()
+  (call "Scm_ArgPoolRef"))
+
+(define-cproc arg-pool-set! (lst)
+  (call "Scm_ArgPoolSet"))
+
+(define-cproc arg-pool-add! (name)
+  (call "Scm_ArgPoolAdd"))
+
+(define-cproc arg-pool-clear! ()
+  (call "Scm_ArgPoolClear"))
+
+(define-cproc init-value-pool ()
+  (call "Scm_InitValuePool"))
+
+(define-cproc register-identifier (name value)
+  (call "Scm_RegisterIdentifier"))
+
+(define-cproc registered-identifier? (name)
+  (call "Scm_RegisteredIdentifierP"))
+
+(define-cproc c-lookup-value (v)
+  (call "Scm_LookupValue"))
+
+(define-cproc init-struct-pool ()
+  (call "Scm_InitStructPool"))
+
+(define-cproc init-union-pool ()
+  (call "Scm_InitUnionPool"))
+
+(define-cproc init-macro-parser-state ()
+  (call "Scm_InitMacroParserState"))
+
+(define-cproc use-return? ()
+  (call "Scm_UseReturnP"))
+
+(define-cproc use-return-set! (flag)
+  (call "Scm_UseReturnSet"))
+
+(define-cproc use-jump? ()
+  (call "Scm_UseJumpP"))
+
+(define-cproc use-jump-set! (flag)
+  (call "Scm_UseJumpSet"))
+
+(define-cproc use-iterator? ()
+  (call "Scm_UseIteratorP"))
+
+(define-cproc use-iterator-set! (flag)
+  (call "Scm_UseIteratorSet"))
+
+(define-cproc macro-body ()
+  (call "Scm_MacroBodyRef"))
+
+(define-cproc macro-body-set! (body)
+  (call "Scm_MacroBodySet"))
+
+(define-cproc referenced-identifier-list ()
+  (call "Scm_ReferencedIdentifierListRef"))
+
+(define-cproc referenced-identifier-list-add! (identifier)
+  (call "Scm_ReferencedIdentifierListAdd"))
+
+(define-cproc referenced-identifier-list-clear! ()
+  (call "Scm_ReferencedIdentifierListClear"))
+
+(define-cproc referenced-typename-list ()
+  (call "Scm_ReferencedTypenameListRef"))
+
+(define-cproc referenced-typename-list-add! (typename)
+  (call "Scm_ReferencedTypenameListAdd"))
+
+(define-cproc referenced-typename-list-clear! ()
+  (call "Scm_ReferencedTypenameListClear"))
+
+(define-cproc all-referenced-info-clear! ()
+  (call "Scm_AllReferencedInfoClear"))
+
+(define-cproc %INT (v)
+  (call "Scm_ToInt"))
+
+(define-cproc %COMPOSE-DECLARATOR (d1 d2)
+  (call "Scm_ComposeDeclarator"))
+
+(define-cproc identifier-declarator (name)
+  (call "Scm_IdentifierDeclarator"))
+
+(define-cproc array-declarator (size)
+  (call "Scm_ArrayDeclarator"))
+
+(define-cproc func-declarator (args)
+  (call "Scm_FuncDeclarator"))
+
+(define-cproc func-vaargs-declarator (args)
+  (call "Scm_FuncVaargsDeclarator"))
+
+(define-cproc ptr-declarator ()
+  (call "Scm_PtrDeclarator"))
+
+(define-cproc bit-field-declarator (n)
+  (call "Scm_BitFieldDeclarator"))
+
+(define-cproc init-value-declarator (v)
+  (call "Scm_InitValueDeclarator"))
+
+(define-cproc null-declarator ()
+  (call "Scm_NullDeclarator"))
+
+(define-cproc compose-variable-attribute (decl)
+  (call "Scm_ComposeVariableAttribute"))
+
+(define-cproc make-type-decl-list (type_spec_list decls)
+  (call "Scm_MakeTypeDeclList"))
+
+(define-cproc parameter-declaration (type_decl)
+  (call "Scm_ParameterDeclaration"))
+
+(define-cproc declaration (type_spec_list declarator_list)
+  (call "Scm_Declaration"))
+
+;;;
+
+(define-cproc defchunk-dict-init ()
+  (call "Scm_DefChunkDictInit"))
+
+(define-cproc defchunk-dict-set-identifier! (identifier defchunk)
+  (call "Scm_DefChunkDictSetIdentifier"))
+
+(define-cproc defchunk-dict-set-typename! (typaname defchunk)
+  (call "Scm_DefChunkDictSetTypename"))
+
+(define-cproc defchunk-dict-set-mark! (proc::<procedure>)
+  (call "Scm_DefChunkDictSetMark"))
+
+(define-cproc defchunk-dict-for-each (module_or_proc all_flag)
+  (call "Scm_DefChunkDictForEach"))
+
+(define-cproc defchunk-dict-all-symbols ()
+  (call "Scm_DefChunkDictAllSymbols"))
+
+;;;
+
+(define-cproc make-defchunk (type id sym obj)
+  (call "Scm_MakeDefChunk"))
+
+(define-cproc defchunk-type (defchunk)
+  (call "SCM_DEFCHUNK_TYPE"))
+
+(define-cproc defchunk-filename (defchunk)
+  (call "SCM_DEFCHUNK_FILENAME"))
+
+(define-cproc defchunk-identifier (defchunk)
+  (call "SCM_DEFCHUNK_IDENTIFIER"))
+
+(define-cproc defchunk-symbol-list (defchunk)
+  (call "SCM_DEFCHUNK_SYMBOL_LIST"))
+
+(define-cproc defchunk-object (defchunk)
+  (call "SCM_DEFCHUNK_OBJECT"))
+
+;;;
+
+(define-cproc external-declaration (declaration_specifiers init_declarator_list)
+  (call "Scm_ExternalDeclaration"))
+
+(define-cproc emit-alloc-struct (tagname)
+  (call "Scm_EmitAllocStruct"))
+
+(define-cproc emit-init-struct (tagname member_list)
+  (call "Scm_EmitInitStruct"))
+
+(define-cproc emit-alloc-union (tagname)
+  (call "Scm_EmitAllocUnion"))
+
+(define-cproc emit-init-union (tagname member_list)
+  (call "Scm_EmitInitUnion"))
+
+(define-cproc emit-define-enum (tagname enum_alist)
+  (call "Scm_EmitDefineEnum"))
+
+(define-cproc emit-define-inline (declaration_specifiers declarator function_body)
+  (call "Scm_EmitDefineInline"))
+
+(define-cproc emit-define-objc-class (classname_list)
+  (call "Scm_EmitDefineObjcClass"))
+
+(define-cproc emit-objc-method (keywords type_list)
+  (call "Scm_EmitObjcMethod"))
+
+(define-cproc emit-define-cmacro (name body)
+  (call "Scm_EmitDefineCmacro"))
+
+(define-cproc emit-define-cfunclike-macro (name args body)
+  (call "Scm_EmitDefineCfunclikeMacro"))
+
+(define-cproc parse-macro-code (in macro_list)
+  (call "Scm_ParseMacroCode"))
+
+(define-cproc c-grammar (error_reporter)
+  (call "CGrammar"))
+
+(define-cproc bridge-symbols (module syms hides)
+  (call "Scm_BridgeSymbols"))
+
+;; Local variables:
+;; mode: scheme
+;; end:

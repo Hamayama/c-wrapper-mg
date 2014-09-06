@@ -1,0 +1,54 @@
+;; -*- coding: utf-8; mode: scheme -*-
+;;
+;; test_funclib.stub
+;; 
+;;  Copyright (c) 2009 KOGURO, Naoki (naoki@koguro.net)
+;; 
+;;  Permission is hereby granted, free of charge, to any person 
+;;  obtaining a copy of this software and associated 
+;;  documentation files (the "Software"), to deal in the 
+;;  Software without restriction, including without limitation 
+;;  the rights to use, copy, modify, merge, publish, distribute, 
+;;  sublicense, and/or sell copies of the Software, and to 
+;;  permit persons to whom the Software is furnished to do so, 
+;;  subject to the following conditions:
+;; 
+;;  The above copyright notice and this permission notice shall 
+;;  be included in all copies or substantial portions of the 
+;;  Software.
+;; 
+;;  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+;;  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+;;  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+;;  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+;;  OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+;;  OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+;;  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+;;  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+;; 
+
+"
+#include \"test_func.h\"
+"
+
+(define-cproc %func_void ()
+  (call <void> "func_void"))
+
+(define-cproc %func_int_int (a::<fixnum>)
+  (call <fixnum> "func_int_int"))
+
+(define-cproc %func_double_int (a::<fixnum>)
+  (call <double> "func_double_int"))
+
+(define-cproc %func_double_double (a::<double>)
+  (call <double> "func_double_double"))
+
+(define-cproc %func_intx32 (   v0::<fixnum>  v1::<fixnum>  v2::<fixnum>  v3::<fixnum>  v4::<fixnum>
+                              v5::<fixnum>  v6::<fixnum>  v7::<fixnum>  v8::<fixnum>  v9::<fixnum>
+                             v10::<fixnum> v11::<fixnum> v12::<fixnum> v13::<fixnum> v14::<fixnum>
+                             v15::<fixnum> v16::<fixnum> v17::<fixnum> v18::<fixnum> v19::<fixnum> 
+                             v20::<fixnum> v21::<fixnum> v22::<fixnum> v23::<fixnum> v24::<fixnum>
+                             v25::<fixnum> v26::<fixnum> v27::<fixnum> v28::<fixnum> v29::<fixnum>
+                             v30::<fixnum> v31::<fixnum>)
+  (call <void> "func_intx32"))
+

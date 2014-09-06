@@ -1,0 +1,110 @@
+SHELL       = @SHELL@
+srcdir      = @srcdir@
+VPATH       = $(srcdir)
+top_builddir = @top_builddir@
+top_srcdir   = @top_srcdir@
+
+MANPAGES = 
+EXTRACTED = c-wrapper-refe.texi c-wrapper-refj.texi
+GENERATED = Makefile $(MANPAGES)
+GOSH = @GOSH@
+GAUCHE_CONFIG = @GAUCHE_CONFIG@
+INSTALL = @GAUCHE_INSTALL@
+MAKEINFO = @MAKEINFO@
+GZIP_PROGRAM = @GZIP_PROGRAM@
+
+TEXIS = c-wrapper-ref.texi
+
+# Manual page destination.
+mandir  = $(DESTDIR)`$(GAUCHE_CONFIG) --mandir`
+infodir = $(DESTDIR)`$(GAUCHE_CONFIG) --infodir`
+
+all: info
+
+install: all
+	if test -f c-wrapper-refe.info.gz -o -f c-wrapper-refj.info.gz; then \
+	  for info in *.info*; do \
+	    $(INSTALL) -m 444 -T $(infodir) $$info; \
+	  done; \
+	fi
+
+uninstall:
+	(cd $(infodir); \
+	 if test -f c-wrapper-refe.info -o -f c-wrapper-refe.info.gz; \
+	   then rm -rf c-wrapper-refe.*; \
+	 fi; \
+	 if test -f c-wrapper-refj.info -o -f c-wrapper-refj.info.gz; \
+	   then rm -rf c-wrapper-refj.*; \
+	 fi)
+
+texi : c-wrapper-refe.texi c-wrapper-refj.texi
+
+html : c-wrapper-refe.html c-wrapper-refj.html
+
+htmls : c-wrapper-refe_toc.html c-wrapper-refj_toc.html
+
+dvi : c-wrapper-refe.dvi
+
+pdf : c-wrapper-refe.pdf
+
+info : c-wrapper-refe.info.gz c-wrapper-refj.info.gz
+
+c-wrapper-refe.html : c-wrapper-refe.texi
+	texi2html -number c-wrapper-refe.texi
+
+c-wrapper-refe_toc.html : c-wrapper-refe.texi
+	texi2html -split section -number c-wrapper-refe.texi
+
+c-wrapper-refe.dvi : c-wrapper-refe.texi
+	texi2dvi c-wrapper-refe.texi
+
+c-wrapper-refe.pdf : c-wrapper-refe.texi
+	texi2pdf c-wrapper-refe.texi
+
+c-wrapper-refe.texi : $(TEXIS) extract
+	$(GOSH) ./extract -en -o c-wrapper-refe.texi c-wrapper-ref.texi
+
+c-wrapper-refe.info.gz : c-wrapper-refe.texi
+	if test X$(MAKEINFO) != X -a X$(GZIP_PROGRAM) != X; then \
+	  $(MAKEINFO) --no-warn c-wrapper-refe.texi; \
+	  rm -rf c-wrapper-refe.info*.gz; \
+	  $(GZIP_PROGRAM) c-wrapper-refe.info; \
+	fi
+
+c-wrapper-refj.html : c-wrapper-refj.texi
+	texi2html --init-file=ja-init.pl -number c-wrapper-refj.texi
+	sed 's/^<body lang="en"/<body lang="ja"/' $@ > $@.t && mv $@.t $@
+
+c-wrapper-refj_toc.html : c-wrapper-refj.texi
+	texi2html --init-file=ja-init.pl -split section -number c-wrapper-refj.texi
+	for f in c-wrapper-refj/c-wrapper-refj*.html; do \
+	  sed 's/^<body lang="en"/<body lang="ja"/' $$f > $$f.t && mv $$f.t $$f; \
+	done
+
+
+c-wrapper-refj.dvi : c-wrapper-refj.texi
+	texi2dvi c-wrapper-refj.texi
+
+c-wrapper-refj.pdf : c-wrapper-refj.texi
+	texi2pdf c-wrapper-refj.texi
+
+c-wrapper-refj.texi : $(TEXIS) extract
+	$(GOSH) ./extract -jp -o c-wrapper-refj.texi c-wrapper-ref.texi
+
+c-wrapper-refj.info.gz : c-wrapper-refj.texi
+	if test X$(MAKEINFO) != X -a X$(GZIP_PROGRAM) != X; then \
+	  $(MAKEINFO) --no-warn c-wrapper-refj.texi; \
+	  rm -rf c-wrapper-refj.info*.gz; \
+	  $(GZIP_PROGRAM) c-wrapper-refj.info ; \
+	fi
+
+clean:
+	rm -rf core *~ *.aux *.cl *.cls *.cp *.fn *.fns *.ky *.log *.md *.mds \
+	       *.pg *.toc *.tp *.tps *.vr *.vrs *.pdf *.dvi *.info* \
+	       $(EXTRACTED)
+
+distclean : clean
+	rm -rf $(GENERATED)
+
+maintainer-clean : clean
+	rm -f c-wrapper-ref*.html c-wrapper-refe.dvi Makefile $(GENERATED) 

@@ -1,0 +1,71 @@
+#
+# $Id: Makefile.in 360 2006-12-21 15:30:12Z naoki $
+#
+
+# General info
+SHELL       = @SHELL@
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+bindir      = @bindir@
+libdir      = @libdir@
+datadir     = @datadir@
+datarootdir = @datarootdir@
+srcdir      = @srcdir@
+VPATH       = $(srcdir)
+
+# These may be overridden by make invocators
+DESTDIR        =
+GOSH           = @GOSH@
+GAUCHE_CONFIG  = @GAUCHE_CONFIG@
+GAUCHE_PACKAGE = @GAUCHE_PACKAGE@
+INSTALL        = @GAUCHE_INSTALL@
+
+CPPFLAGS       = -DGAUCHE_API_0_8_8 @CPPFLAGS@
+LDFLAGS        = @LDFLAGS@
+LIBS           = @LIBS@
+
+# Other parameters
+SOEXT  = @SOEXT@
+OBJEXT = @OBJEXT@
+EXEEXT = @EXEEXT@
+
+# Module-specific stuff
+ARCHFILES = 
+@OBJC_ENABLE_TRUE@ARCHFILES += objc-ffilib.$(SOEXT)
+SCMFILES  = 
+@OBJC_ENABLE_TRUE@SCMFILES  += objc-wrapper.scm c-wrapper/objc-ffi.scm
+HEADERS   = 
+
+TARGET    = $(ARCHFILES)
+GENERATED = 
+@OBJC_ENABLE_TRUE@GENERATED += objc-ffilib.stub objc-ffilib_head.c objc-ffilib_tail.c
+CONFIG_GENERATED = Makefile
+
+GAUCHE_PKGINCDIR  = @GAUCHE_PKGINCDIR@
+GAUCHE_PKGLIBDIR  = @GAUCHE_PKGLIBDIR@
+GAUCHE_PKGARCHDIR = @GAUCHE_PKGARCHDIR@
+
+all : $(TARGET)
+
+objc-ffilib.$(SOEXT): ./c-wrapper/objc-ffi.scm
+	$(GOSH) -I../lib -I../src cwcompile --verbose $^
+
+install : all
+	$(INSTALL) -m 444 -T $(DESTDIR)$(GAUCHE_PKGINCDIR) $(HEADERS)
+	$(INSTALL) -m 555 -T $(DESTDIR)$(GAUCHE_PKGARCHDIR) $(ARCHFILES)
+	$(INSTALL) -m 444 -T $(DESTDIR)$(GAUCHE_PKGLIBDIR) $(SCMFILES) 
+
+uninstall :
+	$(INSTALL) -U $(DESTDIR)$(GAUCHE_PKGINCDIR) $(HEADERS)
+	$(INSTALL) -U $(DESTDIR)$(GAUCHE_PKGARCHDIR) $(ARCHFILES)
+	$(INSTALL) -U $(DESTDIR)$(GAUCHE_PKGLIBDIR) $(SCMFILES) 
+
+clean :
+	rm -rf core $(TARGET) $(GENERATED) *.o *~ so_locations
+
+distclean : clean
+	rm -rf $(CONFIG_GENERATED)
+
+maintainer-clean : clean
+	rm -rf $(CONFIG_GENERATED)
+

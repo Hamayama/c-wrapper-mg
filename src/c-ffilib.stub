@@ -1,0 +1,254 @@
+;; -*- coding: utf-8; mode: scheme -*-
+;;
+;; ffilib.stub
+;; 
+;;  Copyright (c) 2006 KOGURO, Naoki (naoki@koguro.net)
+;; 
+;;  Permission is hereby granted, free of charge, to any person 
+;;  obtaining a copy of this software and associated 
+;;  documentation files (the "Software"), to deal in the 
+;;  Software without restriction, including without limitation 
+;;  the rights to use, copy, modify, merge, publish, distribute, 
+;;  sublicense, and/or sell copies of the Software, and to 
+;;  permit persons to whom the Software is furnished to do so, 
+;;  subject to the following conditions:
+;; 
+;;  The above copyright notice and this permission notice shall 
+;;  be included in all copies or substantial portions of the 
+;;  Software.
+;; 
+;;  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+;;  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+;;  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+;;  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+;;  OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+;;  OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+;;  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+;;  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+;; 
+;;  $Id$
+
+"
+#include \"c-ffi.h\"
+"
+(define-enum FFI_OK)
+(define-enum FFI_BAD_TYPEDEF)
+(define-enum FFI_BAD_ABI)
+
+(define-type <ffi-type>
+  "ffi_type*"         ; c-type
+  "ffi_type"          ; description
+  "SCM_FFI_TYPEP"     ; c-predicate
+  "SCM_FFI_TYPE_DATA" ; unboxer
+  "SCM_MAKE_FFI_TYPE" ; boxer
+  )
+
+(define-type <ffi-cif>
+  "ffi_cif*"         ; c-type
+  "ffi_cif"          ; description
+  "SCM_FFI_CIFP"     ; c-predicate
+  "SCM_FFI_CIF_DATA" ; unboxer
+  "SCM_MAKE_FFI_CIF" ; boxer
+  )
+
+(define-type <ffi-closure>
+  "ffi_closure*"         ; c-type
+  "ffi_closure"          ; description
+  "SCM_FFI_CLOSUREP"     ; c-predicate
+  "SCM_FFI_CLOSURE_DATA" ; unboxer
+  "SCM_MAKE_FFI_CLOSURE" ; boxer
+  )
+
+(define-type <uvector> "ScmUVector*" #f "SCM_UVECTORP" "SCM_UVECTOR")
+
+(define-cclass <ffi-type> :built-in
+  "ScmFFIType*" "Scm_FFITypeClass"
+  ()
+  ((size :type <long>)
+   (alignment :type <ushort>)
+   (type :type <ushort>)))
+
+(define-cclass <ffi-cif> :built-in
+  "ScmFFICif*" "Scm_FFICifClass"
+  ()
+  ())
+
+(define-cclass <ffi-closure> :built-in
+  "ScmFFIClosure*" "Scm_FFIClosureClass"
+  ()
+  ())
+
+(define-cproc ffi-type-void ()
+  (code "SCM_RETURN(SCM_MAKE_FFI_TYPE(&ffi_type_void));"))
+
+(define-cproc ffi-type-float ()
+  (code "SCM_RETURN(SCM_MAKE_FFI_TYPE(&ffi_type_float));"))
+
+(define-cproc ffi-type-double ()
+  (code "SCM_RETURN(SCM_MAKE_FFI_TYPE(&ffi_type_double));"))
+
+(define-cproc ffi-type-longdouble ()
+  (code "SCM_RETURN(SCM_MAKE_FFI_TYPE(&ffi_type_longdouble));"))
+
+(define-cproc ffi-type-pointer ()
+  (code "SCM_RETURN(SCM_MAKE_FFI_TYPE(&ffi_type_pointer));"))
+
+(define-cproc ffi-type-uchar ()
+  (code "SCM_RETURN(Scm_GetUnsignedFFIType(sizeof(unsigned char)));"))
+
+(define-cproc ffi-type-schar ()
+  (code "SCM_RETURN(Scm_GetSignedFFIType(sizeof(signed char)));"))
+
+(define-cproc ffi-type-ushort ()
+  (code "SCM_RETURN(Scm_GetUnsignedFFIType(sizeof(unsigned short)));"))
+
+(define-cproc ffi-type-sshort ()
+  (code "SCM_RETURN(Scm_GetSignedFFIType(sizeof(signed short)));"))
+
+(define-cproc ffi-type-uint ()
+  (code "SCM_RETURN(Scm_GetUnsignedFFIType(sizeof(unsigned int)));"))
+
+(define-cproc ffi-type-sint ()
+  (code "SCM_RETURN(Scm_GetSignedFFIType(sizeof(signed int)));"))
+
+(define-cproc ffi-type-ulong ()
+  (code "SCM_RETURN(Scm_GetUnsignedFFIType(sizeof(unsigned long)));"))
+
+(define-cproc ffi-type-slong ()
+  (code "SCM_RETURN(Scm_GetSignedFFIType(sizeof(signed long)));"))
+
+(define-cproc ffi-type-ulonglong ()
+  (code "SCM_RETURN(Scm_GetUnsignedFFIType(sizeof(unsigned long long)));"))
+
+(define-cproc ffi-type-slonglong ()
+  (code "SCM_RETURN(Scm_GetSignedFFIType(sizeof(signed long long)));"))
+
+(define-cproc ffi-prep-cif (rtype::<ffi-type> arglist::<list>)
+  (call "Scm_FFIPrepCIF"))
+
+(define-cproc make-ffi-array-type (type::<ffi-type> size::<long>)
+  (call "Scm_MakeFFIArrayType"))
+
+(define-cproc make-ffi-struct-type (elementlist::<list>)
+  (call "Scm_MakeFFIStructType"))
+
+(define-cproc make-c-subr (fnptr ret_type arglist optional_p info)
+  (call "Scm_MakeCSubr"))
+
+(define-cproc ffi-call (cif::<ffi-cif> fnPtrObj rvaluePtrObj avalues::<list>)
+  (call "Scm_FFICall"))
+
+(define-cproc ffi-prep-closure (cif::<ffi-cif> proc::<procedure>)
+  (call "Scm_FFIPrepClosure"))
+
+(define-cproc ffi-closure (closure::<ffi-closure>)
+  (code "SCM_RETURN(MAKE_VOID_POINTER(closure));"))
+
+;;
+;; pointer
+;;
+(define-cproc make-u8vector-nonatomic (size::<fixnum>)
+  (code "unsigned char *p = SCM_NEW2(unsigned char*, size);"
+        "SCM_RETURN(Scm_MakeU8VectorFromArrayShared(size, p));"))
+
+(define-cproc null-ptr? (ptr)
+  (code "SCM_RETURN(SCM_MAKE_BOOL(BASIC_POINTERP(ptr) && POINTER_DATA(ptr) == NULL));"))
+
+(define-cproc %ptr (obj)
+  (code "SCM_RETURN(MAKE_POINTER(PTR_CLASS(SCM_CLASS_OF(obj)), SCM_UVECTOR_ELEMENTS(BUFFER_OF(obj))));"))
+
+(define-cproc %ptr-uvector (ptrClass uvec::<uvector>)
+  (code "SCM_RETURN(MAKE_POINTER(ptrClass, SCM_UVECTOR_ELEMENTS(uvec)));"))
+
+(define-cproc %deref (ptrObj)
+  (call "Scm_Deref"))
+
+(define-cproc %deref-uvector (ptrObj size)
+  (call "Scm_Deref_uvector"))
+
+(define-cproc ptr->string (ptrObj)
+  (code "SCM_RETURN(SCM_MAKE_STR_COPYING((const char*) POINTER_DATA(ptrObj)));"))
+
+(define-cproc %expand-u8vector (buf::<uvector> size::<long>)
+  (code "SCM_RETURN(Scm_MakeU8VectorFromArrayShared(size, SCM_U8VECTOR_ELEMENTS(buf)));"))
+
+(define-cproc make-null-ptr ()
+  (code "SCM_RETURN(MAKE_VOID_POINTER(NULL));"))
+
+"
+static void finalize_pointer(ScmObj obj, void *data)
+{
+    static ScmObj finalizeof_proc = SCM_FALSE;
+    ScmObj finalize_proc;
+
+    if (SCM_FALSEP(finalizeof_proc)) {
+        finalizeof_proc = SCM_SYMBOL_VALUE(MODULE_NAME, \"finalizer-of\");
+    }
+
+    finalize_proc = Scm_ApplyRec(finalizeof_proc, SCM_LIST1(obj));
+    if (!SCM_FALSEP(finalize_proc)) {
+        Scm_ApplyRec(finalize_proc, SCM_LIST1(obj));
+    }
+    Scm_UnregisterFinalizer(obj);
+}
+"
+
+(define-cproc %register-finalizer! (ptrobj)
+  "if (!POINTERP(ptrobj)) {
+      Scm_Error(\"<c-ptr> required, but got %S\", ptrobj);
+  }
+  Scm_RegisterFinalizer(ptrobj, finalize_pointer, NULL);
+  SCM_RETURN(SCM_UNDEFINED);")
+
+(define-cproc %unregister-finalizer! (ptrobj)
+  "if (!POINTERP(ptrobj)) {
+      Scm_Error(\"<c-ptr> required, but got %S\", ptrobj);
+  }
+  Scm_UnregisterFinalizer(ptrobj);
+  SCM_RETURN(SCM_UNDEFINED);")
+
+(define-cproc foreign-pointer->c-ptr (ptrClass fptr::<foreign-pointer>)
+  (code "SCM_RETURN(MAKE_POINTER(ptrClass, fptr->ptr));"))
+
+;;
+;; dlopen, dlsym, dlclose
+;;
+(define-cproc dlopen (path::<const-cstring>)
+  (call "FFI_dlopen"))
+
+(define-cproc dlsym (symbol::<const-cstring>)
+  (call "FFI_dlsym"))
+
+(define-cproc dlerror ()
+  (call "FFI_dlerror"))
+
+(define-cproc dlclose (handle)
+  (call "FFI_dlclose"))
+
+;;
+;; others
+;;
+(define-cproc big-endian? ()
+  (code "#ifdef WORDS_BIGENDIAN"
+        "SCM_RETURN(SCM_TRUE);"
+        "#else"
+        "SCM_RETURN(SCM_FALSE);"
+        "#endif"))
+
+(define-cproc objc-string (ptrClass str::<const-cstring>)
+  (code "#ifdef __OBJC__"
+        "NSString *nsstr = [NSString stringWithCString:str encoding:OBJC_STRING_ENCODING];"
+        "SCM_RETURN(MAKE_POINTER(ptrClass, nsstr));"
+        "#else"
+        "Scm_Error(\"Unsupported operation 'objc-string'\");"
+        "#endif"))
+
+(define-cproc c-struct-symbol (tagname)
+  (call "Scm_CStructSymbol"))
+
+(define-cproc c-union-symbol (tagname)
+  (call "Scm_CUnionSymbol"))
+
+;; Local variables:
+;; mode: scheme
+;; end:

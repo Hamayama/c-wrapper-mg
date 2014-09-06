@@ -1,0 +1,171 @@
+;; -*- coding: utf-8; mode: scheme -*-
+;;
+;; c-lexlib.stub
+;; 
+;;  Copyright (c) 2009 KOGURO, Naoki (naoki@koguro.net)
+;; 
+;;  Permission is hereby granted, free of charge, to any person 
+;;  obtaining a copy of this software and associated 
+;;  documentation files (the "Software"), to deal in the 
+;;  Software without restriction, including without limitation 
+;;  the rights to use, copy, modify, merge, publish, distribute, 
+;;  sublicense, and/or sell copies of the Software, and to 
+;;  permit persons to whom the Software is furnished to do so, 
+;;  subject to the following conditions:
+;; 
+;;  The above copyright notice and this permission notice shall 
+;;  be included in all copies or substantial portions of the 
+;;  Software.
+;; 
+;;  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+;;  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+;;  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+;;  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
+;;  OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+;;  OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+;;  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+;;  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+;; 
+
+"
+#include \"c-lex.h\"
+"
+
+;;
+;; strtoll, strtod
+;;
+(define-cproc strtoll (nptr::<const-cstring>)
+  (code "char *endptr = NULL;"
+        "long long v = strtoll(nptr, &endptr, 0);"
+        "if (nptr == endptr) {"
+        "    SCM_RETURN(SCM_FALSE);"
+        "} else {"
+        "    SCM_RETURN(Scm_MakeInteger64((ScmInt64) v));"
+        "}"))
+
+(define-cproc strtod (nptr::<const-cstring>)
+  (code "char *endptr = NULL;"
+        "double v = strtod(nptr, &endptr);"
+        "if (nptr == endptr) {"
+        "    SCM_RETURN(SCM_FALSE);"
+        "} else {"
+        "    SCM_RETURN(Scm_MakeFlonum(v));"
+        "}"))
+
+(define-cproc parser-attribute-clear! ()
+  (call "Scm_ParserAttributeClear"))
+
+(define-cproc parser-attribute ()
+  (call "Scm_ParserAttributeRef"))
+
+(define-cproc parser-attribute-add! (attr)
+  (call "Scm_ParserAttributeAdd"))
+
+(define-cproc buf-read-char ()
+  (call "Scm_BufferReadChar"))
+
+(define-cproc buf-peek-char ()
+  (call "Scm_BufferPeekChar"))
+
+(define-cproc buf-next-char ()
+  (call "Scm_BufferNextChar"))
+
+(define-cproc set-input-port! (port)
+  (call "Scm_SetInputPort"))
+
+(define-cproc free-input-port! ()
+  (call "Scm_FreeInputPort"))
+
+(define-cproc set-input-string! (str::<string>)
+  (call "Scm_SetInputString"))
+
+(define-cproc get-keyword-val (sym)
+  (call "Scm_GetKeywordVal"))
+
+(define-cproc get-operator-val (sym)
+  (call "Scm_GetOperatorVal"))
+
+(define-cproc lineno ()
+  (call "Scm_LineNumberRef"))
+
+(define-cproc lineno-set! (num::<fixnum>)
+  (call "Scm_LineNumberSet"))
+
+(define-cproc filename ()
+  (call "Scm_FilenameRef"))
+
+(define-cproc filename-set! (filename)
+  (call "Scm_FilenameSet"))
+
+(define-cproc current-line ()
+  (call "Scm_CurrentLineRef"))
+
+(define-cproc char-hex-digit? (c)
+  (call "Scm_CharHexDigit"))
+
+(define-cproc char-octal-digit? (c)
+  (call "Scm_CharOctalDigit"))
+
+(define-cproc skip-spaces ()
+  (call "Scm_SkipSpaces"))
+
+(define-cproc skip-line ()
+  (call "Scm_SkipLine"))
+
+(define-cproc last-token ()
+  (call "Scm_LastTokenRef"))
+
+(define-cproc last-token-set! (token)
+  (call "Scm_LastTokenSet"))
+
+(define-cproc force-identifier? ()
+  (call "Scm_IsForceIdentifierRef"))
+
+(define-cproc force-identifier-set! (v)
+  (call "Scm_IsForceIdentifierSet"))
+
+(define-cproc init-type-table ()
+  (call "Scm_InitTypeTable"))
+
+(define-cproc install-type (sym)
+  (call "Scm_InstallType"))
+
+(define-cproc read-identifier (l)
+  (call "Scm_ReadIdentifier"))
+
+(define-cproc read-operator (c)
+  (call "Scm_ReadOperator"))
+
+(define-cproc read-string-literal ()
+  (call "Scm_ReadStringLiteral"))
+
+(define-cproc read-character-constant ()
+  (call "Scm_ReadCharacterConstant"))
+
+(define-cproc read-octal-or-flonum (l)
+  (call "Scm_ReadOctalOrFlonum"))
+
+(define-cproc read-decimal (l)
+  (call "Scm_ReadDecimal"))
+
+(define-cproc read-hexadecimal (l)
+  (call "Scm_ReadHexadecimal"))
+
+(define-cproc read-flonum (l ics radix::<fixnum> ecs)
+  (call "Scm_ReadFlonum"))
+
+(define-cproc do-sharp-command ()
+  (call "Scm_DoSharpCommand"))
+
+(define-cproc c-scan ()
+  (call "Scm_CScan"))
+
+(define-cproc start-macro-set! ()
+  (call "Scm_StartMacroSet"))
+
+(define-cproc start-macro-reset! ()
+  (call "Scm_StartMacroReset"))
+
+;; Local variables:
+;; mode: scheme
+;; end:

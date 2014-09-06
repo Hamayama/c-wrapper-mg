@@ -1,0 +1,647 @@
+;; -*- coding: utf-8; mode: scheme -*-
+;;
+;; stubgen.scm - stub generator
+;;
+;;   Copyright (c) 2006 KOGURO, Naoki (naoki@koguro.net)
+;;   All rights reserved.
+;;
+;;   Redistribution and use in source and binary forms, with or without 
+;;   modification, are permitted provided that the following conditions 
+;;   are met:
+;;
+;;   1. Redistributions of source code must retain the above copyright 
+;;      notice, this list of conditions and the following disclaimer.
+;;   2. Redistributions in binary form must reproduce the above copyright 
+;;      notice, this list of conditions and the following disclaimer in the 
+;;      documentation and/or other materials provided with the distribution.
+;;   3. Neither the name of the authors nor the names of its contributors 
+;;      may be used to endorse or promote products derived from this 
+;;      software without specific prior written permission.
+;;
+;;   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+;;   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+;;   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
+;;   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
+;;   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+;;   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED 
+;;   TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+;;   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+;;   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+;;   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+;;   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;
+;;   $Id: $
+;;
+
+(define-module c-wrapper.stubgen
+  (use srfi-1)
+  (use srfi-13)
+  (use gauche.parameter)
+  (use gauche.process)
+  (use gauche.parseopt)
+  (use file.util)
+  (use util.match)
+  (use c-wrapper.c-parser)
+  (use @STUBGEN_FFI_MODULE@)
+  (use text.tr)
+
+  (export compile-wrapper)
+  )
+
+(select-module c-wrapper.stubgen)
+
+(define (listize obj)
+  (if (list? obj)
+      (cond
+       ((null? obj)
+        obj)
+       ((eq? (car obj) 'quote)
+        (cadr obj))
+       (else
+        obj))
+      (list obj)))
+
+(define *dummy-line* "/**/")
+
+;; from genstub.scm
+(define (get-c-name prefix scheme-name)
+  (with-output-to-string
+    (lambda ()
+      (display (x->string prefix)) 
+      (with-input-from-string (x->string scheme-name)
+        (lambda ()
+          (let loop ((c (read-char)))
+            (unless (eof-object? c)
+              (case c
+                ((#\-) (let ((d (read-char)))
+                         (cond ((eof-object? d)
+                                (display #\_))
+                               ((eqv? d #\>)
+                                (display "_TO") (loop (read-char)))
+                               (else
+                                (display #\_) (loop d)))))
+                ((#\?) (display #\P) (loop (read-char)))
+                ((#\!) (display #\X) (loop (read-char)))
+                ((#\<) (display "_LT") (loop (read-char)))
+                ((#\>) (display "_GT") (loop (read-char)))
+                ((#\* #\> #\@ #\$ #\% #\^ #\& #\* #\+ #\=
+                  #\: #\. #\/ #\~)
+                 (display #\_)
+                 (display (number->string (char->integer c) 16))
+                 (loop (read-char)))
+                (else (display c) (loop (read-char)))
+                ))))
+        )
+      )
+    )
+  )
+
+(define stub-unit (make-parameter #f))
+
+(define-class <stub-unit> ()
+  ((stub-file :init-keyword :stub-file :init-value #f)
+   (header-comments :init-value '())
+   (footer-comments :init-value '())
+   (includes :init-value '())
+   (embedding-c-codes :init-value '())
+   (define-cprocs :init-value '())
+   (define-symbols :init-value '())
+   (initcodes :init-value '())
+   (value-table :init-form (make-hash-table))
+   (symbol-table :init-form (make-hash-table))
+   (string-table :init-form (make-hash-table 'string=?))
+   (memoise-table :init-form (make-hash-table 'equal?))
+   (cproc-table :init-form (make-hash-table))))
+
+(define (make-stub-unit stub-file)
+  (let ((unit (make <stub-unit> :stub-file stub-file)))
+    (parameterize ((stub-unit unit))
+      (emit-header-comment #`";;;")
+      (emit-header-comment #`";;; ,(slot-ref unit 'stub-file)")
+      (emit-header-comment #`";;;")
+
+      (emit-include "stdlib.h")
+      (emit-include "gauche.h")
+      (emit-include "gauche/extend.h")
+      (emit-include "gauche/uvector.h")
+
+      (let ((cname (get-c-name "" (path-sans-extension stub-file))))
+        (emit-c-code "/* Hack for initialization stub */")
+        (emit-c-code "static void internal_init(ScmModule*);")
+        (emit-c-code "static ScmObj __c_wrapper_mod;")
+        (emit-c-code "static ScmObj __sandbox_mod;")
+        (emit-c-code #`"void Scm_Init_,|cname|(void)")
+        (emit-c-code #`"{")
+        (emit-c-code #`"    SCM_INIT_EXTENSION(,|cname|);")
+        (emit-c-code #`"    __c_wrapper_mod = Scm_ApplyRec0(Scm_GlobalVariableRef(SCM_FIND_MODULE(\"c-wrapper.c-ffi\",, FALSE),, SCM_SYMBOL(SCM_INTERN(\"ffi-sandbox-module\")),, FALSE));")
+        (emit-c-code #`"    __sandbox_mod = Scm_ApplyRec0(Scm_GlobalVariableRef(SCM_FIND_MODULE(\"c-wrapper\",, FALSE),, SCM_SYMBOL(SCM_INTERN(\"sandbox-module\")),, FALSE));")        (emit-c-code #`"    internal_init(SCM_MODULE(__c_wrapper_mod));")
+        (emit-c-code #`"}")
+        (emit-c-code #`"#define Scm_Init_,|cname| internal_init"))
+
+      ;; define helper functions
+      (emit-c-code "#define INIT_SYMVAL(var, sym) if (!var) { var = Scm_GlobalVariableRef(SCM_MODULE(__c_wrapper_mod), SCM_SYMBOL(SCM_INTERN(sym)), FALSE); }")
+
+      (emit-c-code "static ScmObj cw_boxvar(ScmObj klass, void *varptr)")
+      (emit-c-code "{")
+      (emit-c-code "    static ScmObj make_proc = NULL;")
+      (emit-c-code "    static ScmObj csizeof_proc = NULL;")
+      (emit-c-code "    ScmObj obj;")
+      (emit-c-code "    ScmObj buf;")
+      (emit-c-code "    size_t size;")
+      (emit-c-code "    INIT_SYMVAL(make_proc, \"make\");")
+      (emit-c-code "    INIT_SYMVAL(csizeof_proc, \"c-sizeof\");")
+      (emit-c-code "    size = Scm_GetIntegerU(Scm_ApplyRec1(csizeof_proc, klass));")
+      (emit-c-code "    buf = Scm_MakeU8VectorFromArrayShared(size, varptr);")
+      (emit-c-code "    obj = Scm_ApplyRec3(make_proc, klass, SCM_MAKE_KEYWORD(\"buffer\"), buf);")
+      (emit-c-code "    SCM_RETURN(obj);")
+      (emit-c-code "}")
+
+      (emit-c-code "static void cw_unbox(void *dest, ScmObj obj, size_t size)")
+      (emit-c-code "{")
+      (emit-c-code "    static ScmObj bufferof_proc = NULL;")
+      (emit-c-code "    ScmObj buf;")
+      (emit-c-code "    if (!bufferof_proc) {")
+      (emit-c-code "        bufferof_proc = Scm_GlobalVariableRef(SCM_FIND_MODULE(\"c-wrapper.c-ffi\", FALSE), SCM_SYMBOL(SCM_INTERN(\"buffer-of\")), FALSE);")
+      (emit-c-code "    }")
+      (emit-c-code "    buf = Scm_ApplyRec1(bufferof_proc, obj);")
+      (emit-c-code "    memcpy(dest, SCM_UVECTOR_ELEMENTS(buf), size);")
+      (emit-c-code "}")
+
+      (emit-footer-comment ";; Local variables:")
+      (emit-footer-comment ";; mode: scheme")
+      (emit-footer-comment ";; end:"))
+    unit))
+
+(define-method emit-header-comment ((comment <string>))
+  (slot-push! (stub-unit) 'header-comments comment))
+
+(define-method emit-footer-comment ((comment <string>))
+  (slot-push! (stub-unit) 'footer-comments comment))
+
+(define-method emit-include ((header-file <string>))
+  (slot-push! (stub-unit) 'includes header-file))
+
+(define-method emit-c-code ((c-code <string>))
+  (slot-push! (stub-unit) 'embedding-c-codes c-code))
+                
+(define-method emit-define-cproc ((name <symbol>) ret-type (arg-types <list>)
+                                  (args <list>) (body <string>))
+  (cond
+   ((hash-table-exists? (slot-ref (stub-unit) 'cproc-table) name)
+    ;; DO NOTHING
+    #t)
+   (else
+    (slot-push! (stub-unit) 'define-cprocs
+                (with-output-to-string
+                  (lambda ()
+                    (format #t "(define-cproc ~a ~a" name args)
+                    (let ((bodies (string-split body #[\x0d\x0a])))
+                      (format #t "~%  (code ~s" (car bodies))
+                      (for-each (cut format #t "~%        ~s" <>) (cdr bodies))
+                      (format #t "))~%")))))
+    (hash-table-put! (slot-ref (stub-unit) 'cproc-table) name
+                     (cons ret-type arg-types)))))
+
+(define-method emit-define-symbol ((name <symbol>) (varnam <symbol>))
+  (slot-push! (stub-unit) 'define-symbols
+              (format "(define-symbol ~a \"~a\")" name varnam)))
+
+(define-method emit-initcode ((c-code <string>))
+  (slot-push! (stub-unit) 'initcodes c-code))
+
+(define (write-stub dir)
+  (with-output-to-file (build-path dir (slot-ref (stub-unit) 'stub-file))
+    (lambda ()
+      (for-each print (reverse (slot-ref (stub-unit) 'header-comments)))
+      (for-each (cut format #t "\"#include \\\"~a\\\"\"~%" <>)
+                (reverse (slot-ref (stub-unit) 'includes)))
+      (for-each (cut format #t "~s~%" <>)
+                (reverse (slot-ref (stub-unit) 'embedding-c-codes)))
+      (for-each print (reverse (slot-ref (stub-unit) 'define-symbols)))
+      (for-each print (reverse (slot-ref (stub-unit) 'define-cprocs)))
+      (for-each (lambda (line)
+                  (unless (string=? line *dummy-line*)
+                    (format #t "(initcode ~s)~%" (string-append line ";"))))
+                (reverse (slot-ref (stub-unit) 'initcodes)))
+      (for-each print (reverse (slot-ref (stub-unit) 'footer-comments))))))
+
+;;
+
+(define (classname->ctype sym)
+  (match sym
+    (('c-struct ('quote nam))
+     #`"struct ,nam")
+    (('c-union ('quote nam))
+     #`"union ,nam")
+    ((('with-module 'c-wrapper.c-ffi 'ptr) type)
+     "void*")
+    (('c-array type num)
+     "void*")
+    (('c-func-ptr ret-type ('list ('list nam arg-type) ...))
+     "void*")
+    (('c-func-ptr ret-type ('list arg-type ...))
+     "void*")
+    ('<c-char>
+     "char")
+    ('<c-uchar>
+     "unsigned char")
+    ('<c-short>
+     "short")
+    ('<c-ushort>
+     "unsigned short")
+    ('<c-int>
+     "int")
+    ('<c-uint>
+     "unsigned int")
+    ('<c-long>
+     "long")
+    ('<c-ulong>
+     "unsigned long")
+    ('<c-longlong>
+     "long long")
+    ('<c-ulonglong>
+     "unsigned long long")
+    ('<c-float>
+     "float")
+    ('<c-double>
+     "double")
+    ('<c-longdouble>
+     "long double")
+    ('<c-void>
+     "void")
+    ((= (lambda (sym) (#/^<(.*)>$/ (x->string sym))) rmatch)
+     (if rmatch
+         (rmatch 1)
+         (errorf "Unknown type ~a" sym)))))
+
+(define-method emit-define-cproc ((name <symbol>) ret-type (arg-types <list>))
+  (let* ((narg-types (remove (cut equal? '<c-void> <>) arg-types))
+         (ret-ctype (classname->ctype ret-type))
+         (narg-ctypes (map classname->ctype narg-types))
+         (arg-objs (map (cut format "obj~a" <>) (iota (length narg-types))))
+         (arg-vars (map (cut format "v~a" <>) (iota (length narg-types))))
+         (body (with-output-to-string
+                 (lambda ()
+                   (for-each (cut format #t "~a ~a;~%" <> <>)
+                             narg-ctypes arg-vars)
+                   (for-each (lambda (var obj type)
+                               (format #t "cw_unbox(&~a, ~a, sizeof(~a));~%"
+                                       var
+                                       (ccode-eval
+                                        `((with-module c-wrapper.c-ffi cast) ,type
+                                               (cexpr ,(string->symbol obj))))
+                                       var))
+                             arg-vars arg-objs narg-types)
+                   (cond
+                    ((equal? '<c-void> ret-type)
+                     (format #t "(~a)(~a);~%"
+                             name (string-join arg-vars ","))
+                     (format #t "SCM_RETURN(SCM_UNDEFINED);"))
+                    (else
+                     (format #t "{~%")
+                     (format #t "    ~a *result_buf = SCM_NEW2(~a*, sizeof(~a));~%"
+                             ret-ctype ret-ctype ret-ctype)
+                     (format #t "    *result_buf = (~a) (~a)(~a);~%"
+                             ret-ctype name (string-join arg-vars ","))
+                     (format #t "    SCM_RETURN(~a);~%"
+                             (ccode-eval
+                              `(scm-cast
+                                (cexpr ,(format "cw_boxvar(~a, result_buf)"
+                                                (ccode-eval ret-type))))))
+                     (format #t "}")))))))
+    (emit-define-cproc name ret-type arg-types
+                       (map string->symbol arg-objs) body)))
+
+(define (ccode-intern sym)
+  (let ((symbol-table (slot-ref (stub-unit) 'symbol-table)))
+    (symbol->string (or (hash-table-get symbol-table sym #f)
+                        (let ((varnam (gensym "__c_wrapper_")))
+                          (emit-define-symbol sym varnam)
+                          (hash-table-put! symbol-table sym varnam)
+                          varnam)))))
+
+(define (ccode-string str)
+  (let ((string-table (slot-ref (stub-unit) 'string-table)))
+    (format "SCM_OBJ(&~a)"
+            (or (hash-table-get string-table str #f)
+                (let ((varnam (gensym "__c_wrapper_"))
+                      (len (string-length str)))
+                  (emit-c-code
+                   (format "static SCM_DEFINE_STRING_CONST(~a, ~s, ~a, ~a);"
+                           varnam str len len))
+                  (hash-table-put! string-table str varnam)
+                  varnam)))))
+
+(define (ccode-lookup-value sym)
+  (let ((value-table (slot-ref (stub-unit) 'value-table)))
+     (or (hash-table-get value-table sym #f)
+         (let ((varnam (gensym "__c_wrapper_")))
+           (emit-c-code (format "static ScmObj ~a;    /* ~a */" varnam sym))
+           (emit-initcode
+            (format
+             "~a = Scm_SymbolValue(SCM_MODULE(__c_wrapper_mod), SCM_SYMBOL(~a))"
+             varnam (ccode-intern sym)))
+           (hash-table-put! value-table sym varnam)
+           (symbol->string varnam)))))
+
+(define (ccode-define name cexpr)
+  (let ((varnam (gensym "__c_wrapper_"))
+        (value-table (slot-ref (stub-unit) 'value-table)))
+    (hash-table-put! value-table name varnam)
+    (emit-c-code (format "static ScmObj ~a;    /* ~a */" varnam name))
+    (emit-initcode (format "~a = ~a" varnam cexpr))
+    (format "Scm_Define(SCM_MODULE(__c_wrapper_mod), SCM_SYMBOL(~a), ~a)"
+            (ccode-intern name) varnam)))
+
+(define (ccode-memoise-apply proc args)
+  (let ((memoise-table (slot-ref (stub-unit) 'memoise-table)))
+    (symbol->string
+     (or (hash-table-get memoise-table (cons proc args) #f)
+         (let ((varnam (gensym "__c_wrapper_")))
+           (emit-c-code (format "static ScmObj ~a;    /* ~a */"
+                                varnam (cons proc args)))
+           (emit-initcode (format "~a = ~a"
+                                  varnam
+                                  (ccode-eval `(apply ,proc (list ,@args)))))
+           (hash-table-put! memoise-table (cons proc args) varnam)
+           varnam)))))
+           
+(define (ccode-eval expr)
+  (match expr
+    ((('with-module 'c-wrapper 'define-inline-cfunc)
+      name ret-type _ (arg-types ...) _ ...)
+     (emit-define-cproc name ret-type arg-types)
+     *dummy-line*)
+    (('define sym expr)
+     (ccode-define sym (ccode-eval expr)))
+    ((('with-module 'c-wrapper 'define-enum) name val)
+     (ccode-define name (format "Scm_MakeInteger(~a)" name)))
+    (('init-c-struct! name members)
+     (ccode-eval `(apply init-c-struct! (list ,name ,members))))
+    (('init-c-union! name members)
+     (ccode-eval `(apply init-c-union! (list ,name ,members))))
+    (('c-enum tagname)
+     (ccode-eval '<c-int>))
+    (('export symbols ...)
+     (for-each (lambda (sym)
+                 (let ((sym-val (ccode-intern sym)))
+                   (emit-initcode (format "Scm_Define(SCM_MODULE(__sandbox_mod), SCM_SYMBOL(~a), Scm_GlobalVariableRef(SCM_MODULE(__c_wrapper_mod), SCM_SYMBOL(~a), 0))" sym-val sym-val))))
+               symbols)
+     *dummy-line*)
+    ((? symbol? x)
+     (ccode-lookup-value x))
+    (#t
+     "SCM_TRUE")
+    (#f
+     "SCM_FALSE")
+    ((? string? x)
+     (ccode-string x))
+    ((? fixnum? x)
+     (format "SCM_MAKE_INT(~a)" x))
+    ((? number? x)
+     (format "Scm_ReadFromCString(\"~a\")" x))
+    (('list)
+     "SCM_NIL")
+    (('list a)
+     (apply (cut format "SCM_LIST1(~a)" <>)
+            (map ccode-eval (cdr expr))))
+    (('list a b)
+     (apply (cut format "SCM_LIST2(~a, ~a)" <> <>)
+            (map ccode-eval (cdr expr))))
+    (('list a b c)
+     (apply (cut format "SCM_LIST3(~a, ~a, ~a)" <> <> <>)
+            (map ccode-eval (cdr expr))))
+    (('list a b c d)
+     (apply (cut format "SCM_LIST4(~a, ~a, ~a, ~a)" <> <> <> <>)
+            (map ccode-eval (cdr expr))))
+    (('list a b c d e)
+     (apply (cut format "SCM_LIST5(~a, ~a, ~a, ~a, ~a)" <> <> <> <> <>)
+            (map ccode-eval (cdr expr))))
+    (('list kar rest ...)
+     (format "Scm_Cons(~a, ~a)" (ccode-eval kar) (ccode-eval `(list ,@rest))))
+    (('quote #f)
+     "SCM_FALSE")
+    (('quote name)
+     (ccode-intern name))
+    (('cons kar kdr)
+     (format "Scm_Cons(~a, ~a)" (ccode-eval kar) (ccode-eval kdr)))
+    ((('with-module 'c-wrapper.c-ffi 'ptr) ctype)
+     (ccode-memoise-apply '(with-module c-wrapper.c-ffi ptr) (list ctype)))
+    (('apply proc lst)
+     (format "Scm_ApplyRec(~a, ~a)" (ccode-eval proc) (ccode-eval lst)))
+    ((('with-module 'c-wrapper.c-ffi 'cast) ctype val)
+     (ccode-eval `(apply (with-module c-wrapper.c-ffi cast) (list ,ctype ,val))))
+    (('scm-cast val)
+     (ccode-eval `(apply scm-cast (list ,val))))
+    (('c-cast val)
+     (ccode-eval `(apply c-cast (list ,val))))
+    (('c-bit-field ctype n)
+     (ccode-eval `(apply c-bit-field (list ,ctype ,n))))
+    (('c-array ctype size)
+     (ccode-memoise-apply 'c-array (list ctype size)))
+    (('c-func-ptr rettype argtypes)
+     (ccode-memoise-apply 'c-func-ptr (list rettype argtypes)))
+    (('c-struct ('quote name))
+     (ccode-eval ((with-module c-wrapper.c-ffi c-struct-symbol) name)))
+    (('c-union ('quote name))
+     (ccode-eval ((with-module c-wrapper.c-ffi c-union-symbol) name)))
+    (('make-c-func-vaargs name rettype argtypes)
+     (ccode-memoise-apply 'make-c-func-vaargs (list name rettype argtypes)))
+    (('cexpr expr)
+     expr)
+    (else
+     (format "Scm_EvalRec(~a, SCM_OBJ(__c_wrapper_mod))"
+             (letrec ((traverse
+                       (lambda (obj)
+                         (cond
+                          ((list? obj)
+                           `(cexpr ,(ccode-eval `(list ,@(map traverse obj)))))
+                          ((pair? obj)
+                           `(cexpr
+                             ,(ccode-eval `(cons ,(traverse (car obj))
+                                                 ,(traverse (cdr obj))))))
+                          ((symbol? obj)
+                           `(cexpr ,(ccode-eval `(quote ,obj))))
+                          ((or (number? obj)
+                               (string? obj)
+                               (boolean? obj))
+                           `(cexpr ,(ccode-eval obj)))
+                          (else
+                           `(cexpr
+                             ,(format "Scm_ReadFromCString(\"~s\")" obj)))))))
+               (ccode-eval (traverse expr)))))))
+
+(define (wrapper->c headers include-dirs options import-arg export? hide)
+  (for-each emit-include headers)
+  (let ((lst '()))
+    (c-parse include-dirs
+             headers
+             options
+             import-arg
+             export?
+             (lambda (expr)
+               (push! lst expr))
+             hide)
+    (for-each (lambda (expr)
+                (emit-initcode (ccode-eval expr)))
+              (reverse lst))))
+
+(define (run-command command compiled-lib headers include-dirs import-arg
+                     export? hide cppflags cflags ldflags libs verbose?)
+  (let* ((extension (path-sans-extension compiled-lib))
+         (stub-file (path-swap-extension compiled-lib "stub"))
+         (cmdlines (case command
+                     ((compile)
+                      `(("gauche-package" "compile"
+                         ,@(if verbose? '("--verbose") '())
+                         ,#`"--cflags=,|cflags|"
+                         ,#`"--cppflags=,|cppflags|"
+                         ,#`"--ldflags=,|ldflags|"
+                         ,#`"--libs=,|libs|"
+                         ,extension
+                         ,stub-file)))
+                     ((clean)
+                      `(("gauche-package" "compile" "--clean"
+                         ,@(if verbose? '("--verbose") '())
+                         ,extension
+                         ,stub-file)
+                        ("rm" "-f" ,stub-file))))))
+    (parameterize ((stub-unit (make-stub-unit stub-file)))
+      (wrapper->c (listize headers)
+                  (listize include-dirs)
+                  (string-split cppflags #[\s])
+                  import-arg export? hide)
+      (write-stub (sys-dirname compiled-lib))
+      (for-each (lambda (cmd)
+                  (when verbose?
+                    (print (string-join cmd " ")))
+                  (run-process cmd :wait #t))
+                cmdlines))))
+
+(define (compile-wrapper filename command
+                         cflags-arg cppflags-arg ldflags-arg libs-arg verbose?)
+  (with-input-from-file filename
+    (lambda ()
+      (let loop ((expr (read))
+                 (cppflags (list cppflags-arg))
+                 (ldflags (list ldflags-arg))
+                 (libs (list libs-arg)))
+        (match expr
+         ((? eof-object? v)
+          #t)
+
+         (('define-module module lst ...)
+          (with-input-from-string (with-output-to-string
+                                    (lambda ()
+                                      (for-each (cut format #t "~s" <>) lst)))
+            (lambda ()
+              (loop (read) cppflags ldflags libs)))
+          (loop (read) cppflags ldflags libs))
+
+         (('use 'objc-wrapper)
+          (loop (read) (append cppflags (list "-ObjC")) ldflags libs))
+
+         (('c-load-framework frameworks)
+          (loop (read) cppflags ldflags
+                (append libs (map (lambda (fw)
+                                    #`"-framework ,|fw|")
+                                  (listize frameworks)))))
+
+         (('c-ld keywords ...)
+          (loop `(c-load-library () ,@keywords)
+                cppflags ldflags libs))
+
+         (('c-load-library libs keywords ...)
+          (let-keywords* keywords ((library-dirs '())
+                                   (option ""))
+            (let ((ldflags&libs
+                   (fold (lambda (filename ldflags&libs)
+                           (receive (dir lib _)
+                               (decompose-path filename)
+                             (cons
+                              (append (car ldflags&libs)
+                                      (if (string=? dir ".")
+                                          '()
+                                          (list #`"-L,|dir|")))
+                              (append (cdr ldflags&libs)
+                                      (let ((name (regexp-replace #/lib(.*)/
+                                                                  "\\1")))
+                                        (list #`"-l,|name|"))))))
+                         (receive (libs ldflags)
+                             (partition (cut string-prefix? "-l" <>)
+                                        (string-split option #[\s]))
+                           (cons ldflags libs))
+                         (listize libs))))
+              (loop (read) cppflags
+                    (append ldflags (car ldflags&libs))
+                    (append libs (cdr ldflags&libs))))))
+         
+         (('c-include headers keywords ...)
+          (let-keywords* keywords ((include-dirs '())
+                                   (option "")
+                                   (import-arg :import #f)
+                                   (module #t)
+                                   (export? #f)
+                                   (compiled-lib #f))
+            (when compiled-lib
+              (let* ((options (string-split option #[\s]))
+                     (cppflags-str (string-join (append cppflags options) " "))
+                     (ldflags-str (string-join ldflags " "))
+                     (libs-str (string-join libs " ")))
+                (run-command command
+                             compiled-lib
+                             headers
+                             include-dirs
+                             (eval import-arg (current-module))
+                             (if module #t export?)
+                             hide
+                             cppflags-str "" ldflags-str libs-str
+                             verbose?))))
+          (loop (read) cppflags ldflags libs))
+
+         (('c-load headers keywords ...)
+          (let-keywords* keywords ((cflags-str :cflags "")
+                                   (cflags-cmd #f)
+                                   (cppflags-str :cppflags "")
+                                   (cppflags-cmd #f)
+                                   (ldflags-str :ldflags "")
+                                   (ldflags-cmd #f)
+                                   (libs-str :libs "")
+                                   (libs-cmd #f)
+                                   (compiled-lib #f)
+                                   (module #t)
+                                   (export? #f)
+                                   (import-arg :import #f)
+                                   (hide '()))
+            (when compiled-lib
+              (let ((append-cmd
+                     (lambda (flags str cmd)
+                       (string-join (append (reverse flags)
+                                            (list str)
+                                            (list (cond
+                                                   (cmd => process-output->string)
+                                                   (else ""))))
+                                    " "))))
+                (run-command command
+                             compiled-lib
+                             headers
+                             '()
+                             (eval import-arg (current-module))
+                             (if module #t export?)
+                             hide
+                             (append-cmd cppflags cppflags-str cppflags-cmd)
+                             (append-cmd '() cflags-str cflags-cmd)
+                             (append-cmd ldflags ldflags-str ldflags-cmd)
+                             (append-cmd libs libs-str libs-cmd)
+                             verbose?))))
+          (loop (read) cppflags ldflags libs))
+         
+         (('select-module module)
+          (loop (read) cppflags ldflags libs))
+
+         (else
+          (loop (read) cppflags ldflags libs)))))))
+
+(provide "c-wrapper/stubgen")
+
+;; end of file

@@ -1,0 +1,55 @@
+
+下記の Gauche 用 の c-wrapper を MinGW (32bit) 上で動くように改造途中のものです。
+
+オリジナルは、
+http://hg.koguro.net/c-wrapper
+にある c-wrapper v0.6.1 (ChangeLog 2012-07-19) です。
+
+付属していたlibffiは削除して、
+https://sourceware.org/libffi/
+にある libffi-3.1 を使うようにします。
+
+mmap関数は、
+https://code.google.com/p/mman-win32/
+にある mman.h と mman.c を使うようにします。
+
+(2014-9-6)
+
+
+
+-- ここから オリジナルの情報 --
+
+This is c-wrapper, a generic wrapper for C libraries.
+
+Requirements
+------------
+- Gauche 0.8.6 or later
+
+
+Install
+-------
+To install, you can use gauche-package.
+    % gauche-package install <<<this tarball>>>
+
+Or expand this tarball, configure and make (use GNU make).
+
+    % ./configure
+    % make
+    % make install
+
+
+Included Libraries
+------------------
+c-wrapper includes the external libraries below.
+- libffi (from GCC 4.0.2)
+  (http://gcc.gnu.org/)
+- lang.tool (c-grammar.scm, c-lex.scm) in Gauche Garbage Collection
+  (http://homepage.mac.com/skimu/ggc/)
+- Dominique Boucher's Lalr (lalr-gauche.scm)
+  (http://www.iro.umontreal.ca/~boucherd/Lalr/documentation/lalr.html)
+
+
+License
+-------
+c-wrapper's license is MIT License, but the libraries (libffi, lang.tool, lalr) obey their own license.
+
