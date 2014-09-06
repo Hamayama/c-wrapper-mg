@@ -1,36 +1,8 @@
-ƒlibffi‚Ì¶¬•û–@ƒƒ‚„
+ï¼œãƒ¡ãƒ¢ï¼ž
 
 
-(1)libffi‚Ìƒ\[ƒX‚ðƒ_ƒEƒ“ƒ[ƒh
-     https://sourceware.org/libffi/
-     ‚©‚ç libffi-3.1.tar.gz ‚ðƒ_ƒEƒ“ƒ[ƒh‚µ‚Ä‰ð“€‚·‚éB
-
-(2)ƒpƒbƒ`“K—p
-     (a)–{ƒtƒHƒ‹ƒ_‚Ì ffi.c.diff ‚ð libffi-3.1 ‚Ì src/x86 ƒtƒHƒ‹ƒ_‚ÉƒRƒs[‚·‚é
-     (b)ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg‚ðŠJ‚¢‚ÄˆÈ‰º‚ðŽÀs‚·‚é(libffi-3.1ƒtƒHƒ‹ƒ_‚ªc:\‚É‚ ‚éê‡)
-        bash
-        cd /c/libffi-3.1/src/x86
-        patch < ffi.c.diff
-
-(3)ƒRƒ“ƒpƒCƒ‹ŽÀs
-   (a)ƒRƒ}ƒ“ƒhƒvƒƒ“ƒvƒg‚ðŠJ‚¢‚ÄˆÈ‰º‚ðŽÀs‚·‚é(libffi-3.1ƒtƒHƒ‹ƒ_‚ªc:\‚É‚ ‚éê‡)
-        bash
-        cd /c/libffi-3.1
-        ./configure       (‰‰ñ‚Ì‚ÝŽÀŽ{)
-        make
-
-   (b)¶¬‚³‚ê‚½ i686-pc-mingw32 ƒtƒHƒ‹ƒ_“à‚Ì Makefile ‚ðA
-      ˆÈ‰º‚Ì‚æ‚¤‚É‘‚«Š·‚¦‚é‚ÆAgdb‚ÅƒfƒoƒbƒO‚µ‚â‚·‚­‚È‚éB
-        CFLAGS = -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
-          «
-        CFLAGS = -g -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
-
-      •ÏX‚µ‚½‚çÄ“xmake‚ª•K—vB
+æœ¬ãƒ•ã‚©ãƒ«ãƒ€ã«ã‚ã‚‹ ffi.c ã‚’
+libffi-3.1 ã® src/x86 ãƒ•ã‚©ãƒ«ãƒ€ã«ä¸Šæ›¸ãã‚³ãƒ”ãƒ¼ã—ã¦ãã ã•ã„ã€‚
 
 
-(4)¶¬‚µ‚½ƒtƒ@ƒCƒ‹‚ÌƒRƒs[
-    (a)¶¬‚³‚ê‚½ i686-pc-mingw32 ƒtƒHƒ‹ƒ_“à‚Ì .lib ƒtƒHƒ‹ƒ_‚Æ include ƒtƒHƒ‹ƒ_‚ðA
-       c-wrapper ‚Ì src/libffi ƒtƒHƒ‹ƒ_‚Ì‰º‚ÉƒRƒs[‚·‚éB
-
-
-(2014-9-5)
+(2014-9-7)

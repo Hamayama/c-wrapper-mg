@@ -1,8 +1,8 @@
-��������
+＜メモ＞
 
 
-libffi-3.1��make���Ăł��� .lib �t�H���_�� include �t�H���_�������ɃR�s�[����B
-(�t�H���_���� lib �ł͂Ȃ� .lib �Ȃ̂Œ���)
+libffi-3.1をmakeしてできる .lib フォルダと include フォルダをここにコピーしてください。
+(フォルダ名が lib ではなく .lib なので注意)
 
 
-(2014-9-5)
+(2014-9-7)

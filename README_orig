@@ -1,24 +1,3 @@
-
-下記の Gauche 用 の c-wrapper を MinGW (32bit) 上で動くように改造途中のものです。
-
-オリジナルは、
-http://hg.koguro.net/c-wrapper
-にある c-wrapper v0.6.1 (ChangeLog 2012-07-19) です。
-
-付属していたlibffiは削除して、
-https://sourceware.org/libffi/
-にある libffi-3.1 を使うようにします。
-
-mmap関数は、
-https://code.google.com/p/mman-win32/
-にある mman.h と mman.c を使うようにします。
-
-(2014-9-6)
-
-
-
--- ここから オリジナルの情報 --
-
 This is c-wrapper, a generic wrapper for C libraries.
 
 Requirements

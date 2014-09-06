@@ -2,9 +2,9 @@
 
 (c-include "stdio.h" :compiled-lib "stdiolib")
 
-(print "Scheme start")
+(print  "--- Scheme start ---")
 
-(printf "C Language exec\n")
+(printf "--- C Language exec ---\n")
 
-(print "Scheme end")
+(print  "--- Scheme end ---")
 
