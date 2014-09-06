@@ -1,0 +1,36 @@
+＜libffiの生成方法メモ＞
+
+
+(1)libffiのソースをダウンロード
+     https://sourceware.org/libffi/
+     から libffi-3.1.tar.gz をダウンロードして解凍する。
+
+(2)パッチ適用
+     (a)本フォルダの ffi.c.diff を libffi-3.1 の src/x86 フォルダにコピーする
+     (b)コマンドプロンプトを開いて以下を実行する(libffi-3.1フォルダがc:\にある場合)
+        bash
+        cd /c/libffi-3.1/src/x86
+        patch < ffi.c.diff
+
+(3)コンパイル実行
+   (a)コマンドプロンプトを開いて以下を実行する(libffi-3.1フォルダがc:\にある場合)
+        bash
+        cd /c/libffi-3.1
+        ./configure       (初回のみ実施)
+        make
+
+   (b)生成された i686-pc-mingw32 フォルダ内の Makefile を、
+      以下のように書き換えると、gdbでデバッグしやすくなる。
+        CFLAGS = -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
+          ↓
+        CFLAGS = -g -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
+
+      変更したら再度makeが必要。
+
+
+(4)生成したファイルのコピー
+    (a)生成された i686-pc-mingw32 フォルダ内の .lib フォルダと include フォルダを、
+       c-wrapper の src/libffi フォルダの下にコピーする。
+
+
+(2014-9-5)

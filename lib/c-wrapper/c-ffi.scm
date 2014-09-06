@@ -997,15 +997,23 @@
 (define make-bit-field c-bit-field)
 
 (define (init-decl-alist! alist)
-  (define (dispatch rest accum)
+  ;; ***** bitsize boundary fix *****
+  ;(define (dispatch rest accum)
+  (define (dispatch rest accum bitstart)
     (cond
      ((null? rest)
       alist)
      ((bit-field? (cdar rest))
-      (do-bit-field (cdar rest) (cdr rest) accum))
+      ;; ***** bitsize boundary fix *****
+      ;(do-bit-field (cdar rest) (cdr rest) accum))
+      (if bitstart
+        (do-bit-field (cdar rest) (cdr rest) 0)
+        (do-bit-field (cdar rest) (cdr rest) accum)))
      (else
-      (dispatch (cdr rest) (max (* (- (c-sizeof-type <c-uint>) (c-sizeof-type (cdar rest))) 8)
-                                0)))))
+      ;; ***** bitsize boundary fix *****
+      ;(dispatch (cdr rest) (max (* (- (c-sizeof-type <c-uint>) (c-sizeof-type (cdar rest))) 8)
+      ;                          0)))))
+      (dispatch (cdr rest) 0 #t))))
   (define (do-bit-field bit-field rest accum)
     (if (< (* (c-sizeof-type <c-uint>) 8) (+ accum (bits-of bit-field)))
         (do-bit-field bit-field rest 0)
@@ -1016,8 +1024,12 @@
                                             (bits-of bit-field))
                                          accum))
           (set! (leader? bit-field) (= accum 0))
-          (dispatch rest (+ accum (bits-of bit-field))))))
-  (dispatch alist 0))
+          ;; ***** bitsize boundary fix *****
+          ;(dispatch rest (+ accum (bits-of bit-field))))))
+          (dispatch rest (+ accum (bits-of bit-field)) #f))))
+  ;; ***** bitsize boundary fix *****
+  ;(dispatch alist 0))
+  (dispatch alist 0 #t))
 
 (define (unnamed-symbol? sym)
   (#/^%unnamed/ (symbol->string sym)))
@@ -1350,6 +1362,12 @@
 
 (define (make-c-func identifier ret-type arg-types . opts)
   (let-keywords* opts ((c++? #f))
+    ;; ***** for debug *****
+    ;(print ret-type)
+    ;(print arg-types)
+    ;(print (normalize-ret-type ret-type))
+    ;(print (normalize-arg-types arg-types))
+    ;(if (not (null? arg-types)) (read-eval-print-loop))
     (make-c-subr #f
                  (normalize-ret-type ret-type)
                  (normalize-arg-types arg-types)

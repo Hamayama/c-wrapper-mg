@@ -548,7 +548,25 @@ struct test_array_##type add_struct_array_##type(struct test_array_##type v1, \
     return result; \
 }
 
-DEFINE_FUNC_TEST_STRUCT_ARRAY(uchar, unsigned char)
+//DEFINE_FUNC_TEST_STRUCT_ARRAY(uchar, unsigned char)
+
+// ***** for debug *****
+extern struct test_array_uchar add_struct_array_uchar(struct test_array_uchar v1, struct test_array_uchar v2)
+{
+    struct test_array_uchar result;
+    int i;
+
+    //result.dummy =  0x10;
+    //result.value[0]=0x11;
+    //result.value[1]=0x12;
+    //result.value[2]=0x13;
+
+    for (i = 0; i < sizeof(result.value) / sizeof(unsigned char); ++i) {
+        result.value[i] = v1.value[i] + v2.value[i];
+    }
+    return result;
+}
+
 DEFINE_FUNC_TEST_STRUCT_ARRAY(ushort, unsigned short)
 DEFINE_FUNC_TEST_STRUCT_ARRAY(uint, unsigned int)
 DEFINE_FUNC_TEST_STRUCT_ARRAY(ulong, unsigned long)

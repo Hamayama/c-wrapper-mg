@@ -15,10 +15,10 @@ VPATH       = $(srcdir)
 
 # These may be overridden by make invocators
 DESTDIR        =
-GOSH           = @GOSH@
-GAUCHE_CONFIG  = @GAUCHE_CONFIG@
-GAUCHE_PACKAGE = @GAUCHE_PACKAGE@
-INSTALL        = @GAUCHE_INSTALL@
+GOSH           = "@GOSH@"
+GAUCHE_CONFIG  = "@GAUCHE_CONFIG@"
+GAUCHE_PACKAGE = "@GAUCHE_PACKAGE@"
+INSTALL        = "@GAUCHE_INSTALL@"
 
 # Other parameters
 SOEXT  = @SOEXT@
@@ -50,14 +50,14 @@ install : all
 	cd lib; $(MAKE) install
 	cd objc; $(MAKE) install
 	cd doc; $(MAKE) install
-	$(INSTALL) -m 444 -T $(DESTDIR)$(GAUCHE_PKGLIBDIR)/.packages $(PACKAGE).gpd
+	$(INSTALL) -m 444 -T "$(DESTDIR)$(GAUCHE_PKGLIBDIR)/.packages" $(PACKAGE).gpd
 
 uninstall :
 	cd objc; $(MAKE) uninstall
 	cd src; $(MAKE) uninstall
 	cd lib; $(MAKE) uninstall
 	cd doc; $(MAKE) uninstall
-	$(INSTALL) -U $(DESTDIR)$(GAUCHE_PKGLIBDIR)/.packages $(PACKAGE).gpd
+	$(INSTALL) -U "$(DESTDIR)$(GAUCHE_PKGLIBDIR)/.packages" $(PACKAGE).gpd
 
 clean :
 	cd src; $(MAKE) clean

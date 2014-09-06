@@ -7,9 +7,9 @@ top_srcdir   = @top_srcdir@
 MANPAGES = 
 EXTRACTED = c-wrapper-refe.texi c-wrapper-refj.texi
 GENERATED = Makefile $(MANPAGES)
-GOSH = @GOSH@
-GAUCHE_CONFIG = @GAUCHE_CONFIG@
-INSTALL = @GAUCHE_INSTALL@
+GOSH = "@GOSH@"
+GAUCHE_CONFIG = "@GAUCHE_CONFIG@"
+INSTALL = "@GAUCHE_INSTALL@"
 MAKEINFO = @MAKEINFO@
 GZIP_PROGRAM = @GZIP_PROGRAM@
 
@@ -24,12 +24,12 @@ all: info
 install: all
 	if test -f c-wrapper-refe.info.gz -o -f c-wrapper-refj.info.gz; then \
 	  for info in *.info*; do \
-	    $(INSTALL) -m 444 -T $(infodir) $$info; \
+	    $(INSTALL) -m 444 -T "$(infodir)" $$info; \
 	  done; \
 	fi
 
 uninstall:
-	(cd $(infodir); \
+	(cd "$(infodir)"; \
 	 if test -f c-wrapper-refe.info -o -f c-wrapper-refe.info.gz; \
 	   then rm -rf c-wrapper-refe.*; \
 	 fi; \

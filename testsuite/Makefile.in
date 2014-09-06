@@ -15,12 +15,13 @@ VPATH       = $(srcdir)
 
 # These may be overridden by make invocators
 DESTDIR        =
-GOSH           = @GOSH@
-GAUCHE_CONFIG  = @GAUCHE_CONFIG@
-GAUCHE_PACKAGE = @GAUCHE_PACKAGE@
-INSTALL        = @GAUCHE_INSTALL@
+GOSH           = "@GOSH@"
+GAUCHE_CONFIG  = "@GAUCHE_CONFIG@"
+GAUCHE_PACKAGE = "@GAUCHE_PACKAGE@"
+INSTALL        = "@GAUCHE_INSTALL@"
 CC             = @CC@
 CFLAGS         = @TESTLIB_CFLAGS@
+#CFLAGS         = -g @TESTLIB_CFLAGS@
 LDFLAGS        = @TESTLIB_LDFLAGS@
 
 # Other parameters
@@ -49,7 +50,7 @@ CHECK_TARGET = check-c
 .m.o:
 	$(CC) $(CFLAGS) $@ $<
 
-all : 
+all : ffitest.$(DYLIBEXT) fptr_array.$(DYLIBEXT) gcc_extension.$(DYLIBEXT)
 
 ffitest.$(DYLIBEXT): ffitest.o
 	$(CC) $(LDFLAGS) $@ $< 

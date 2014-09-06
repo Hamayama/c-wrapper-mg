@@ -33,7 +33,11 @@
 #define GAUCHE_CWRAPPER_FFI_H
 
 #include <assert.h>
+
+#ifndef __MINGW32__
 #include <dlfcn.h>
+#endif
+
 #include <stdlib.h>
 #include <inttypes.h>
 

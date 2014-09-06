@@ -121,7 +121,14 @@ struct test_array_##type { \
     ctype value[3]; \
 };
 
-DEFINE_TEST_STRUCT_ARRAY(uchar, unsigned char)
+//DEFINE_TEST_STRUCT_ARRAY(uchar, unsigned char)
+
+// ***** for debug *****
+struct test_array_uchar {
+    char dummy;
+    unsigned char value[3];
+};
+
 DEFINE_TEST_STRUCT_ARRAY(ushort, unsigned short)
 DEFINE_TEST_STRUCT_ARRAY(uint, unsigned int)
 DEFINE_TEST_STRUCT_ARRAY(ulong, unsigned long)
@@ -167,7 +174,11 @@ extern struct test_array_##type \
 add_struct_array_##type(struct test_array_##type v1, \
                         struct test_array_##type v2);
 
-EXTERN_FUNC_TEST_STRUCT_ARRAY(uchar)
+//EXTERN_FUNC_TEST_STRUCT_ARRAY(uchar)
+
+// ***** for debug *****
+extern struct test_array_uchar add_struct_array_uchar(struct test_array_uchar v1, struct test_array_uchar v2);
+
 EXTERN_FUNC_TEST_STRUCT_ARRAY(ushort)
 EXTERN_FUNC_TEST_STRUCT_ARRAY(uint)
 EXTERN_FUNC_TEST_STRUCT_ARRAY(ulong)

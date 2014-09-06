@@ -551,7 +551,7 @@
           (loop `(c-load-library () ,@keywords)
                 cppflags ldflags libs))
 
-         (('c-load-library libs keywords ...)
+         (('c-load-library libs2 keywords ...)
           (let-keywords* keywords ((library-dirs '())
                                    (option ""))
             (let ((ldflags&libs
@@ -565,13 +565,14 @@
                                           (list #`"-L,|dir|")))
                               (append (cdr ldflags&libs)
                                       (let ((name (regexp-replace #/lib(.*)/
+                                                                  lib
                                                                   "\\1")))
                                         (list #`"-l,|name|"))))))
                          (receive (libs ldflags)
                              (partition (cut string-prefix? "-l" <>)
                                         (string-split option #[\s]))
                            (cons ldflags libs))
-                         (listize libs))))
+                         (listize libs2))))
               (loop (read) cppflags
                     (append ldflags (car ldflags&libs))
                     (append libs (cdr ldflags&libs))))))
@@ -582,7 +583,8 @@
                                    (import-arg :import #f)
                                    (module #t)
                                    (export? #f)
-                                   (compiled-lib #f))
+                                   (compiled-lib #f)
+                                   (hide '()))
             (when compiled-lib
               (let* ((options (string-split option #[\s]))
                      (cppflags-str (string-join (append cppflags options) " "))

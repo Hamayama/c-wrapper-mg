@@ -21,20 +21,20 @@ AC_PATH_PROG([GAUCHE_CESCONV], gauche-cesconv)
 
 dnl Usually these parameters are set by AC_PROG_CC, but we'd rather use
 dnl the same one as Gauche has been compiled with.
-SOEXT=`$GAUCHE_CONFIG --so-suffix`
-OBJEXT=`$GAUCHE_CONFIG --object-suffix`
-EXEEXT=`$GAUCHE_CONFIG --executable-suffix`
-DYLIBEXT=`$GAUCHE_CONFIG --dylib-suffix`
+SOEXT=`"$GAUCHE_CONFIG" --so-suffix`
+OBJEXT=`"$GAUCHE_CONFIG" --object-suffix`
+EXEEXT=`"$GAUCHE_CONFIG" --executable-suffix`
+DYLIBEXT=`"$GAUCHE_CONFIG" --dylib-suffix`
 AC_SUBST(SOEXT)
 AC_SUBST(OBJEXT)
 AC_SUBST(EXEEXT)
 AC_SUBST(DYLIBEXT)
 
-ac_default_prefix=`$GAUCHE_CONFIG --prefix`
+ac_default_prefix=`"$GAUCHE_CONFIG" --prefix`
 
-GAUCHE_PKGINCDIR=`$GAUCHE_CONFIG --pkgincdir`
-GAUCHE_PKGLIBDIR=`$GAUCHE_CONFIG --pkglibdir`
-GAUCHE_PKGARCHDIR=`$GAUCHE_CONFIG --pkgarchdir`
+GAUCHE_PKGINCDIR=`"$GAUCHE_CONFIG" --pkgincdir`
+GAUCHE_PKGLIBDIR=`"$GAUCHE_CONFIG" --pkglibdir`
+GAUCHE_PKGARCHDIR=`"$GAUCHE_CONFIG" --pkgarchdir`
 AC_SUBST(GAUCHE_PKGINCDIR)
 AC_SUBST(GAUCHE_PKGLIBDIR)
 AC_SUBST(GAUCHE_PKGARCHDIR)
@@ -75,6 +75,7 @@ LDFLAGS="$LDFLAGS $rpath"
 TESTLIB_CFLAGS="-c -fPIC -o"
 TESTLIB_LDFLAGS="$rpath -shared -o"
 SYS_LIBRARY_PATHS="/usr/lib /lib"
+FFI_SRC_ADD=""
 CPARSER_LIBS=""
 CYGWIN_FLAG="#f"
 CWCOMPILE_DEFAULT_LIBS=""
@@ -121,6 +122,16 @@ case "$target" in
         CYGWIN_FLAG="#t"
 	CWCOMPILE_DEFAULT_LIBS="-lgauche-uvector"
         ;;
+    *-mingw*)
+        LIBS="-lgauche-uvector -lpsapi $LIBS"
+        LDFLAGS="$LDFLAGS -L."
+	TESTLIB_CFLAGS="-c -o"
+        FFI_SRC_ADD="mman.c"
+        CPARSER_LIBS="-lc-ffi -lc-lex"
+        SYS_LIBRARY_PATHS="$SYS_LIBRARY_PATHS /usr/bin"
+        CYGWIN_FLAG="#t"
+	CWCOMPILE_DEFAULT_LIBS="-lgauche-uvector"
+        ;;
 esac
 
 if test "$enable_objc" = "yes"; then
@@ -138,6 +149,7 @@ AC_SUBST(OBJC_ENABLE_TRUE)
 AC_SUBST(STUBGEN_FFI_MODULE)
 AC_SUBST(LDCONFIG_CMD)
 AC_SUBST(SYS_LIBRARY_PATHS)
+AC_SUBST(FFI_SRC_ADD)
 AC_SUBST(CPARSER_LIBS)
 AC_SUBST(CYGWIN_FLAG)
 AC_SUBST(CWCOMPILE_DEFAULT_LIBS)
@@ -145,7 +157,7 @@ AC_SUBST(CWCOMPILE_DEFAULT_LIBS)
 dnl Creating gpd (gauche package description) file
 GAUCHE_PACKAGE_CONFIGURE_ARGS="`echo ""$ac_configure_args"" | sed 's/[\\""\`\$]/\\\&/g'`"
 AC_MSG_NOTICE([creating ${PACKAGE_NAME}.gpd])
-$GAUCHE_PACKAGE make-gpd "$PACKAGE_NAME" \
+"$GAUCHE_PACKAGE" make-gpd "$PACKAGE_NAME" \
   -version "$PACKAGE_VERSION" \
   -configure "./configure $GAUCHE_PACKAGE_CONFIGURE_ARGS"
 

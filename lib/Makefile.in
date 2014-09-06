@@ -15,10 +15,10 @@ VPATH       = $(srcdir)
 
 # These may be overridden by make invocators
 DESTDIR        =
-GOSH           = @GOSH@
-GAUCHE_CONFIG  = @GAUCHE_CONFIG@
-GAUCHE_PACKAGE = @GAUCHE_PACKAGE@
-INSTALL        = @GAUCHE_INSTALL@
+GOSH           = "@GOSH@"
+GAUCHE_CONFIG  = "@GAUCHE_CONFIG@"
+GAUCHE_PACKAGE = "@GAUCHE_PACKAGE@"
+INSTALL        = "@GAUCHE_INSTALL@"
 
 # Other parameters
 SOEXT  = @SOEXT@
@@ -42,11 +42,11 @@ GAUCHE_PKGARCHDIR = @GAUCHE_PKGARCHDIR@
 all : 
 
 install : all
-	$(INSTALL) -m 444 -T $(DESTDIR)$(GAUCHE_PKGLIBDIR) $(SCMFILES) 
+	$(INSTALL) -m 444 -T "$(DESTDIR)$(GAUCHE_PKGLIBDIR)" $(SCMFILES) 
 
 uninstall :
-	$(INSTALL) -U $(DESTDIR)$(GAUCHE_PKGLIBDIR) $(SCMFILES) 
-	rmdir $(DESTDIR)$(GAUCHE_PKGLIBDIR)/c-wrapper
+	$(INSTALL) -U "$(DESTDIR)$(GAUCHE_PKGLIBDIR)" $(SCMFILES) 
+	rmdir "$(DESTDIR)$(GAUCHE_PKGLIBDIR)/c-wrapper"
 
 clean :
 	rm -rf core $(GENERATED) *~

@@ -37,7 +37,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#ifdef __MINGW32__
+#include "mman.h"
+int getpagesize(void);  // defined in MinGW's libgcc.a
+#else
 #include <sys/mman.h>
+#endif
+
 #include <ffi.h>
 
 extern ffi_closure *closure_alloc();

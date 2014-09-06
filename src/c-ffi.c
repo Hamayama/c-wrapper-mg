@@ -615,7 +615,7 @@ static void *lookup_symbol(const char *sym)
     addr = NULL;
     for (i = 0; i < needed/sizeof(HMODULE); ++i) {
         addr = GetProcAddress(lphModules[i], sym);
-        CloseHandle(lphModules[i]);
+        //CloseHandle(lphModules[i]);
         if (addr != NULL) {
             break;
         }
