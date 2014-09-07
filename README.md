@@ -27,7 +27,7 @@
 
 
 ## 変更点
-- MinGW用に変更した内容を以下に示します。
+- MinGW用にオリジナルから変更した内容を以下に示します。
 
 1. configure.ac の修正  
    `*-mingw*` という場合分けのセクションを追加。
@@ -40,15 +40,15 @@
    元のlibffiは削除して、  
    https://sourceware.org/libffi/  
    からlibffi-3.1を別途入手。  
-   不具合があるので src/x86/ffi.c を以下のように修正した。
+   不具合があるので src フォルダの下の x86 フォルダ内の ffi.c を以下のように修正した。
    ```
-   (1)ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更
+   (1)ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更
         X86_WIN32 のときに is_result_on_stack 関数で戻り値がスタックを使うかどうか
         判定するようにした。
         is_result_on_stack関数は、元のlibffiの src/prep_cif.c からコピーした。
         この判定がないと Segmentation Fault エラーで落ちるので必須と思われる。
 
-   (2)ffi_prep_cif_machdep 関数で、スタック確保のサイズにスペースを追加
+   (2)ffi.c の ffi_prep_cif_machdep 関数で、スタック確保のサイズにスペースを追加
         X86_WIN32 のときに 以下のようにスペースを追加するようにした。
           cif->bytes = ((cif->bytes + 15) & ~0xF) + 8;
         これは元のlibffiの src/prep_cif.c の ffi_prep_cif関数で追加していたため
@@ -67,14 +67,14 @@
    CloseHandleしているが、これがあると gdb で unknown signal と出てデバッグができなかった。  
    CloseHandleしてはいけないようなのでコメントアウトしたところ、gdbでデバッグできるようになった。  
    また、インクルードでエラーになったので、  
-   __MINGW32__ のときは c-ffi.h で dlfcn.h を インクルードしないようにした。
+   `__MINGW32__` のときは c-ffi.h で dlfcn.h を インクルードしないようにした。
 
 5. mmapの対応  
    mmap関数が、MinGWには存在しない。  
    https://code.google.com/p/mman-win32/  
    から mman.h と mman.c を入手。  
    c-wrapper の src フォルダにコピーして取り込むようにした。  
-   そして、__MINGW32__ のときは closure_alloc.h で src フォルダの下の mman.h を  
+   そして、`__MINGW32__` のときは closure_alloc.h で src フォルダの下の mman.h を  
    インクルードするようにした。  
    あと、1箇所MinGWとバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを修正)。
 
@@ -146,9 +146,9 @@
 
      C:\MinGW\msys\1.0\home\(ユーザ名) の
      .inputrc を テキストエディタ(TeraPad)で編集。変更内容は以下
-       set bell-style audible  →  none
-       set output-meta off     →  on
-       set convert-meta on     →  off
+       set bell-style audible  →  set bell-style none
+       set output-meta off     →  set output-meta on
+       set convert-meta on     →  set convert-meta off
 
      C:\MinGW\msys\1.0\etc に
      テキストエディタ(TeraPad)で fstab を作成(拡張子なし)。内容は以下
@@ -177,7 +177,7 @@
    ```
 
 5. libffi-3.1のファイルの修正  
-   c-wrapper  の libffi_patch フォルダにある ffi.c を  
+   c-wrapper  の libffi_patch フォルダにある ffi.c を、  
    libffi-3.1 の src フォルダの下の x86 フォルダの中にある ffi.c に上書きコピーしてください。
 
 6. libffi-3.1のコンパイル  
