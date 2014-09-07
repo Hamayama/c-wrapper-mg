@@ -1,11 +1,12 @@
 # c-wrapper-mg
 
+![image](image.png)
 
 ## 概要
 - Gauche 用 の c-wrapper を MinGW (32bit) 上で動くように改造したものです。  
   c-wrapperは、GacuheからC言語のライブラリを呼び出せるようにするモジュールです。  
   正直中身は難しくてあまり理解できていませんが、  
-  どうにかテストは(stdioのsys-fork以外は)通るようにしました。
+  どうにかテストは(stdioのsys-fork以外は)通るようになりました。
 
 - オリジナルの情報は、以下にあります。  
   http://www.koguro.net/prog/c-wrapper/index-j.html  
