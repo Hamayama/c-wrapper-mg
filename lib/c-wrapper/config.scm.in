@@ -33,6 +33,11 @@
   (set! ignore-library-list (append ignore-library-list '("libc" "libm")))
   (set! force-load-library-when-compiledlib-exists? #t))
 
+(when @MINGW_FLAG@
+  (set! ignore-libname-list (append ignore-libname-list '("c" "m")))
+  (set! ignore-library-list (append ignore-library-list '("libc" "libm")))
+  (set! force-load-library-when-compiledlib-exists? #t))
+
 (define sys-library-paths
   (let ((paths (string-split "@SYS_LIBRARY_PATHS@" #[\s])))
     (lambda ()

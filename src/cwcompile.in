@@ -1,4 +1,4 @@
-#! gosh
+#!@CWCOMPILE_SHEBANG@
 ;; -*- coding: utf-8; mode: scheme -*-
 ;;
 ;; cwcompile - stub generator for c-wrapper

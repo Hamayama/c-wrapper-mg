@@ -76,7 +76,8 @@
    c-wrapper の src フォルダにコピーして取り込むようにした。  
    そして、`__MINGW32__` のときは closure_alloc.h で src フォルダの下の mman.h を  
    インクルードするようにした。  
-   あと、1箇所MinGWとバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを修正)。
+   あと、1箇所MinGWとバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを修正)。  
+   また、configure.ac に FFI_SRC_ADD という定義を追加した。
 
 6. cwcompile で c-load-library の処理に失敗する
    ```
@@ -100,6 +101,18 @@
      init-decl-alist!
        構造体にビットフィールドの先頭があらわれたら、シフト値を0にするように変更した。
        本当にこれでよいのかは、よく分からない。
+   ```
+
+8. config.scm.in に MinGW 用の場合分けを追加
+   ```
+     lib/c-wrapper/config.scm.in に (when @MINGW_FLAG@ という場合分けを追加した。
+     configure.ac に MINGW_FLAG の定義を追加した。
+   ```
+
+9. cwcompileの先頭行の変更(空白のパスが入るので対策)
+   ```
+     src/cwcompile.in の先頭行の記述を変更。
+     configure.ac に CWCOMPILE_SHEBANG の定義を追加した。
    ```
 
 
@@ -178,7 +191,7 @@
 
 5. libffi-3.1のファイルの修正  
    c-wrapper  の libffi_patch フォルダにある ffi.c を、  
-   libffi-3.1 の src フォルダの下の x86 フォルダの中にある ffi.c に上書きコピーしてください。
+   libffi-3.1 の src フォルダの下の x86 フォルダ内の ffi.c に上書きコピーしてください。
 
 6. libffi-3.1のコンパイル  
    コマンドプロンプトを開いて以下を実行します。
@@ -261,7 +274,7 @@
            ↓
          CFLAGS = -g -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
    ```
-   変更したら再度makeが必要です。  
+   変更したら make clean してから再度 make が必要です。  
    (./configureを実行するとMakefileが元に戻ってしまうので注意してください)
 
 2. デバッグのしかた  
@@ -304,6 +317,8 @@
 
 ## 履歴
 - 2014-9-6  v0.6.1-mg0001 MinGW対応
+- 2014-9-8  v0.6.1-mg0002 configure.ac, config.scm.in, cwcompile.in を変更
+  (configure.ac を変更したため ./DIST gen → ./configure が必要)
 
 
-(2014-9-7)
+(2014-9-8)

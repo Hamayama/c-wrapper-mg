@@ -75,10 +75,12 @@ LDFLAGS="$LDFLAGS $rpath"
 TESTLIB_CFLAGS="-c -fPIC -o"
 TESTLIB_LDFLAGS="$rpath -shared -o"
 SYS_LIBRARY_PATHS="/usr/lib /lib"
-FFI_SRC_ADD=""
 CPARSER_LIBS=""
 CYGWIN_FLAG="#f"
+MINGW_FLAG="#f"
 CWCOMPILE_DEFAULT_LIBS=""
+CWCOMPILE_SHEBANG="$GOSH"
+FFI_SRC_ADD=""
 case "$target" in
     *darwin*)
         LD_LIBRARY_PATH_ENVS='"LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"'
@@ -126,11 +128,12 @@ case "$target" in
         LIBS="-lgauche-uvector -lpsapi $LIBS"
         LDFLAGS="$LDFLAGS -L."
 	TESTLIB_CFLAGS="-c -o"
-        FFI_SRC_ADD="mman.c"
         CPARSER_LIBS="-lc-ffi -lc-lex"
         SYS_LIBRARY_PATHS="$SYS_LIBRARY_PATHS /usr/bin"
-        CYGWIN_FLAG="#t"
+        MINGW_FLAG="#t"
 	CWCOMPILE_DEFAULT_LIBS="-lgauche-uvector"
+        CWCOMPILE_SHEBANG=" gosh"
+        FFI_SRC_ADD="mman.c"
         ;;
 esac
 
@@ -149,10 +152,12 @@ AC_SUBST(OBJC_ENABLE_TRUE)
 AC_SUBST(STUBGEN_FFI_MODULE)
 AC_SUBST(LDCONFIG_CMD)
 AC_SUBST(SYS_LIBRARY_PATHS)
-AC_SUBST(FFI_SRC_ADD)
 AC_SUBST(CPARSER_LIBS)
 AC_SUBST(CYGWIN_FLAG)
+AC_SUBST(MINGW_FLAG)
 AC_SUBST(CWCOMPILE_DEFAULT_LIBS)
+AC_SUBST(CWCOMPILE_SHEBANG)
+AC_SUBST(FFI_SRC_ADD)
 
 dnl Creating gpd (gauche package description) file
 GAUCHE_PACKAGE_CONFIGURE_ARGS="`echo ""$ac_configure_args"" | sed 's/[\\""\`\$]/\\\&/g'`"
