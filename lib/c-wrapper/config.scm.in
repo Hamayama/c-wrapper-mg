@@ -34,6 +34,7 @@
   (set! force-load-library-when-compiledlib-exists? #t))
 
 (when @MINGW_FLAG@
+  (set! libname-prefix-list (append libname-prefix-list (list "")))
   (set! ignore-libname-list (append ignore-libname-list '("c" "m")))
   (set! ignore-library-list (append ignore-library-list '("libc" "libm")))
   (set! force-load-library-when-compiledlib-exists? #t))

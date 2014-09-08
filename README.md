@@ -319,6 +319,8 @@
 - 2014-9-6  v0.6.1-mg0001 MinGW対応
 - 2014-9-8  v0.6.1-mg0002 configure.ac, config.scm.in, cwcompile.in を変更  
   (configure.ac を変更したため ./DIST gen → ./configure が必要)
+- 2014-9-8  v0.6.1-mg0003 config.scm.in の変更ミス修正  
+  ( ./configure → make install が必要)
 
 
 (2014-9-8)
