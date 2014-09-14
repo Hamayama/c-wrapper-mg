@@ -40,7 +40,7 @@
    元のlibffiは削除して、  
    https://sourceware.org/libffi/  
    からlibffi-3.1を別途入手。  
-   不具合があるので src フォルダの下の x86 フォルダ内の ffi.c を以下のように修正した。
+   不具合があるので src/x86 フォルダ内の ffi.c を以下のように修正した。
    ```
    (1)ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更
         X86_WIN32 のときに is_result_on_stack 関数で戻り値がスタックを使うかどうか
@@ -54,7 +54,7 @@
         これは元のlibffiの src/prep_cif.c の ffi_prep_cif関数で追加していたため
         同じようにした。ただし、これが必須なのかどうかはよく分からない。
    ```
-   上記修正後、libffi-3.1 の configure → make を実行し、  
+   上記修正後、libffi-3.1 の ./configure → make を実行し、  
    生成された i686-pc-mingw32 フォルダ内の .lib フォルダと include フォルダを、  
    c-wrapper の src/libffi フォルダの下にコピーした。  
    これでc-wrapperがコンパイルできるようになった。
@@ -126,7 +126,8 @@
 
 2. MinGWのインストール  
    事前に MinGW がインストールされている必要があります。  
-   以下は自分がインストールしたときの参考用のメモです。
+   以下は自分がインストールしたときの参考用のメモです。  
+   (情報が古くなっている可能性があります)
    ```
      MinGWのダウンロードページ
      http://sourceforge.net/projects/mingw/files/
@@ -191,7 +192,7 @@
 
 5. libffi-3.1のファイルの修正  
    c-wrapper  の libffi_patch フォルダにある ffi.c を、  
-   libffi-3.1 の src フォルダの下の x86 フォルダ内の ffi.c に上書きコピーしてください。
+   libffi-3.1 の src/x86 フォルダ内の ffi.c に上書きコピーしてください。
 
 6. libffi-3.1のコンパイル  
    コマンドプロンプトを開いて以下を実行します。
@@ -205,7 +206,7 @@
 7. 生成したライブラリとヘッダをc-wrapperのフォルダにコピー  
    コンパイルが完了すると libffi-3.1 の下に i686-pc-mingw32 というフォルダができます。  
    この中の .libs フォルダと include フォルダ を、  
-   c-wrapper の src フォルダの下の libffi フォルダの下にコピーしてください。
+   c-wrapper の src/libffi フォルダの下にコピーしてください。
    ```
      c-wrapper
          |-- src
@@ -272,7 +273,7 @@
        i686-pc-mingw32フォルダ内のMakefile
          CFLAGS = -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
            ↓
-         CFLAGS = -g -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
+         CFLAGS = -g -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
    ```
    変更したら make clean してから再度 make が必要です。  
    (./configureを実行するとMakefileが元に戻ってしまうので注意してください)
@@ -311,9 +312,9 @@
     - Windows XP Home SP3
     - Windows 8 (64bit)
   - 環境
-    - MinGW   v4.8.1
+    - MinGW (32bit) v4.8.1
   - 言語
-    - Gauche  v0.9.4
+    - Gauche v0.9.4
 
 ## 履歴
 - 2014-9-6  v0.6.1-mg0001 MinGW対応
@@ -323,4 +324,4 @@
   ( ./configure → make install が必要)
 
 
-(2014-9-8)
+(2014-9-14)
