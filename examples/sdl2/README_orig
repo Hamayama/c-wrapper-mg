@@ -1,0 +1,17 @@
+breakout.scm is an example of using c-wrapper and SDL.
+
+- How to play
+  (1) Install SDL and SDL_mixer.
+  (2) Create sdlib.so.
+      % make
+  (3) Run breakout.scm.
+      % make run
+  
+- Key binding
+  'z':   The paddle moves left.
+  'x':   The paddle moves right.
+  space: Shoot a ball.
+
+Note:
+  cursor5.wav and cursor6.wav are downloaded from http://www.tam-music.com/.
+

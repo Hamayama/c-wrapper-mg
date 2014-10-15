@@ -252,6 +252,8 @@
    → .h の依存関係がMakefileに書かれていないからだと思う。  
       とりあえず make clean してから make すればコンパイルできる。
 
+3. c-loadで:cflagsと:cflags-cmdは未使用なので 設定しても効果がない
+
 
 ## その他 ノウハウ等
 1. デバッグ用のコンパイル  
@@ -319,11 +321,12 @@
     - Gauche v0.9.4
 
 ## 履歴
-- 2014-9-6  v0.6.1-mg0001 MinGW対応
-- 2014-9-8  v0.6.1-mg0002 configure.ac, config.scm.in, cwcompile.in を変更  
+- 2014-9-6   v0.6.1-mg0001 MinGW対応
+- 2014-9-8   v0.6.1-mg0002 configure.ac, config.scm.in, cwcompile.in を変更  
   (configure.ac を変更したため ./DIST gen → ./configure が必要)
-- 2014-9-8  v0.6.1-mg0003 config.scm.in の変更ミス修正  
+- 2014-9-8   v0.6.1-mg0003 config.scm.in の変更ミス修正  
   ( ./configure → make install が必要)
+- 2014-10-16 v0.6.1-mg0004 SDL2サンプル example/sdl2 を追加
 
 
-(2014-9-18)
+(2014-10-16)
