@@ -611,12 +611,27 @@ static void *lookup_symbol(const char *sym)
     if (!EnumProcessModules(hProcess, lphModules, needed, &needed)) {
         Scm_Error("EnumProcessModules failed (2nd call).\n");
     }
-        
+
+    // ***** for debug *****
+    //TCHAR szModule[256];
+    //MODULEINFO mi;
+    //for (i = 0; i < needed/sizeof(HMODULE); ++i) {
+    //    GetModuleBaseName(hProcess, lphModules[i], szModule, sizeof(szModule));
+    //    GetModuleInformation(hProcess, lphModules[i], &mi, sizeof(MODULEINFO));
+    //    printf("%s %x\n", szModule, mi.lpBaseOfDll);
+    //}
+
     addr = NULL;
     for (i = 0; i < needed/sizeof(HMODULE); ++i) {
         addr = GetProcAddress(lphModules[i], sym);
         //CloseHandle(lphModules[i]);
         if (addr != NULL) {
+
+            // ***** for debug *****
+            //GetModuleBaseName(hProcess, lphModules[i], szModule, sizeof(szModule));
+            //GetModuleInformation(hProcess, lphModules[i], &mi, sizeof(MODULEINFO));
+            //printf("[ %s is found in %s %x ]\n", sym, szModule, mi.lpBaseOfDll);
+
             break;
         }
     }

@@ -1,0 +1,2 @@
+gosh printf.scm
+pause
