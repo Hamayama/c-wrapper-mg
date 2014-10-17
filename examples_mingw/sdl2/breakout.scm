@@ -59,7 +59,8 @@
         :compiled-lib "sdllib")
 
 ;; ***** SDL2対応 *****
-(define *window* #f)
+(define *window* #f) ; ウィンドウ
+(define *wait* 8)    ; ウェイト時間(msec)
 
 (define *screen* #f)
 (define-constant *screen-width* 640)
@@ -75,7 +76,8 @@
 (define-constant *ball-size* *unit*)
 
 (define *paddle-rect* #f)
-(define *paddle-width* (* 8 *unit*))
+;(define *paddle-width* (* 8 *unit*))
+(define *paddle-width* (* 10 *unit*))
 (define *paddle-vx* 0)
 
 (define *block-list* '())
@@ -156,7 +158,7 @@
        ;; ***** SDL2対応 *****
        ;; (32ビットカラーに変更)
        ;(colors '(#o700 #o770 #o373 #o077 #o007) (cdr colors))
-       (colors '(#xFF0000 #xFFFF00 #x7FFF7F #x00FFFF #x00007F) (cdr colors))
+       (colors '(#xFF0000 #xFFFF00 #x7FFF7F #x00FFFF #x0000FF) (cdr colors))
 
        (y (* 7 *unit*) (+ y *block-height*)))
       ((<= 5 level)
@@ -374,7 +376,8 @@
       ;; (画面更新)
       ;(SDL_Flip *screen*)
       (SDL_UpdateWindowSurface *window*)
-      (SDL_Delay 5)
+      ;; (ウェイト)
+      (SDL_Delay *wait*)
 
       (cond
        ((< *ball-count* 0)
