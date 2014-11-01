@@ -325,8 +325,9 @@
 - 2014-9-8   v0.6.1-mg0003 config.scm.in の変更ミス修正  
   ( ./configure → make install が必要)
 - 2014-10-16 v0.6.1-mg0004 SDL2サンプル examples/sdl2 を追加
-- 2014-10-17 v0.6.1-mg0005 MinGW用のサンプルはexamples_mingwフォルダに移動  
+- 2014-10-17 v0.6.1-mg0005 MinGW用のサンプルは examples_mingw フォルダに移動  
   c-ffi.cのlookup_symbol関数にデバッグ用コード追加(今はコメントアウトしてある)
+- 2014-11-1  v0.6.1-mg0006 MML音楽演奏サンプル examples_mingw/mml を追加
 
 
-(2014-10-20)
+(2014-11-1)

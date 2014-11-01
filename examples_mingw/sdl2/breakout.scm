@@ -1,6 +1,6 @@
 ;; -*- coding: utf-8; mode: scheme -*-
 ;;
-;; Modified for SDL2 + MinGW(32bit), by Hamayama.
+;; Modified for SDL2 + MinGW(32bit), by Hamayama (2014).
 ;; Licensed under the same license that the original breakout is.
 ;;
 ;; --

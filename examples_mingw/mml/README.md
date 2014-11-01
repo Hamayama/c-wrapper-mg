@@ -1,0 +1,46 @@
+# MML音楽演奏サンプル
+
+## 概要
+- MinGW(32bit)環境で Gauche, c-wrapper, SDL2, SDL2_mixer を用いて、  
+  MML(Music Macro Language)による音楽演奏を行うサンプルです。
+
+
+## インストール方法
+- SDL2サンプルのページ  
+  https://github.com/Hamayama/c-wrapper-mg/tree/master/examples_mingw/sdl2  
+  の「インストール方法」を参照ください。  
+  Gauche, MinGW(32bit), c-wrapper, SDL2, SDL2_mixerが適切にインストール  
+  されている必要があります。
+
+
+## 実行方法
+- audtest1001.bat をダブルクリック等で起動します。  
+  しばらくすると音楽が鳴ります。演奏が終わると終了します。
+
+
+## ファイルについて
+- audtest1001.scm の (define a1 (audmake の下がMMLの文字列になっています。  
+  ここを書き換えることで、いろいろな音楽を演奏できます。
+
+- MMLの解釈は mmlproc.scm というモジュールで行っています。  
+  MMLは方言が多く本モジュールも独自文法です。  
+  本モジュールのMML文法の参考ページは、  
+  https://sites.google.com/site/hamayama1010/spalm_web_interpreter/syntax_doc/builtin_functions3  
+  の下の方の「2.6.2.MML(Music Macro Language)について」になります。
+
+
+## 環境等
+- 以下の環境で動作を確認しました。
+  - OS
+    - Windows XP Home SP3
+    - Windows 8 (64bit)
+  - 環境
+    - MinGW (32bit) v4.8.1
+  - 言語
+    - Gauche v0.9.4
+
+## 履歴
+- 2014-11-1  v1.00 初版
+
+
+(2014-11-1)
