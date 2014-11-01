@@ -15,18 +15,19 @@
 
 ## 実行方法
 - audtest1001.bat をダブルクリック等で起動します。  
+  (audtest1001.bat, audtest1001.scm, mmlproc.scm が同一フォルダに存在する必要があります)  
   しばらくすると音楽が鳴ります。演奏が終わると終了します。
 
 
 ## ファイルについて
-- audtest1001.scm の (define a1 (audmake の下がMMLの文字列になっています。  
+- audtest1001.scm の「 (define a1 (audmake 」の行の下がMMLの文字列になっています。  
   ここを書き換えることで、いろいろな音楽を演奏できます。
 
 - MMLの解釈は mmlproc.scm というモジュールで行っています。  
-  MMLは方言が多く本モジュールも独自文法です。  
-  本モジュールのMML文法の参考ページは、  
+  MMLは方言が多く 本モジュールも独自文法です。  
+  本モジュールのMML文法については、  
   https://sites.google.com/site/hamayama1010/spalm_web_interpreter/syntax_doc/builtin_functions3  
-  の下の方の「2.6.2.MML(Music Macro Language)について」になります。
+  の下の方の「2.6.2.MML(Music Macro Language)について」を参照ください。
 
 
 ## 環境等
