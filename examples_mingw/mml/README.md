@@ -20,14 +20,14 @@
 
 
 ## ファイルについて
-- audtest1001.scm の「 (define a1 (audmake 」の行の下がMMLの文字列になっています。  
+- audtest1001.scm の61行目の「 (define a1 (audmake 」の下がMMLの文字列になっています。  
   ここを書き換えることで、いろいろな音楽を演奏できます。
 
 - MMLの解釈は mmlproc.scm というモジュールで行っています。  
-  MMLは方言が多く 本モジュールも独自文法です。  
+  MMLは方言が多く 本モジュールも独自文法になっています。  
   本モジュールのMML文法については、  
-  https://sites.google.com/site/hamayama1010/spalm_web_interpreter/syntax_doc/builtin_functions3  
-  の下の方の「2.6.2.MML(Music Macro Language)について」を参照ください。
+  https://github.com/Hamayama/mmlproc  
+  の「MML(Music Macro Language)について」を参照ください。
 
 
 ## 環境等
@@ -42,6 +42,7 @@
 
 ## 履歴
 - 2014-11-1  v1.00 初版
+- 2014-11-3  v1.01 mmlproc.scmをv1.02に更新
 
 
-(2014-11-1)
+(2014-11-3)
