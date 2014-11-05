@@ -59,8 +59,8 @@
 
 ;; 音声チャンクの生成
 (define a1 (audmake
-  "!c0 @500 >cc  | gg | aa | g&r | ff  | ee   | de32d32c32d16.e16 | c2  | \
-   !c1 @500 <c>c | ec | fc | ec  | d<b | >c<a | fg                | c2> | "
+  "!c0 @500 o4 >cc gg aa g&r ff  ee   de32d32c32d16.e16 c2 \
+   !c1 @500 o3 c>c ec fc ec  d<b >c<a fg                c2 "
   ))
 
 ;; 音声チャンクの再生
