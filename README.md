@@ -29,7 +29,7 @@
 ## 変更点
 - MinGW用にオリジナルから変更した内容を以下に示します。
 
-1. configure.ac の修正  
+1. configure.ac の変更  
    `*-mingw*` という場合分けのセクションを追加。
 
 2. Gaucheのインストール先パスの空白対応  
@@ -76,7 +76,7 @@
    c-wrapper の src フォルダにコピーして取り込むようにした。  
    そして、`__MINGW32__` のときは closure_alloc.h で src フォルダの下の mman.h を  
    インクルードするようにした。  
-   あと、1箇所MinGWとバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを修正)。  
+   あと、1箇所MinGWとバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを変更)。  
    また、configure.ac に FFI_SRC_ADD という定義を追加した。
 
 6. cwcompile で c-load-library の処理に失敗する
@@ -330,4 +330,4 @@
 - 2014-11-1  v0.6.1-mg0006 MML音楽演奏サンプル examples_mingw/mml を追加
 
 
-(2014-11-1)
+(2014-11-7)
