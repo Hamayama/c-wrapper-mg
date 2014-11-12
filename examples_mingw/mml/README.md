@@ -14,19 +14,21 @@
 
 
 ## 実行方法
-- audtest1001.bat をダブルクリック等で起動します。  
-  (audtest1001.bat, audtest1001.scm, mmlproc.scm が同一フォルダに存在する必要があります)  
+- test1001.bat をダブルクリック等で起動します。  
+  (test1001.bat, test1001.scm, audplaymod.scm, mmlproc.scm が同一フォルダに存在する必要があります)  
   しばらくすると音楽が鳴ります。演奏が終わると終了します。
 
 
 ## ファイルについて
-- audtest1001.scm の61行目の「 (define a1 (audmake 」の下がMMLの文字列になっています。  
+- test1001.scm の31行目の「 (set! a1 (mml->aud 」の下がMMLの文字列になっています。  
   ここを書き換えることで、いろいろな音楽を演奏できます。
 
-- MMLの解釈は mmlproc.scm というモジュールで行っています。  
-  このモジュールの詳細については、  
-  https://github.com/Hamayama/mmlproc  
-  の説明を参照ください。
+- 音楽の演奏は audplaymod.scm というモジュールで行っています。  
+  (c-wrapper経由でSDLを制御しています)
+
+- また、MMLの解釈は mmlproc.scm というモジュールで行っています。  
+  mmlproc の詳細については、以下のページを参照ください。  
+  https://github.com/Hamayama/mmlproc
 
 
 ## 環境等
@@ -50,6 +52,7 @@
 - 2014-11-8  v1.07 mmlproc.scmをv1.10に更新
 - 2014-11-8  v1.08 mmlproc.scmをv1.11に更新
 - 2014-11-11 v1.09 mmlproc.scmをv1.12に更新
+- 2014-11-13 v1.10 audplaymod.scmを作成
 
 
-(2014-11-11)
+(2014-11-13)
