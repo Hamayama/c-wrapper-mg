@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2014-11-13 v1.00
+;; 2014-11-14 v1.01
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -36,7 +36,7 @@
 ;;                                   ;   戻り値は再生したチャンネルの番号になります。
 ;;   (audstop ch)                    ; 指定したチャンネルの再生を停止します
 ;;   (define st (getaudstat ch))     ; 指定したチャンネルの再生状態を取得します
-;;                                   ;   戻り値は 停止中が 0 再生中が 1 となります。
+;;                                   ;   戻り値は、停止中が0で再生中が1となります。
 ;;   (aud-end)                       ; SDL_mixerの終了
 ;;   (sdl-end)                       ; SDLの終了
 ;;
@@ -46,19 +46,19 @@
   (use mmlproc)
   (use gauche.uvector)
   (export
-    sdl-init sdl-end
+    sdl-init sdl-end  sdl-delay
     aud-init aud-end
-    sdl-delay
     loadwav  mml->aud
     audplay  audstop
     getaudstat
+    ;setaudcallback
     SDL_INIT_TIMER    SDL_INIT_AUDIO       SDL_INIT_VIDEO
     SDL_INIT_JOYSTICK SDL_INIT_HAPTIC      SDL_INIT_GAMECONTROLLER
     SDL_INIT_EVENTS   SDL_INIT_NOPARACHUTE SDL_INIT_EVERYTHING))
 (select-module audplaymod)
 
 
-;; SDL2のロード
+;; SDLのロード
 (cond-expand
  ;; Windowsのとき
  (gauche.os.windows
@@ -69,7 +69,7 @@
                           ;(print header " " sym)
                           (#/\/SDL2\/.*\.h$/ header))
                         'NULL)
-          :compiled-lib "sdllib"))
+          :compiled-lib "sdl2audlib"))
  ;; その他のOSのとき(動作未確認)
  (else
   (c-load '("SDL.h" "SDL_mixer.h" "stdio.h" "stdlib.h")
@@ -79,7 +79,7 @@
                           ;(print header " " sym)
                           (#/\/SDL2\/.*\.h$/ header))
                         'NULL)
-          :compiled-lib "sdllib")))
+          :compiled-lib "sdl2audlib")))
 
 
 ;; SDLの初期化
@@ -90,6 +90,10 @@
 (define (sdl-end)
   (SDL_Quit))
 
+;; ウェイト(msec)
+(define (sdl-delay wait)
+  (SDL_Delay wait))
+
 ;; SDL_mixerの初期化
 (define (aud-init sample-rate)
   (Mix_OpenAudio sample-rate AUDIO_S16SYS 1 4096)
@@ -98,10 +102,6 @@
 ;; SDL_mixerの終了
 (define (aud-end)
   (Mix_CloseAudio))
-
-;; ウェイト(msec)
-(define (sdl-delay wait)
-  (SDL_Delay wait))
 
 ;; wavファイルを読み込んで音声チャンクに変換
 (define (loadwav wavfile)
@@ -124,19 +124,19 @@
 
 ;; 音声チャンクの再生
 (define (audplay audchunk :optional (ch -1) (waitflag #f))
-  (define audch        0)  ; 音声チャンネル
-  (define audplaystate 0)  ; 音声再生状態(=0:停止,=1:再生中)
+  (define pch    0) ; 再生チャンネル
+  (define pstate 0) ; 再生状態(=0:停止,=1:再生中)
   ;; 音声チャンクを再生
-  (set! audch (Mix_PlayChannel ch audchunk 0))
+  (set! pch (Mix_PlayChannel ch audchunk 0))
   ;; 終了待ちありのとき
   (when waitflag
-    ;; 音声再生状態を監視
-    (set! audplaystate 1)
-    (while (not (= audplaystate 0))
-      (set! audplaystate (Mix_Playing audch))
+    ;; 再生状態を監視
+    (set! pstate 1)
+    (while (not (= pstate 0))
+      (set! pstate (Mix_Playing pch))
       (SDL_Delay 100)))
-  ;; 音声チャンネルを返す
-  audch)
+  ;; 再生チャンネルを返す
+  pch)
 
 ;; 再生停止
 (define (audstop ch)
