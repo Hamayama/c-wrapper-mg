@@ -55,6 +55,7 @@
 - 2014-11-13 v1.10 audplaymod.scmを作成
 - 2014-11-14 v1.11 audplaymod.scmをv1.01に更新
 - 2014-11-18 v1.12 audplaymod.scmをv1.02に更新(全面見直し)
+- 2014-11-18 v1.13 audplaymod.scmをv1.03に更新(一部処理見直し)
 
 
 (2014-11-18)
