@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2014-11-19 v1.04
+;; 2014-11-20 v1.05
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -37,6 +37,7 @@
 ;;
 (define-module audplaymod
   (use c-wrapper)
+  (use c-wrapper.config)
   (use gauche.uvector)
   (export
     sdl-init  sdl-end  sdl-sleep
@@ -50,26 +51,17 @@
 
 ;; SDLのロード
 (cond-expand
- ;; Windowsのとき
  (gauche.os.windows
-  (c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_mixer.h")
-          :cppflags "-I/mingw/include/SDL2"
-          :libs "-L/mingw/lib -lSDL2 -lSDL2_mixer"
-          :import (list (lambda (header sym)
-                          ;(print header " " sym)
-                          (#/\/SDL2\/.*\.h$/ header))
-                        'NULL)
-          :compiled-lib "sdl2audlib"))
- ;; その他のOSのとき(動作未確認)
- (else
-  (c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_mixer.h")
-          :cppflags-cmd "sdl2-config --cflags"
-          :libs-cmd "sdl2-config --libs; echo '-lSDL2_mixer'"
-          :import (list (lambda (header sym)
-                          ;(print header " " sym)
-                          (#/\/SDL2\/.*\.h$/ header))
-                        'NULL)
-          :compiled-lib "sdl2audlib")))
+  (set! ignore-libname-list (append ignore-libname-list '("mingw32" "SDL2main")))
+  (set! ignore-library-list (append ignore-libname-list '("libmingw32" "libSDL2main")))))
+(c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_mixer.h")
+        :cppflags-cmd "bash -c 'sdl2-config --cflags'"
+        :libs-cmd     "bash -c 'sdl2-config --libs; echo \"-lSDL2_mixer\"'"
+        :import (list (lambda (header sym)
+                        ;(print header " " sym)
+                        (#/\/SDL2\/.*\.h$/ header))
+                      'NULL)
+        :compiled-lib "sdl2audlib")
 
 
 ;; SDLの初期化
