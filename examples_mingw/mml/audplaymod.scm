@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2014-11-18 v1.03
+;; 2014-11-19 v1.04
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -106,18 +106,13 @@
 ;; 音声チャンクの再生
 ;; (戻り値は再生チャンネルの番号)
 (define (audplay audchunk :optional (ch -1) (waitflag #f))
-  (define pch    0) ; 再生チャンネル
-  (define pstate 1) ; 再生状態(=0:停止,=1:再生中)
   ;; 音声チャンクを再生
-  (set! pch (Mix_PlayChannel ch audchunk 0))
-  ;; 終了待ちありのとき
-  (when waitflag
-    ;; 再生状態を監視
-    (while (not (= pstate 0))
-      (set! pstate (Mix_Playing pch))
-      (SDL_Delay 100)))
-  ;; 再生チャンネルを返す
-  pch)
+  (rlet1 pch (Mix_PlayChannel ch audchunk 0)
+    ;; 終了待ちありのとき
+    (when waitflag
+      ;; 再生状態を監視
+      (while (not (= (Mix_Playing pch) 0))
+        (SDL_Delay 100)))))
 
 ;; 再生停止
 (define (audstop ch)
