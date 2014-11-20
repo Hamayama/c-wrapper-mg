@@ -321,13 +321,16 @@
 ## 履歴
 - 2014-9-6   v0.6.1-mg0001 MinGW対応
 - 2014-9-8   v0.6.1-mg0002 configure.ac, config.scm.in, cwcompile.in を変更  
-  (configure.ac を変更したため ./DIST gen → ./configure が必要)
+  (configure.ac を変更したため ./DIST gen → ./configure  → make install が必要)
 - 2014-9-8   v0.6.1-mg0003 config.scm.in の変更ミス修正  
   ( ./configure → make install が必要)
 - 2014-10-16 v0.6.1-mg0004 SDL2サンプル examples/sdl2 を追加
 - 2014-10-17 v0.6.1-mg0005 MinGW用のサンプルは examples_mingw フォルダに移動  
   c-ffi.cのlookup_symbol関数にデバッグ用コード追加(今はコメントアウトしてある)
 - 2014-11-1  v0.6.1-mg0006 MML音楽演奏サンプル examples_mingw/mml を追加
+- 2014-11-20 v0.6.1-mg0007 configure.ac を変更  
+  ( MinGW時のCWCOMPILE_SHEBANGの定義を「/usr/bin/env gosh」にした )  
+  (configure.ac を変更したため ./DIST gen → ./configure  → make install が必要)
 
 
-(2014-11-7)
+(2014-11-20)

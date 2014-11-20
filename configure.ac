@@ -132,7 +132,7 @@ case "$target" in
         SYS_LIBRARY_PATHS="$SYS_LIBRARY_PATHS /usr/bin"
         MINGW_FLAG="#t"
 	CWCOMPILE_DEFAULT_LIBS="-lgauche-uvector"
-        CWCOMPILE_SHEBANG=" gosh"
+        CWCOMPILE_SHEBANG="/usr/bin/env gosh"
         FFI_SRC_ADD="mman.c"
         ;;
 esac
