@@ -42,8 +42,6 @@
    元のlibffiは削除して、  
    https://sourceware.org/libffi/  
    からlibffi-3.2.1を別途入手。  
-   (libffiのバージョンが上がって上記のページに存在しない場合は、  
-    ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)  
    不具合があるので src/x86 フォルダ内の ffi.c を以下のように修正した。
    ```
    (1)ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更
@@ -60,8 +58,7 @@
    ```
    上記修正後、libffi-3.2.1 の ./configure → make を実行し、  
    生成された i686-pc-mingw32 フォルダ内の .lib フォルダと include フォルダを、  
-   c-wrapper の src/libffi フォルダの下にコピーした。  
-   これでc-wrapperがコンパイルできるようになった。
+   c-wrapper の src/libffi フォルダの下にコピーした。
 
 4. dlopenの対応  
    dlopen, dlsym, dlerror等の関数が、MinGWには存在しない。  
