@@ -16,9 +16,11 @@
 
 - もともと付属していたlibffiは削除して、  
   https://sourceware.org/libffi/  
-  にある libffi-3.1 を使うようにしました。  
-  (libffi-3.1は同梱していないため別途入手が必要です。  
-  そして、元のlibffiと同様に一部修正を行う必要があります)
+  にある libffi-3.2.1 を使うようにしました。  
+  (libffi-3.2.1は同梱していないため別途入手が必要です。  
+  そして、元のlibffiと同様に一部修正を行う必要があります)  
+  (libffiのバージョンが上がって上記のページに存在しない場合は、  
+   ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)
 
 - またMinGWに存在しないmmap関数については、  
   https://code.google.com/p/mman-win32/  
@@ -39,7 +41,9 @@
 3. libffiの変更  
    元のlibffiは削除して、  
    https://sourceware.org/libffi/  
-   からlibffi-3.1を別途入手。  
+   からlibffi-3.2.1を別途入手。  
+   (libffiのバージョンが上がって上記のページに存在しない場合は、  
+    ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)  
    不具合があるので src/x86 フォルダ内の ffi.c を以下のように修正した。
    ```
    (1)ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更
@@ -54,7 +58,7 @@
         これは元のlibffiの src/prep_cif.c の ffi_prep_cif関数で追加していたため
         同じようにした。ただし、これが必須なのかどうかはよく分からない。
    ```
-   上記修正後、libffi-3.1 の ./configure → make を実行し、  
+   上記修正後、libffi-3.2.1 の ./configure → make を実行し、  
    生成された i686-pc-mingw32 フォルダ内の .lib フォルダと include フォルダを、  
    c-wrapper の src/libffi フォルダの下にコピーした。  
    これでc-wrapperがコンパイルできるようになった。
@@ -179,32 +183,34 @@
        空白を入れないように注意してください。
    ```
 
-4. libffi-3.1のダウンロード  
+4. libffi-3.2.1のダウンロード  
    https://sourceware.org/libffi/  
-   から libffi-3.1.tar.gz をダウンロードして展開します。  
+   から libffi-3.2.1.tar.gz をダウンロードして展開します。  
+   (libffiのバージョンが上がって上記のページに存在しない場合は、  
+    ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)  
    例えば作業用のフォルダを c:\work とすると、このフォルダにファイルを置いて、  
    コマンドプロンプトを開いて以下を実行すると展開されます。
    ```
      bash
      cd /c/work
-     tar zxvf libffi-3.1.tar.gz
+     tar zxvf libffi-3.2.1.tar.gz
    ```
 
-5. libffi-3.1のファイルの修正  
+5. libffi-3.2.1のファイルの修正  
    c-wrapper  の libffi_patch フォルダにある ffi.c を、  
-   libffi-3.1 の src/x86 フォルダ内の ffi.c に上書きコピーしてください。
+   libffi-3.2.1 の src/x86 フォルダ内の ffi.c に上書きコピーしてください。
 
-6. libffi-3.1のコンパイル  
+6. libffi-3.2.1のコンパイル  
    コマンドプロンプトを開いて以下を実行します。
    ```
      bash
-     cd /c/work/libffi-3.1
+     cd /c/work/libffi-3.2.1
      ./configure            ← これは初回のみ実施が必要です
      make
    ```
 
 7. 生成したライブラリとヘッダをc-wrapperのフォルダにコピー  
-   コンパイルが完了すると libffi-3.1 の下に i686-pc-mingw32 というフォルダができます。  
+   コンパイルが完了すると libffi-3.2.1 の下に i686-pc-mingw32 というフォルダができます。  
    この中の .libs フォルダと include フォルダ を、  
    c-wrapper の src/libffi フォルダの下にコピーしてください。
    ```
@@ -269,7 +275,7 @@
            ↓
          CFLAGS         = -g -c -o
 
-     libffi-3.1
+     libffi-3.2.1
        i686-pc-mingw32フォルダ内のMakefile
          CFLAGS = -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
            ↓
@@ -331,6 +337,7 @@
 - 2014-11-20 v0.6.1-mg0007 configure.ac を変更  
   ( MinGW時のCWCOMPILE_SHEBANGの定義を「/usr/bin/env gosh」にした )  
   (configure.ac を変更したため ./DIST gen → ./configure  → make install が必要)
+- 2014-11-20 v0.6.1-mg0008 libffi-3.1 を libffi-3.2.1 に更新
 
 
 (2014-11-20)
