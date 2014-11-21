@@ -245,15 +245,16 @@
 - 以上です。
 
 
-## 問題点
-- 現状分かっている問題点を以下に示します。
-
-1. テストの stdio-test.scm で fork failed エラー  
+## その他 メモ等
+1. テストの stdio-test.scm で fork failed エラーが出る  
    → Windows に sys-fork がないので仕方ない  
    → Windows のときは sys-fork-and-exec を使うようにテストを変更した
 
 2. ヘッダファイル(.h)だけを変更した場合にmakeで再コンパイルされない  
    → make clean してから make すればコンパイルできる
+
+3. テストの ffitest.h, ffitest.c でマクロの部分がgdbでデバッグしにくい  
+   → いくつかマクロを展開したものを、べたに書いてデバッグした
 
 
 ## その他 ノウハウ等
