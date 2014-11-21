@@ -249,11 +249,11 @@
 - 現状分かっている問題点を以下に示します。
 
 1. テストの stdio-test.scm で fork failed エラー  
-   → Windowsにsys-forkがないので仕方ない
+   → Windows に sys-fork がないので仕方ない  
+   → Windows のときは sys-fork-and-exec を使うようにテストを変更した
 
 2. ヘッダファイル(.h)だけを変更した場合にmakeで再コンパイルされない  
-   → .h の依存関係がMakefileに書かれていないからだと思う。  
-      とりあえず make clean してから make すればコンパイルできる。
+   → make clean してから make すればコンパイルできる
 
 
 ## その他 ノウハウ等
@@ -337,4 +337,4 @@
 - 2014-11-20 v0.6.1-mg0008 libffi-3.1 を libffi-3.2.1 に更新
 
 
-(2014-11-20)
+(2014-11-21)
