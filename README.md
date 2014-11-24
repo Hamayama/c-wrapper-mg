@@ -336,6 +336,7 @@
   ( MinGW時のCWCOMPILE_SHEBANGの定義を「/usr/bin/env gosh」にした )  
   (configure.ac を変更したため ./DIST gen → ./configure  → make install が必要)
 - 2014-11-20 v0.6.1-mg0008 libffi-3.1 を libffi-3.2.1 に更新
+- 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2014-11-21)
+(2014-11-24)

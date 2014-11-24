@@ -342,16 +342,15 @@
        ; #t)))))
        (else
         (cond
-         ;; (数字はSDL_Scancode)
-         ((= (ref keys 41) 1) ; [ESC]
+         ((= (ref keys SDL_SCANCODE_ESCAPE) 1)
           #f)
-         ((= (ref keys 44) 1) ; [SPACE]
+         ((= (ref keys SDL_SCANCODE_SPACE)  1)
           (shoot-ball)
           #t)
-         ((= (ref keys 80) 1) ; [←]
+         ((= (ref keys SDL_SCANCODE_LEFT)   1)
           (move-paddle-left)
           #t)
-         ((= (ref keys 79) 1) ; [→]
+         ((= (ref keys SDL_SCANCODE_RIGHT)  1)
           (move-paddle-right)
           #t)
          (else

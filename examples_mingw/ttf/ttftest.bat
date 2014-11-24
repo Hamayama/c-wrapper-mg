@@ -1,0 +1,2 @@
+gosh ttftest.scm
+pause
