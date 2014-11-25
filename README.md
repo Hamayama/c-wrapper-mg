@@ -245,16 +245,25 @@
 - 以上です。
 
 
-## その他 メモ等
-1. テストの stdio-test.scm で fork failed エラーが出る  
+## その他 問題点等
+1. テストの stdio-test.scm で fork failed エラー  
    → Windows に sys-fork がないので仕方ない  
-   → Windows のときは sys-fork-and-exec を使うようにテストを変更した
+   → Windows のときは sys-fork-and-exec を使うようにテストの方を変更した
 
 2. ヘッダファイル(.h)だけを変更した場合にmakeで再コンパイルされない  
-   → make clean してから make すればコンパイルできる
+   → make clean してから make すればコンパイルできる  
+      (ヘッダファイルだけを変更することはまずないと思うが、はまったので一応メモ)
 
-3. テストの ffitest.h, ffitest.c でマクロの部分がgdbでデバッグしにくい  
+3. テストの ffitest.h, ffitest.c でマクロの部分がgdbでデバッグ(ステップ実行)しにくい  
    → いくつかマクロを展開したものを、べたに書いてデバッグした
+
+4. c-wapperを利用したscmファイルを、gosh-noconsole.exeで実行すると動作しない(途中で止まる)  
+   (GaucheのWindows用インストーラは、デフォルトでscmファイルを  
+    gosh-noconsole.exeに関連付けするので、scmファイルをダブルクリックで  
+    実行するとこの現象が出る)  
+   → よく分かっていないが、c-wrapperの仕組み上コンソールが必要なもよう  
+   → 今のところ、gosh.exeで実行する必要がある  
+      (例えばバッチファイルを作成して gosh xxx.scm を実行する等)
 
 
 ## その他 ノウハウ等
@@ -339,4 +348,4 @@
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2014-11-24)
+(2014-11-25)
