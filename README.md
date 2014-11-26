@@ -122,7 +122,7 @@
 
 1. Gaucheのインストール  
    事前に Gauche がインストールされている必要があります。  
-   以下のページに Windows用バイナリインストーラ があるのでインストールを実施ください。  
+   以下のページに Windows用バイナリインストーラ があるので インストールを実施ください。  
    http://practical-scheme.net/gauche/download-j.html
 
 2. MinGWのインストール  
@@ -162,7 +162,7 @@
    ```
      bash
      cd /c/work/libffi-3.2.1
-     ./configure    # Makefileを生成します(初回のみ実施が必要です)
+     ./configure    # Makefile等を生成します
      make           # コンパイルを実行します
    ```
 
@@ -183,8 +183,8 @@
    ```
      bash
      cd /c/work/c-wrapper
-     ./DIST gen     # configureファイルを生成します(初回のみ実施が必要です)
-     ./configure    # Makefileを生成します(初回のみ実施が必要です)
+     ./DIST gen     # configureファイルを生成します
+     ./configure    # Makefile等を生成します
      make           # コンパイルを実行します
    ```
 
