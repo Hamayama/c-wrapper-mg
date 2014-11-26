@@ -6,70 +6,16 @@
 - c-wrapperのSDLサンプルのブロック崩しを、SDL2 + MinGW(32bit)用に改造したものです。
 
 
-## インストール方法
-- インストールの方法を以下に示します。
+## 環境のインストール方法
+- Gauche, MinGW(32bit), c-wrapper, SDL2, SDL2_mixerが適切にインストールされている必要があります。
 
-1. 事前準備  
-   事前にGauche, MinGW(32bit), c-wrapperがインストールされている必要があります。  
-   ( https://github.com/Hamayama/c-wrapper-mg の「インストール方法」を参照)
+- Gauche, MinGW(32bit), c-wrapperについては、  
+  以下のページの「インストール方法」を参考にインストールを実施ください。  
+  https://github.com/Hamayama/c-wrapper-mg
 
-2. SDL2のダウンロード  
-   http://www.libsdl.org/  
-   から SDL 2.0 のダウンロードページへ行き、Development LibrariesのMinGW用のファイル  
-   SDL2-devel-2.0.3-mingw.tar.gz  
-   をダウンロードします。  
-   そして、このファイルの中身を作業用のフォルダに展開します。  
-   例えば作業用のフォルダを c:\work とした場合、このフォルダにファイルを置いて、  
-   コマンドプロンプトを開いて以下を実行すると展開できます。
-   ```
-     bash
-     cd /c/work
-     tar zxvf SDL2-devel-2.0.3-mingw.tar.gz
-   ```
-
-3. SDL2のインクルードファイルの修正  
-   そのままだとコンパイル時に  
-   「winapifamily.h: No such file or directory」  
-   というエラーが発生します。  
-   以下のページに説明があります。  
-   http://stackoverflow.com/questions/22446008/winapifamily-h-no-such-file-or-directory-when-compiling-sdl-in-codeblocks  
-   記述通りに、  
-   https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h  
-   にアクセスして、SDL_platform.h をダウンロードし、  
-   SDL2-2.0.3 の i686-w64-mingw32/include/SDL2 フォルダ内の SDL_platform.h に  
-   上書きコピーします。
-
-4. SDL2のインストール  
-   コマンドプロンプトを開いて以下を実行して、MinGWのフォルダにインストールします。
-   ```
-     bash
-     cd /c/work/SDL2-2.0.3
-     make install-package arch=i686-w64-mingw32 prefix=/mingw
-   ```
-
-5. SDL2_mixerのダウンロード  
-   http://www.libsdl.org/projects/SDL_mixer/  
-   のページから、Development LibrariesのMinGW用のファイル  
-   SDL2_mixer-devel-2.0.0-mingw.tar.gz  
-   をダウンロードします。  
-   そして、このファイルの中身を作業用のフォルダに展開します。  
-   例えば作業用のフォルダを c:\work とした場合、このフォルダにファイルを置いて、  
-   コマンドプロンプトを開いて以下を実行すると展開できます。
-   ```
-     bash
-     cd /c/work
-     tar zxvf SDL2_mixer-devel-2.0.0-mingw.tar.gz
-   ```
-
-6. SDL2_mixerのインストール  
-   コマンドプロンプトを開いて以下を実行して、MinGWのフォルダにインストールします。
-   ```
-     bash
-     cd /c/work/SDL2_mixer-2.0.0
-     make install-package arch=i686-w64-mingw32 prefix=/mingw
-   ```
-
-- 以上です。
+- SDL2, SDL2_mixerについては、  
+  以下のページを参考にインストールを実施ください。  
+  https://gist.github.com/Hamayama/155b5557db31334ce492
 
 
 ## 実行方法
@@ -98,4 +44,4 @@
 - 2014-11-24 v1.02 キー入力の定数使用
 
 
-(2014-11-24)
+(2014-11-26)

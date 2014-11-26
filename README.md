@@ -122,53 +122,13 @@
 
 1. Gaucheのインストール  
    事前に Gauche がインストールされている必要があります。  
-   http://practical-scheme.net/gauche/download-j.html  
-   に Windows用バイナリインストーラ があります。
+   以下のページに Windows用バイナリインストーラ があるのでインストールを実施ください。  
+   http://practical-scheme.net/gauche/download-j.html
 
 2. MinGWのインストール  
    事前に MinGW がインストールされている必要があります。  
-   以下は自分がインストールしたときの参考用のメモです。  
-   (情報が古くなっている可能性があります)
-   ```
-     MinGWのダウンロードページ
-     http://sourceforge.net/projects/mingw/files/
-     から mingw-get-setup.exe (2013-10-04版) をダウンロードしてきて実行
-       Basic Setup で以下を選択
-         mingw-developer-toolkit  (v2013072300)
-         mingw32-base             (v2013072200)
-         mingw32-gcc-g++          (v4.8.1-4)
-         msys-base                (v2013072300)
-       All Packages で以下を追加選択
-         mingw32-libz dev         (v1.2.8-1)
-       メニューの Installation - Apply Changes を選択して、
-       Applyボタンをクリックしてインストール
-
-     システム環境変数PATHを編集し、最後のところに
-       ;C:\MinGw\bin;C:\MinGW\msys\1.0\bin
-     を追加
-
-     C:\MinGW\msys\1.0\msys.batを実行
-     すると、以下のフォルダができる
-       C:\MinGW\msys\1.0\home\(ユーザ名)
-
-     C:\MinGW\msys\1.0\home\(ユーザ名) に
-     テキストエディタ(TeraPad)で .bashrc を作成。内容は以下
-       alias ls='ls --color=auto --show-control-chars'
-
-     C:\MinGW\msys\1.0\home\(ユーザ名) に
-     テキストエディタ(TeraPad)で .profile を作成。内容は以下
-       source .bashrc
-
-     C:\MinGW\msys\1.0\home\(ユーザ名) の
-     .inputrc を テキストエディタ(TeraPad)で編集。変更内容は以下
-       set bell-style audible  →  set bell-style none
-       set output-meta off     →  set output-meta on
-       set convert-meta on     →  set convert-meta off
-
-     C:\MinGW\msys\1.0\etc に
-     テキストエディタ(TeraPad)で fstab を作成(拡張子なし)。内容は以下
-       c:/mingw  /mingw
-   ```
+   以下のページを参考にインストールを実施ください。  
+   https://gist.github.com/Hamayama/362f2eb14ae26d971ca4
 
 3. c-wrapperのソースの展開  
    本サイト( https://github.com/Hamayama/c-wrapper-mg )のソースを、  
@@ -202,8 +162,8 @@
    ```
      bash
      cd /c/work/libffi-3.2.1
-     ./configure            ← これは初回のみ実施が必要です
-     make
+     ./configure    # Makefileを生成します(初回のみ実施が必要です)
+     make           # コンパイルを実行します
    ```
 
 7. 生成したライブラリとヘッダをc-wrapperのフォルダにコピー  
@@ -223,9 +183,9 @@
    ```
      bash
      cd /c/work/c-wrapper
-     ./DIST gen             ← これは初回のみ実施が必要です
-     ./configure            ← これは初回のみ実施が必要です
-     make
+     ./DIST gen     # configureファイルを生成します(初回のみ実施が必要です)
+     ./configure    # Makefileを生成します(初回のみ実施が必要です)
+     make           # コンパイルを実行します
    ```
 
 9. c-wrapperのインストール  
@@ -348,4 +308,4 @@
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2014-11-25)
+(2014-11-26)

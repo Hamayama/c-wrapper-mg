@@ -5,40 +5,16 @@
   TrueTypeフォントの表示を行うサンプルです。
 
 
-## インストール方法
-- インストールの方法を以下に示します。
+## 環境のインストール方法
+- Gauche, MinGW(32bit), c-wrapper, SDL2, SDL2_ttfが適切にインストールされている必要があります。
 
-1. 事前準備  
-   SDL2サンプルのページ  
-   https://github.com/Hamayama/c-wrapper-mg/tree/master/examples_mingw/sdl2  
-   の「インストール方法」を参照ください。  
-   ただし、SDL2_mixerのダウンロード/インストールは不要です。  
-   Gauche, MinGW(32bit), c-wrapper, SDL2が適切にインストール  
-   されている必要があります。
+- Gauche, MinGW(32bit), c-wrapperについては、  
+  以下のページの「インストール方法」を参考にインストールを実施ください。  
+  https://github.com/Hamayama/c-wrapper-mg
 
-2. SDL2_ttfのダウンロード  
-   https://www.libsdl.org/projects/SDL_ttf/  
-   のページから、Development LibrariesのMinGW用のファイル  
-     SDL2_ttf-devel-2.0.12-mingw.tar.gz  
-   をダウンロードします。  
-   そして、このファイルの中身を作業用のフォルダに展開します。  
-   例えば作業用のフォルダを c:\work とした場合、このフォルダにファイルを置いて、  
-   コマンドプロンプトを開いて以下を実行すると展開できます。
-   ```
-     bash
-     cd /c/work
-     tar zxvf SDL2_ttf-devel-2.0.12-mingw.tar.gz
-   ```
-
-3. SDL2_ttfのインストール  
-   コマンドプロンプトを開いて以下を実行して、MinGWのフォルダにインストールします。
-   ```
-     bash
-     cd /c/work/SDL2_ttf-2.0.12
-     make install-package arch=i686-w64-mingw32 prefix=/mingw
-   ```
-
-- 以上です。
+- SDL2, SDL2_ttfについては、  
+  以下のページを参考にインストールを実施ください。  
+  https://gist.github.com/Hamayama/155b5557db31334ce492
 
 
 ## 実行方法
@@ -68,4 +44,4 @@
 - 2014-11-24 v1.00 初版
 
 
-(2014-11-24)
+(2014-11-26)

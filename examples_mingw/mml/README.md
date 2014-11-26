@@ -5,12 +5,16 @@
   MML(Music Macro Language)による音楽演奏を行うサンプルです。
 
 
-## インストール方法
-- SDL2サンプルのページ  
-  https://github.com/Hamayama/c-wrapper-mg/tree/master/examples_mingw/sdl2  
-  の「インストール方法」を参照ください。  
-  Gauche, MinGW(32bit), c-wrapper, SDL2, SDL2_mixerが適切にインストール  
-  されている必要があります。
+## 環境のインストール方法
+- Gauche, MinGW(32bit), c-wrapper, SDL2, SDL2_mixerが適切にインストールされている必要があります。
+
+- Gauche, MinGW(32bit), c-wrapperについては、  
+  以下のページの「インストール方法」を参考にインストールを実施ください。  
+  https://github.com/Hamayama/c-wrapper-mg
+
+- SDL2, SDL2_mixerについては、  
+  以下のページを参考にインストールを実施ください。  
+  https://gist.github.com/Hamayama/155b5557db31334ce492
 
 
 ## 実行方法
@@ -61,4 +65,4 @@
 - 2014-11-24 v1.16 audplaymod.scmをv1.06に更新(SDLロード処理修正)
 
 
-(2014-11-24)
+(2014-11-26)
