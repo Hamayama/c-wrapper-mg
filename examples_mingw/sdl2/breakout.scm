@@ -49,6 +49,7 @@
 ;        :import (list (lambda (header sym)
 ;                        (#/\/SDL\/.*\.h$/ header))
 ;                      'NULL))
+(display #\cr)(flush) ; コンソールを割り当てる
 (c-load '("SDL.h" "SDL_mixer.h" "stdio.h" "stdlib.h")
         :cppflags "-I/mingw/include/SDL2"
         :libs "-L/mingw/lib -lSDL2 -lSDL2_mixer"

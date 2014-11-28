@@ -217,13 +217,19 @@
 3. テストの ffitest.h, ffitest.c でマクロの部分がgdbでデバッグ(ステップ実行)しにくい  
    → いくつかマクロを展開したものを、べたに書いてデバッグした
 
-4. c-wapperを利用したscmファイルを、gosh-noconsole.exeで実行すると動作しない(途中で止まる)  
+4. c-wapperを利用したscmファイルを、gosh-noconsole.exe で実行すると動作しない(途中で止まる)  
    (GaucheのWindows用インストーラは、デフォルトでscmファイルを  
-    gosh-noconsole.exeに関連付けするので、scmファイルをダブルクリックで  
-    実行するとこの現象が出る)  
+    gosh-noconsole.exe に関連付けするので、scmファイルをダブルクリックで実行すると  
+    この現象が出る)  
    → よく分かっていないが、c-wrapperの仕組み上コンソールが必要なもよう  
-   → 今のところ、gosh.exeで実行する必要がある  
-      (例えばバッチファイルを作成して gosh xxx.scm を実行する等)
+   → 基本的には gosh.exe で実行する必要がある  
+      (例えばバッチファイルを作成して gosh xxx.scm を実行する等)  
+   → c-include や c-load を実行する前に  
+      (display #\cr)(flush) や (print "XXX") を実行してコンソールを割り当てるようにすれば、  
+      gosh-noconsole.exe でも動かすことができた。  
+      ただし、コマンドプロンプトの画面が表示される。  
+      どうしてもコマンドプロンプトの画面を出したくない場合には、以下のページを参照。  
+      https://github.com/Hamayama/msconalloc
 
 
 ## その他 ノウハウ等
@@ -308,4 +314,4 @@
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2014-11-26)
+(2014-11-28)
