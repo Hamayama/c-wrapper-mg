@@ -205,6 +205,20 @@
 - 以上です。
 
 
+##使い方
+- MinGW用の実行サンプルをいくつかexamples_mingwフォルダに格納しました。  
+  (benchmark, examples, experimentフォルダのサンプルは動作未確認です)
+
+1. SDL2サンプル  
+   https://github.com/Hamayama/c-wrapper-mg/tree/master/examples_mingw/sdl2
+
+2. MML音楽演奏サンプル  
+   https://github.com/Hamayama/c-wrapper-mg/tree/master/examples_mingw/mml
+
+3. TTF表示サンプル  
+   https://github.com/Hamayama/c-wrapper-mg/tree/master/examples_mingw/ttf
+
+
 ## その他 問題点等
 1. テストの stdio-test.scm で fork failed エラー  
    → Windows に sys-fork がないので仕方ない  
@@ -224,11 +238,11 @@
    → よく分かっていないが、c-wrapperの仕組み上コンソールが必要なもよう  
    → 基本的には gosh.exe で実行する必要がある  
       (例えばバッチファイルを作成して gosh xxx.scm を実行する等)  
-   → c-include や c-load を実行する前に  
+   → 回避策として c-include や c-load を実行する前に  
       (display #\cr)(flush) や (print "XXX") を実行してコンソールを割り当てるようにすれば、  
       gosh-noconsole.exe でも動かすことができた。  
-      ただし、コマンドプロンプトの画面が表示される。  
-      どうしてもコマンドプロンプトの画面を出したくない場合には、以下のページを参照。  
+      ただし、コマンドプロンプトの画面が出る。  
+      どうしてもコマンドプロンプトの画面を出したくない場合には、以下のページを参照のこと。  
       https://github.com/Hamayama/msconalloc
 
 
@@ -314,4 +328,4 @@
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2014-11-28)
+(2014-11-29)
