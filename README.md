@@ -68,14 +68,14 @@
    CloseHandleしているが、これがあると gdb で unknown signal と出てデバッグができなかった。  
    CloseHandleしてはいけないようなのでコメントアウトしたところ、gdbでデバッグできるようになった。  
    また、インクルードでエラーになったので、  
-   `__MINGW32__` のときは c-ffi.h で dlfcn.h を インクルードしないようにした。
+   `__MINGW32__` が定義済みのときは c-ffi.h で dlfcn.h を インクルードしないようにした。
 
 5. mmapの対応  
    mmap関数が、MinGWには存在しない。  
    https://code.google.com/p/mman-win32/  
    から mman.h と mman.c を入手。  
    c-wrapper の src フォルダにコピーして取り込むようにした。  
-   そして、`__MINGW32__` のときは closure_alloc.h で src フォルダの下の mman.h を  
+   そして、`__MINGW32__` が定義済みのときは closure_alloc.h で src フォルダの下の mman.h を  
    インクルードするようにした。  
    あと、1箇所MinGWとバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを変更)。  
    また、configure.ac に FFI_SRC_ADD という定義を追加した。
@@ -339,4 +339,4 @@
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2015-2-8)
+(2015-2-14)
