@@ -187,6 +187,16 @@
      ./configure    # Makefile等を生成します
      make           # コンパイルを実行します
    ```
+   (注意) 2014-12-29 にリリースされた MinGW ランタイム v3.21 を使うと、  
+   timespec 構造体と nanosleep 関数の重複定義エラーが発生します。  
+   これらは、もともと Gauche が自前 (win-compat.h, system.c の中) で持っていたものが、  
+   MinGW ランタイム (libmingwex.a) にも追加されたために、重複することになったものです。  
+   しかし、MinGWの実装には問題があり、この追加は取り消される可能性があるようです。  
+   http://mingw-users.1079350.n2.nabble.com/Definition-of-struct-timespec-in-MinGW-runtime-3-21-td7583272.html  
+   とりあえずの対策としては、  
+   `c:\MinGW\include\parts\time.h` 内の timespec 構造体の定義と、  
+   `c:\MinGW\include\unistd.h` 内の nanosleep 関数の定義を、両方ともコメントアウトすれば、  
+   コンパイル可能になるようです。
 
 9. c-wrapperのインストール  
    コマンドプロンプトを開いて以下を実行します。
@@ -339,4 +349,4 @@
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2015-2-14)
+(2015-2-18)
