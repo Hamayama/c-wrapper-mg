@@ -11,7 +11,7 @@
 - オリジナルの情報は、以下にあります。  
   http://www.koguro.net/prog/c-wrapper/index-j.html  
   ただし、ソースコードは、  
-  http://hg.koguro.net/c-wrapper  
+  https://bitbucket.org/nkoguro/c-wrapper  
   で最新と思われる c-wrapper v0.6.1 (ChangeLog 2012-07-19) をダウンロードしてベースとしました。
 
 - もともと付属していたlibffiは削除して、  
@@ -132,13 +132,10 @@
 
 3. c-wrapperのソースの展開  
    本サイト( https://github.com/Hamayama/c-wrapper-mg )のソースを、  
-   (Download Zipボタン等で)ダウンロードして、作業用のフォルダに展開してください。  
+   (Download Zip ボタン等で)ダウンロードして、作業用のフォルダに展開してください。  
    例えば、作業用のフォルダを c:\work とすると、  
-   c:\work\c-wrapper の下にファイルとフォルダ一式が配置されるように展開してください。
-   ```
-   (注意) フォルダのパスに空白があるとコンパイルに失敗するので、
-          空白を入れないようにしてください。
-   ```
+   c:\work\c-wrapper の下にファイルとフォルダ一式が配置されるように展開してください。  
+   (注意) 作業用フォルダのパスには、空白を入れないようにしてください。
 
 4. libffi-3.2.1のダウンロード  
    https://sourceware.org/libffi/  
@@ -187,16 +184,9 @@
      ./configure    # Makefile等を生成します
      make           # コンパイルを実行します
    ```
-   (注意) 2014-12-29 にリリースされた MinGW ランタイム v3.21 を使うと、  
-   timespec 構造体と nanosleep 関数の重複定義エラーが発生します。  
-   これらは、もともと Gauche が自前 (win-compat.h, system.c の中) で持っていたものが、  
-   MinGW ランタイム (libmingwex.a) にも追加されたために、重複することになったものです。  
-   しかし、MinGWの実装には問題があり、この追加は取り消される可能性があるようです。  
-   http://mingw-users.1079350.n2.nabble.com/Definition-of-struct-timespec-in-MinGW-runtime-3-21-td7583272.html  
-   とりあえずの対策としては、  
-   `c:\MinGW\include\parts\time.h` 内の timespec 構造体の定義と、  
-   `c:\MinGW\include\unistd.h` 内の nanosleep 関数の定義を、両方ともコメントアウトすれば、  
-   コンパイル可能になるようです。
+   (注意) コンパイルエラーになる場合は、以下のページの  
+   「5. MinGW (32bit) のファイルの修正」の内容を確認してみてください。  
+   https://gist.github.com/Hamayama/19d7e779cec0480af0cf
 
 9. c-wrapperのインストール  
    コマンドプロンプトを開いて以下を実行します。
@@ -324,7 +314,7 @@
 ## 環境等
 - OS
   - Windows XP Home SP3
-  - Windows 8 (64bit)
+  - Windows 8.1 (64bit)
 - 環境
   - MinGW (32bit) v4.8.1
 - 言語
@@ -349,4 +339,4 @@
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
 
 
-(2015-2-18)
+(2015-5-7)
