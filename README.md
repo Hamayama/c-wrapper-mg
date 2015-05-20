@@ -116,6 +116,13 @@
      configure.ac に CWCOMPILE_SHEBANG の定義を追加した。
    ```
 
+10. Gauche v0.9.5_pre1 で uvector のライブラリファイル名が変わったので対応
+    ```
+      configure.ac に GAUCHE_UVECTOR_LIBS の定義を追加して、
+      ファイルの存在有無によってライブラリファイル名を切り換えるようにした。
+      (Cygwinは未対応)
+    ```
+
 
 ## インストール方法
 - インストールの方法を以下に示します。
@@ -333,10 +340,13 @@
   c-ffi.cのlookup_symbol関数にデバッグ用コード追加(今はコメントアウトしてある)
 - 2014-11-1  v0.6.1-mg0006 MML音楽演奏サンプル examples_mingw/mml を追加
 - 2014-11-20 v0.6.1-mg0007 configure.ac を変更  
-  ( MinGW時のCWCOMPILE_SHEBANGの定義を「/usr/bin/env gosh」にした )  
+  (MinGW時のCWCOMPILE_SHEBANGの定義を「/usr/bin/env gosh」にした)  
   (configure.ac を変更したため ./DIST gen → ./configure  → make install が必要)
 - 2014-11-20 v0.6.1-mg0008 libffi-3.1 を libffi-3.2.1 に更新
 - 2014-11-24 v0.6.1-mg0009 TTF表示サンプル examples_mingw/ttf を追加
+- 2015-5-20  v0.6.1-mg0010 configure.ac を変更  
+  (Gauche v0.9.5_pre1 で uvector のライブラリファイル名が変わったので対応)  
+  (configure.ac を変更したため make clean → ./DIST gen → ./configure  → make install が必要)
 
 
-(2015-5-7)
+(2015-5-20)
