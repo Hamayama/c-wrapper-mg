@@ -129,13 +129,15 @@
 
 1. Gaucheのインストール  
    事前に Gauche がインストールされている必要があります。  
-   以下のページに Windows用バイナリインストーラ があるので インストールを実施ください。  
-   http://practical-scheme.net/gauche/download-j.html
+   以下のページに Windows用バイナリインストーラ があるので、インストールを実施ください。  
+   http://practical-scheme.net/gauche/download-j.html  
+   (すでにインストール済みであれば本手順は不要です)
 
 2. MinGWのインストール  
    事前に MinGW がインストールされている必要があります。  
-   以下のページを参考にインストールを実施ください。  
-   https://gist.github.com/Hamayama/362f2eb14ae26d971ca4
+   以下のページを参考に、インストールを実施ください。  
+   https://gist.github.com/Hamayama/362f2eb14ae26d971ca4  
+   (すでにインストール済みであれば本手順は不要です)
 
 3. c-wrapperのソースの展開  
    本サイト( https://github.com/Hamayama/c-wrapper-mg )のソースを、  
@@ -349,4 +351,4 @@
   (configure.ac を変更したため make clean → ./DIST gen → ./configure  → make install が必要)
 
 
-(2015-5-20)
+(2015-6-4)
