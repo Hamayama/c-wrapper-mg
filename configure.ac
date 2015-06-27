@@ -115,21 +115,9 @@ case "$target" in
             LDCONFIG_CMD="$LDCONFIG -r | $SED -n '/^	/s/^.*=> //p'"
         fi
         ;;
-    *-cygwin*)
+    *-cygwin*|*-mingw*)
         dnl Gauche's uvector library file name is changed in v0.9.5_pre1.
-        dnl GAUCHE_UVECTOR_LIBS="-lgauche--uvector"
-        GAUCHE_UVECTOR_LIBS="-lgauche-uvector"
-        LIBS="$GAUCHE_UVECTOR_LIBS -lpsapi $LIBS"
-        LDFLAGS="$LDFLAGS -L."
-	TESTLIB_CFLAGS="-c -o"
-        CPARSER_LIBS="-lc-ffi -lc-lex"
-        SYS_LIBRARY_PATHS="$SYS_LIBRARY_PATHS /usr/bin"
-        CYGWIN_FLAG="#t"
-	CWCOMPILE_DEFAULT_LIBS="$GAUCHE_UVECTOR_LIBS"
-        ;;
-    *-mingw*)
-        dnl Gauche's uvector library file name is changed in v0.9.5_pre1.
-        GAUCHE_SYSDIR=`"$GAUCHE_CONFIG" --sysarchdir`
+        GAUCHE_SYSDIR=`"$GAUCHE_CONFIG" --sysarchdir | sed 's/\\\\/\\//g'`
         GAUCHE_UVECTOR_DLL="$GAUCHE_SYSDIR/gauche--uvector.$SOEXT"
         if test -e "$GAUCHE_UVECTOR_DLL"; then
             GAUCHE_UVECTOR_LIBS="-lgauche--uvector"
@@ -138,13 +126,20 @@ case "$target" in
         fi
         LIBS="$GAUCHE_UVECTOR_LIBS -lpsapi $LIBS"
         LDFLAGS="$LDFLAGS -L."
-	TESTLIB_CFLAGS="-c -o"
+        TESTLIB_CFLAGS="-c -o"
         CPARSER_LIBS="-lc-ffi -lc-lex"
         SYS_LIBRARY_PATHS="$SYS_LIBRARY_PATHS /usr/bin"
-        MINGW_FLAG="#t"
-	CWCOMPILE_DEFAULT_LIBS="$GAUCHE_UVECTOR_LIBS"
+        CWCOMPILE_DEFAULT_LIBS="$GAUCHE_UVECTOR_LIBS"
         CWCOMPILE_SHEBANG="/usr/bin/env gosh"
-        FFI_SRC_ADD="mman.c"
+        case "$target" in
+            *-cygwin*)
+                CYGWIN_FLAG="#t"
+                ;;
+            *-mingw*)
+                MINGW_FLAG="#t"
+                FFI_SRC_ADD="mman.c"
+                ;;
+        esac
         ;;
 esac
 
