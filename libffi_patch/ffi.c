@@ -42,7 +42,7 @@
 
 // ***** win32 result check functions *****
 #ifdef X86_WIN32
-static int is_result_on_stack_sub(ffi_type *rtype);
+static int is_result_on_stack_sub(ffi_type *rtype, int *elem_count, int *elem_type);
 static int is_result_on_stack(ffi_type *rtype);
 #endif
 
@@ -241,6 +241,7 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
 {
   unsigned int i;
   ffi_type **ptr;
+  int ret;
 
   /* Set the return type flag */
   switch (cif->rtype->type)
@@ -308,7 +309,8 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
 //        }
 #ifdef X86_WIN32
       // ***** win32 result check *****
-      if (is_result_on_stack(cif->rtype)) {
+      ret = is_result_on_stack(cif->rtype);
+      if (ret == -1) {
           if (cif->abi == FFI_MS_CDECL) {
               cif->flags = FFI_TYPE_MS_STRUCT;
           } else {
@@ -316,8 +318,12 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
           }
           /* allocate space for return value pointer */
           cif->bytes += ALIGN(sizeof(void*), FFI_SIZEOF_ARG);
-      } else {
+      } else if (ret == -2) {
+          // use two register for return values
           cif->flags = FFI_TYPE_SINT64; /* same as int64 type */
+      } else {
+          // single element
+          cif->flags = ret;
       }
 #else
       if (cif->rtype->size == 1)
@@ -995,7 +1001,7 @@ ffi_raw_call(ffi_cif *cif, void (*fn)(void), void *rvalue, ffi_raw *fake_avalue)
 
 // ***** win32 result check functions *****
 #ifdef X86_WIN32
-static int is_result_on_stack_sub(ffi_type *rtype)
+static int is_result_on_stack_sub(ffi_type *rtype, int *elem_count, int *elem_type)
 {
   ffi_type *elem;
   int i;
@@ -1005,8 +1011,9 @@ static int is_result_on_stack_sub(ffi_type *rtype)
       elem = rtype->elements[i];
       if (elem->type == FFI_TYPE_STRUCT)
         {
-          if (is_result_on_stack_sub(elem))
+          if (is_result_on_stack_sub(elem, elem_count, elem_type)) {
             return 1;
+          }
         }
       else
         {
@@ -1043,8 +1050,25 @@ static int is_result_on_stack_sub(ffi_type *rtype)
               size = ffi_type_longdouble.size;
               break;
             }
-          if (size < elem->size)
+          // element type set
+          if (size > 0) {
+            *elem_type = elem->type;
+          }
+          // element size check
+          if (elem->size <= size) {
+            // single element
+            (*elem_count)++;
+          } else if (elem->size <= size * 2) {
+            // array element (length=2)
+            (*elem_count)+=2;
+          } else {
+            // array element (length>2)
             return 1;
+          }
+          // elements count check
+          if (*elem_count >= 3) {
+            return 1;
+          }
         }
     }
   return 0;
@@ -1052,13 +1076,24 @@ static int is_result_on_stack_sub(ffi_type *rtype)
 
 static int is_result_on_stack(ffi_type *rtype)
 {
-  if (rtype->size > 8)
-    return 1;
+  int elem_count = 0;
+  int elem_type = 0;
 
-  if (rtype->type == FFI_TYPE_STRUCT)
-    return is_result_on_stack_sub(rtype);
-  else
-    return 0;
+  if (rtype->type == FFI_TYPE_STRUCT) {
+    if (is_result_on_stack_sub(rtype, &elem_count, &elem_type)) {
+      return -1;
+    }
+    // single element check
+    if (elem_count == 1 && elem_type > 0) {
+      return elem_type;
+    }
+    // struct size check
+    if (rtype->size <= 8) {
+      return -2;
+    }
+    return -1;
+  }
+  return rtype->type;
 }
 #endif
 
