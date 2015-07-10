@@ -997,39 +997,34 @@
 (define make-bit-field c-bit-field)
 
 (define (init-decl-alist! alist)
-  ;; ***** bitsize boundary fix *****
-  ;(define (dispatch rest accum)
-  (define (dispatch rest accum bitstart)
+  (define (dispatch rest accum)
     (cond
      ((null? rest)
       alist)
      ((bit-field? (cdar rest))
-      ;; ***** bitsize boundary fix *****
-      ;(do-bit-field (cdar rest) (cdr rest) accum))
-      (if bitstart
-        (do-bit-field (cdar rest) (cdr rest) 0)
-        (do-bit-field (cdar rest) (cdr rest) accum)))
+      (do-bit-field (cdar rest) (cdr rest) accum))
      (else
-      ;; ***** bitsize boundary fix *****
+      ;; ***** fix bit-field offset *****
       ;(dispatch (cdr rest) (max (* (- (c-sizeof-type <c-uint>) (c-sizeof-type (cdar rest))) 8)
       ;                          0)))))
-      (dispatch (cdr rest) 0 #t))))
+      (dispatch (cdr rest) 0))))
   (define (do-bit-field bit-field rest accum)
     (if (< (* (c-sizeof-type <c-uint>) 8) (+ accum (bits-of bit-field)))
         (do-bit-field bit-field rest 0)
         (begin
+          ;; ***** fix bit-field offset *****
+          (if (= (bits-of bit-field) 0) (set! accum 0))
           (set! (shift-of bit-field) (if (big-endian?)
                                          (- (* (c-sizeof-type <c-uint>) 8)
                                             accum
                                             (bits-of bit-field))
                                          accum))
-          (set! (leader? bit-field) (= accum 0))
-          ;; ***** bitsize boundary fix *****
-          ;(dispatch rest (+ accum (bits-of bit-field))))))
-          (dispatch rest (+ accum (bits-of bit-field)) #f))))
-  ;; ***** bitsize boundary fix *****
-  ;(dispatch alist 0))
-  (dispatch alist 0 #t))
+          ;; ***** fix bit-field offset *****
+          ;(set! (leader? bit-field) (= accum 0))
+          (set! (leader? bit-field) (and (= accum 0)
+                                         (not (= (bits-of bit-field) 0))))
+          (dispatch rest (+ accum (bits-of bit-field))))))
+  (dispatch alist 0))
 
 (define (unnamed-symbol? sym)
   (#/^%unnamed/ (symbol->string sym)))
