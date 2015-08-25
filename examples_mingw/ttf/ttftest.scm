@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; SDL2_ttfによるフォント表示のテスト
-;; 2014-11-28
+;; 2015-8-25
 ;;
 (use c-wrapper)
 (use c-wrapper.config)
@@ -11,7 +11,8 @@
  (gauche.os.windows
   (print "loading...") ; コンソールを割り当てる
   (set! ignore-libname-list (append ignore-libname-list '("mingw32" "SDL2main")))
-  (set! ignore-library-list (append ignore-library-list '("libmingw32" "libSDL2main")))))
+  (set! ignore-library-list (append ignore-library-list '("libmingw32" "libSDL2main"))))
+ (else))
 (c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_ttf.h")
         :cppflags-cmd "bash -c 'sdl2-config --cflags'"
         :libs-cmd     "bash -c 'sdl2-config --libs; echo \"-lSDL2_ttf\"'"
@@ -22,7 +23,8 @@
         :compiled-lib "sdl2ttflib")
 (cond-expand
  (gauche.os.windows
-  (print "complete.")))
+  (print "complete."))
+ (else))
 
 ;; 変数/定数
 (define *window*    #f)

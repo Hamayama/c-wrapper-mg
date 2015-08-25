@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2014-11-28 v1.07
+;; 2015-8-25 v1.08
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -54,7 +54,8 @@
  (gauche.os.windows
   (display #\cr)(flush) ; コンソールを割り当てる
   (set! ignore-libname-list (append ignore-libname-list '("mingw32" "SDL2main")))
-  (set! ignore-library-list (append ignore-library-list '("libmingw32" "libSDL2main")))))
+  (set! ignore-library-list (append ignore-library-list '("libmingw32" "libSDL2main"))))
+ (else))
 (c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_mixer.h")
         :cppflags-cmd "bash -c 'sdl2-config --cflags'"
         :libs-cmd     "bash -c 'sdl2-config --libs; echo \"-lSDL2_mixer\"'"

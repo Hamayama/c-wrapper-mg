@@ -65,6 +65,7 @@
 - 2014-11-26 v1.17 mmlproc.scmをv1.13に更新(コメント修正のみ)
 - 2014-11-28 v1.18 audplaymod.scmをv1.07に更新(gosh-noconsoleでも動くようにコンソールの割り当てを追加)
 - 2015-1-18  v1.19 mmlproc.scmをv1.14に更新(エラーチェック追加)
+- 2015-8-25  v1.20 audplaymod.scmをv1.08に更新(cond-expandにelse節を追加)
 
 
-(2015-2-8)
+(2015-8-25)
