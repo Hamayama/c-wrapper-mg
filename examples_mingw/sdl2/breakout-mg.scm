@@ -1,7 +1,9 @@
 ;; -*- coding: utf-8; mode: scheme -*-
 ;;
-;; Modified for SDL2 + MinGW(32bit), by Hamayama (2014).
-;; Licensed under the same license that the original breakout is.
+;; breakout-mg.scm
+;;
+;;   Modified for SDL2 + MinGW(32bit), by Hamayama (2014-2015).
+;;   Licensed under the same license that the original breakout is.
 ;;
 ;; --
 ;;
@@ -41,6 +43,7 @@
 (use c-wrapper)
 (use srfi-1)
 (use srfi-27)
+(use math.const)
 
 ;; ***** SDL2対応 *****
 ;(c-load '("SDL.h" "SDL_mixer.h" "stdio.h" "stdlib.h")
@@ -75,10 +78,12 @@
 (define *ball-vy* 0)
 (define *ball-count* 0)
 (define-constant *ball-size* *unit*)
+(define *ball-speed* (* (sqrt 2) *unit*))
 
 (define *paddle-rect* #f)
 ;(define *paddle-width* (* 8 *unit*))
 (define *paddle-width* (* 10 *unit*))
+(define *paddle-height* (+ *ball-speed* 1))
 (define *paddle-vx* 0)
 
 (define *block-list* '())
@@ -112,7 +117,8 @@
 
   (set! *paddle-rect* (make <SDL_Rect>))
   (set! (ref *paddle-rect* 'w) *paddle-width*)
-  (set! (ref *paddle-rect* 'h) *unit*)
+  ;(set! (ref *paddle-rect* 'h) *unit*)
+  (set! (ref *paddle-rect* 'h) *paddle-height*)
   
   (Mix_OpenAudio 44100 AUDIO_S16SYS 2 1024)
   (set! *bounce-sound* (Mix_LoadWAV "cursor5.wav"))
@@ -139,14 +145,18 @@
 (define (block-vertical-reflect? block x y vx)
   (receive (sx sy ex ey) (apply values (vector-ref block 0))
     (and (<= sy y ey)
-         (or (and (= x sx) (< 0 vx))
-             (and (= x ex) (< vx 0))))))
+         ;(or (and (= x sx) (< 0 vx))
+         ;    (and (= x ex) (< vx 0))))))
+         (or (and (< (abs (- x sx)) *ball-speed*) (< 0 vx))
+             (and (< (abs (- x ex)) *ball-speed*) (< vx 0))))))
 
 (define (block-horizontal-reflect? block x y vy)
   (receive (sx sy ex ey) (apply values (vector-ref block 0))
     (and (<= sx x ex)
-         (or (and (= y sy) (< 0 vy))
-             (and (= y ey) (< vy 0))))))
+         ;(or (and (= y sy) (< 0 vy))
+         ;    (and (= y ey) (< vy 0))))))
+         (or (and (< (abs (- y sy)) *ball-speed*) (< 0 vy))
+             (and (< (abs (- y ey)) *ball-speed*) (< vy 0))))))
 
 (define (block-hit? block x y)
   (receive (sx sy ex ey) (apply values (vector-ref block 0))
@@ -241,9 +251,10 @@
             (paddle-x (ref *paddle-rect* 'x))
             (paddle-y (ref *paddle-rect* 'y))
             (paddle-w (ref *paddle-rect* 'w))
-          (paddle-h (ref *paddle-rect* 'h))
-          (w (ref *ball-rect* 'w))
-          (h (ref *ball-rect* 'h)))
+            (paddle-h (ref *paddle-rect* 'h))
+            (x (ref *ball-rect* 'x))
+            (w (ref *ball-rect* 'w))
+            (h (ref *ball-rect* 'h)))
         (when (< new-x 0)
           (reflect-x)
           (set! new-x (- new-x)))
@@ -255,13 +266,36 @@
           (set! new-y 0))
         (when (and (<= paddle-y new-y (+ paddle-y paddle-h))
                    (<= paddle-x new-x (+ paddle-x paddle-w)))
-          (reflect-y)
-          (when (or (and (= paddle-x new-x)
-                         (< 0 *ball-vx*))
-                    (and (= (+ paddle-x paddle-w (- *unit*)) new-x)
-                         (< *ball-vx* 0)))
-            (reflect-x))
+          ;(reflect-y)
+          ;(when (or (and (= paddle-x new-x)
+          ;               (< 0 *ball-vx*))
+          ;          (and (= (+ paddle-x paddle-w (- *unit*)) new-x)
+          ;               (< *ball-vx* 0)))
+          ;  (reflect-x))
+          ;(set! new-y (- paddle-y h)))
+          (let ((rad 0)
+                (hit-dir (if  (< x (+ paddle-x (/. paddle-w 2))) -1 1))
+                (hit-pos (abs (- x (+ paddle-x (/. paddle-w 2))))))
+            ;; 反射角を設定
+            (set! rad (if (< *ball-vx* 0)
+                        (* (/. pi 4) 3)
+                        (/. pi 4)))
+            ;; パドルの端にヒットしたときは反射角を変える
+            (when (and (< (* *ball-vx* hit-dir) 0)
+                       (> hit-pos (/. paddle-w 6)))
+              (set! rad (- pi rad)))
+            ;; パドルのヒット位置によって反射角を変える
+            (set! rad (+ rad
+                         (* (if (< rad (/. pi 2)) -1 1)
+                            (- (/. (* hit-pos (/. pi 6)) (/. paddle-w 2))
+                               (/. pi 12)))))
+            ;; 反射させる
+            (set! rad (- rad))
+            (set! *ball-vx* (* *ball-speed* (cos rad)))
+            (set! *ball-vy* (* *ball-speed* (sin rad)))
+            (set! reflect? #t))
           (set! new-y (- paddle-y h)))
+
         (when (< (- *screen-height* h) new-y)
           (dec! *ball-count*)
           (set! *ball-rect* #f))
@@ -296,8 +330,14 @@
       (set! (ref *ball-rect* 'h) *ball-size*)
       (set! (ref *ball-rect* 'x) (+ paddle-x (/ paddle-w 2)))
       (set! (ref *ball-rect* 'y) paddle-y)
-      (set! *ball-vx* (* (- (* 2 (random-integer 2)) 1) *unit*))
-      (set! *ball-vy* (- *unit*))
+      ;(set! *ball-vx* (* (- (* 2 (random-integer 2)) 1) *unit*))
+      ;(set! *ball-vy* (- *unit*))
+      (let1 rad (if (= (random-integer 2) 0)
+                  (* (/. pi 4) 3)
+                  (/. pi 4))
+        (set! rad (- rad))
+        (set! *ball-vx* (* *ball-speed* (cos rad)))
+        (set! *ball-vy* (* *ball-speed* (sin rad))))
       (format #t "ball: ~a~%" *ball-count*)
       (Mix_PlayChannel -1 *shoot-sound* 0))))
 

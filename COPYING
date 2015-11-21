@@ -1,8 +1,10 @@
-Modified for MinGW(32bit), by Hamayama (2014).
-Licensed under the same license that the original c-wrapper is.
+c-wrapper-mg
 
-The following included source code is licensed under the MIT License.
-  mman.h mman.c ( https://code.google.com/p/mman-win32/ )
+    Modified for MinGW(32bit), by Hamayama (2014-2015).
+    Licensed under the same license that the original c-wrapper is.
+
+    The following included source code is licensed under the MIT License.
+    mman.h mman.c ( https://code.google.com/p/mman-win32/ )
 
 
 -----------------------------------------------------------------------------

@@ -1,2 +1,0 @@
-gosh breakout.scm
-pause
