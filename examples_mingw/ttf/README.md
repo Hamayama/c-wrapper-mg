@@ -33,7 +33,7 @@
 ## 環境等
 - OS
   - Windows XP Home SP3
-  - Windows 8 (64bit)
+  - Windows 8.1 (64bit)
 - 環境
   - MinGW (32bit) v4.8.1
 - 言語
@@ -45,4 +45,4 @@
 - 2015-8-25  v1.02 cond-expandにelse節を追加
 
 
-(2015-10-12)
+(2015-11-22)
