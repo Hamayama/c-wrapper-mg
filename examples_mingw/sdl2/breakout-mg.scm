@@ -83,7 +83,7 @@
 (define *paddle-rect* #f)
 ;(define *paddle-width* (* 8 *unit*))
 (define *paddle-width* (* 10 *unit*))
-(define *paddle-height* (+ *ball-speed* 1))
+(define *paddle-height* *ball-speed*)
 (define *paddle-vx* 0)
 
 (define *block-list* '())
@@ -147,16 +147,16 @@
     (and (<= sy y ey)
          ;(or (and (= x sx) (< 0 vx))
          ;    (and (= x ex) (< vx 0))))))
-         (or (and (< (abs (- x sx)) *ball-speed*) (< 0 vx))
-             (and (< (abs (- x ex)) *ball-speed*) (< vx 0))))))
+         (or (and (<= (abs (- x sx)) *ball-speed*) (< 0 vx))
+             (and (<= (abs (- x ex)) *ball-speed*) (< vx 0))))))
 
 (define (block-horizontal-reflect? block x y vy)
   (receive (sx sy ex ey) (apply values (vector-ref block 0))
     (and (<= sx x ex)
          ;(or (and (= y sy) (< 0 vy))
          ;    (and (= y ey) (< vy 0))))))
-         (or (and (< (abs (- y sy)) *ball-speed*) (< 0 vy))
-             (and (< (abs (- y ey)) *ball-speed*) (< vy 0))))))
+         (or (and (<= (abs (- y sy)) *ball-speed*) (< 0 vy))
+             (and (<= (abs (- y ey)) *ball-speed*) (< vy 0))))))
 
 (define (block-hit? block x y)
   (receive (sx sy ex ey) (apply values (vector-ref block 0))
@@ -231,11 +231,17 @@
   (set! *paddle-vx* 0))
 
 (define (draw-ball)
+  (define rect (make <SDL_Rect>))
   (when *ball-rect*
+    ;; ボールの半径分ずらして表示
+    (set! (ref rect 'x) (- (ref *ball-rect* 'x) (/. (ref *ball-rect* 'w) 2)))
+    (set! (ref rect 'y) (- (ref *ball-rect* 'y) (/. (ref *ball-rect* 'h) 2)))
+    (set! (ref rect 'w) (ref *ball-rect* 'w))
+    (set! (ref rect 'h) (ref *ball-rect* 'h))
     ;; ***** SDL2対応 *****
     ;; (32ビットカラーに変更)
     ;(SDL_FillRect *screen* (ptr *ball-rect*) #o777)))
-    (SDL_FillRect *screen* (ptr *ball-rect*) #xFFFFFF)))
+    (SDL_FillRect *screen* (ptr rect) #xFFFFFF)))
 
 (define (move-ball)
   (let ((reflect? #f))
@@ -258,9 +264,12 @@
         (when (< new-x 0)
           (reflect-x)
           (set! new-x (- new-x)))
-        (when (< (- *screen-width* w) new-x)
+        ;(when (< (- *screen-width* w) new-x)
+        ;  (reflect-x)
+        ;  (set! new-x (- (* 2 (- *screen-width* w)) new-x)))
+        (when (< (- *screen-width* 1) new-x)
           (reflect-x)
-          (set! new-x (- (* 2 (- *screen-width* w)) new-x)))
+          (set! new-x (- (* 2 (- *screen-width* 1)) new-x)))
         (when (< new-y 0)
           (reflect-y)
           (set! new-y 0))
@@ -296,7 +305,8 @@
             (set! reflect? #t))
           (set! new-y (- paddle-y h)))
 
-        (when (< (- *screen-height* h) new-y)
+        ;(when (< (- *screen-height* h) new-y)
+        (when (< (- *screen-height* 1) new-y)
           (dec! *ball-count*)
           (set! *ball-rect* #f))
         (when (and (<= *block-start-x* new-x *block-end-x*)
