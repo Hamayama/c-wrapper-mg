@@ -233,7 +233,8 @@
 (define (draw-ball)
   (define rect (make <SDL_Rect>))
   (when *ball-rect*
-    ;; ボールの半径分ずらして表示
+    ;; ボールの半径分だけずらして表示する
+    ;; (当たり判定を簡略化するため)
     (set! (ref rect 'x) (- (ref *ball-rect* 'x) (/. (ref *ball-rect* 'w) 2)))
     (set! (ref rect 'y) (- (ref *ball-rect* 'y) (/. (ref *ball-rect* 'h) 2)))
     (set! (ref rect 'w) (ref *ball-rect* 'w))
@@ -285,15 +286,16 @@
           (let ((rad 0)
                 (hit-dir (if  (< x (+ paddle-x (/. paddle-w 2))) -1 1))
                 (hit-pos (abs (- x (+ paddle-x (/. paddle-w 2))))))
-            ;; 反射角を設定
+            ;; 反射角をまず設定
             (set! rad (if (< *ball-vx* 0)
                         (* (/. pi 4) 3)
                         (/. pi 4)))
-            ;; パドルの端にヒットしたときは反射角を変える
+            ;; パドルの端にヒットしたときは反射角を逆にして、
+            ;; ボールが来た方向に打ち返す
             (when (and (< (* *ball-vx* hit-dir) 0)
                        (> hit-pos (/. paddle-w 6)))
               (set! rad (- pi rad)))
-            ;; パドルのヒット位置によって反射角を変える
+            ;; パドルのヒット位置に応じて反射角を少しだけ変える
             (set! rad (+ rad
                          (* (if (< rad (/. pi 2)) -1 1)
                             (- (/. (* hit-pos (/. pi 6)) (/. paddle-w 2))
