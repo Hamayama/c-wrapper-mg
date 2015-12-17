@@ -19,7 +19,7 @@ TEXIS = c-wrapper-ref.texi
 mandir  = $(DESTDIR)`$(GAUCHE_CONFIG) --mandir`
 infodir = $(DESTDIR)`$(GAUCHE_CONFIG) --infodir`
 
-all: info
+all: info html
 
 install: all
 	if test -f c-wrapper-refe.info.gz -o -f c-wrapper-refj.info.gz; then \
@@ -50,7 +50,8 @@ pdf : c-wrapper-refe.pdf
 info : c-wrapper-refe.info.gz c-wrapper-refj.info.gz
 
 c-wrapper-refe.html : c-wrapper-refe.texi
-	texi2html -number c-wrapper-refe.texi
+#	texi2html -number c-wrapper-refe.texi
+	$(MAKEINFO) --html --no-split c-wrapper-refe.texi
 
 c-wrapper-refe_toc.html : c-wrapper-refe.texi
 	texi2html -split section -number c-wrapper-refe.texi
@@ -72,8 +73,10 @@ c-wrapper-refe.info.gz : c-wrapper-refe.texi
 	fi
 
 c-wrapper-refj.html : c-wrapper-refj.texi
-	texi2html --init-file=ja-init.pl -number c-wrapper-refj.texi
-	sed 's/^<body lang="en"/<body lang="ja"/' $@ > $@.t && mv $@.t $@
+#	texi2html --init-file=ja-init.pl -number c-wrapper-refj.texi
+#	sed 's/^<body lang="en"/<body lang="ja"/' $@ > $@.t && mv $@.t $@
+	$(MAKEINFO) --html --no-split c-wrapper-refj.texi
+	sed 's/^<html lang="en"/<html lang="ja"/' $@ > $@.t && mv $@.t $@
 
 c-wrapper-refj_toc.html : c-wrapper-refj.texi
 	texi2html --init-file=ja-init.pl -split section -number c-wrapper-refj.texi
@@ -100,7 +103,7 @@ c-wrapper-refj.info.gz : c-wrapper-refj.texi
 
 clean:
 	rm -rf core *~ *.aux *.cl *.cls *.cp *.fn *.fns *.ky *.log *.md *.mds \
-	       *.pg *.toc *.tp *.tps *.vr *.vrs *.pdf *.dvi *.info* \
+	       *.pg *.toc *.tp *.tps *.vr *.vrs *.pdf *.dvi *.info* *.html \
 	       $(EXTRACTED)
 
 distclean : clean

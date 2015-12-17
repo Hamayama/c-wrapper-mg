@@ -340,6 +340,7 @@ Cオブジェクトのサンドボックスモジュールを制御します。引数として、@code{#t}、@cod
 @section Classes and functions about C types
 
 @deftp {Class} <c-type>
+@clindex c-type
 @c EN
 This is a basic class for the classes related with C types.
 @c JP
@@ -348,6 +349,7 @@ Cの型に対応したクラスの基底クラスです。
 @end deftp
 
 @deftp {Class} <c-type-meta>
+@clindex c-type-meta
 @c EN
 This is a meta class for the classes related with C types. All the classes are instances of @code{<c-type-meta>}.
 @c JP
@@ -412,6 +414,7 @@ Sets @var{value} to @var{obj}.
 @end deffn
 
 @deftp {Class} <c-void>
+@clindex c-void
 @c EN
 This is a class for void type in C.
 @c JP
@@ -420,6 +423,7 @@ C言語の void 型に対応するクラスです。
 @end deftp
 
 @deftp {Class} <c-ptr>
+@clindex c-ptr
 @c EN
 This is an abstract class for pointer type in C. If you use a pointer type, make a concrete class with @code{ptr}.
 @c JP
@@ -444,6 +448,7 @@ Returns a pointer object for @var{obj}.
 @end deffn
 
 @deftp {Class} <c-array>
+@clindex c-array
 @c EN
 This is an abstract class for array type in C. If you use an array type, make a concrete class with @code{c-array}.
 
@@ -464,6 +469,7 @@ Makes a class for an array type of @var{class}, and it is a subclass of @code{<c
 @end defun
 
 @deftp {Class} <c-struct>
+@clindex c-struct
 @c EN
 This is an abstract class for struct type in C. 
 @c JP
@@ -472,6 +478,7 @@ C言語の構造体に対応する抽象クラスです。
 @end deftp
 
 @deftp {Class} <c-union>
+@clindex c-union
 @c EN
 This is an abstract class for union type in C. 
 @c JP
@@ -514,6 +521,7 @@ Sets @var{value} to the @var{member} of the struct or union @var{obj}.
 @end deffn
 
 @deftp {Class} <c-func-ptr>
+@clindex c-func-ptr
 @c EN
 This is an abstract class for function pointer in C.
 @c JP
