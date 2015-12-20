@@ -131,6 +131,10 @@
     - ドキュメントファイルのインデックス追加
       - doc/c-wrapper-ref.texi
 
+12. Makefile修正  
+    コンパイル時に CFLAGS の内容を反映するようにした。
+    - src/Makefile.in
+
 
 ## インストール方法
 - インストールの方法を以下に示します。
@@ -290,10 +294,10 @@
    (コンパイルオプションに -g をつける。また必要に応じて最適化オプションを外す)
    ```
      c-wrapper
-       srcフォルダ内のMakefile
-         CPPFLAGS       = -I./libffi/include -DGAUCHE_API_0_8_8 
+       srcフォルダ内のMakefile (すでに -g がついていれば書き換え不要)
+         CFLAGS         = -O2
            ↓
-         CPPFLAGS       = -g -I./libffi/include -DGAUCHE_API_0_8_8 
+         CFLAGS         = -g -O2
 
        testsuiteフォルダ内のMakefile
          CFLAGS         = -c -o
@@ -380,6 +384,8 @@
 - 2015-11-21 v0.6.0-mg0015 SDL2サンプル更新
 - 2015-12-17 v0.6.0-mg0016 ドキュメントファイル修正等  
   (doc/Makefile.in を変更したため make clean → ./configure  → make install が必要)
+- 2015-12-20 v0.6.0-mg0017 Makefile修正  
+  (src/Makefile.in を変更したため make clean → ./configure  → make install が必要)
 
 
-(2015-12-17)
+(2015-12-20)

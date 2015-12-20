@@ -20,8 +20,8 @@ GAUCHE_CONFIG  = "@GAUCHE_CONFIG@"
 GAUCHE_PACKAGE = "@GAUCHE_PACKAGE@"
 INSTALL        = "@GAUCHE_INSTALL@"
 
+CFLAGS         = @CFLAGS@
 CPPFLAGS       = -I./libffi/include -DGAUCHE_API_0_8_8 @CPPFLAGS@
-#CPPFLAGS       = -g -I./libffi/include -DGAUCHE_API_0_8_8 @CPPFLAGS@
 LDFLAGS        = @LDFLAGS@
 LIBS           = libffi/.libs/libffi.a @LIBS@
 
@@ -56,13 +56,19 @@ cparser_LIBS = @CPARSER_LIBS@
 all : $(TARGET)
 
 c-ffi.$(SOEXT): $(ffi_SRCS) libffi/.libs/libffi.a
-	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS)" --verbose c-ffi $(ffi_SRCS)
+	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" \
+	--cflags="$(CFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS)" \
+	--verbose c-ffi $(ffi_SRCS)
 
 c-lex.$(SOEXT): $(clex_SRCS) libffi/.libs/libffi.a
-	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS)" --verbose c-lex $(clex_SRCS)
+	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" \
+	--cflags="$(CFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS)" \
+	--verbose c-lex $(clex_SRCS)
 
 c-parser.$(SOEXT): $(cparser_SRCS) y.tab.c libffi/.libs/libffi.a
-	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS) $(cparser_LIBS)" --verbose c-parser $(cparser_SRCS)
+	$(GAUCHE_PACKAGE) compile --cppflags="$(CPPFLAGS)" \
+	--cflags="$(CFLAGS)" --ldflags="$(LDFLAGS)" --libs="$(LIBS) $(cparser_LIBS)" \
+	--verbose c-parser $(cparser_SRCS)
 
 c-grammar.y: c-grammar.scm genyacc.scm
 	$(GOSH) genyacc.scm --outfile=c-grammar.y $<
