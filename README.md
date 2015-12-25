@@ -351,6 +351,7 @@
   - MinGW (32bit) v4.8.1
 - 言語
   - Gauche v0.9.4
+  - Gauche v0.9.5_pe1
 - ライセンス
   - オリジナルと同様とします
   - 追加した mman.h と mman.c は MITライセンスです
@@ -388,4 +389,4 @@
   (src/Makefile.in を変更したため make clean → ./configure  → make install が必要)
 
 
-(2015-12-20)
+(2015-12-25)
