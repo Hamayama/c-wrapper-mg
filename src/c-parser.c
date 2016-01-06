@@ -1668,6 +1668,8 @@ ScmObj Scm_ParseMacroCode(ScmObj in, ScmObj macro_list)
 {
     static ScmObj trigger_line = SCM_FALSE;
     ScmObj line_str;
+    ScmObj next_line_str; /* one line look-ahead */
+    ScmObj skip_regex;
 
     /* skip the first line '# 1 "<stdin>"' */
     Scm_ReadLineUnsafe(SCM_PORT(in));
@@ -1682,16 +1684,39 @@ ScmObj Scm_ParseMacroCode(ScmObj in, ScmObj macro_list)
         }
     }
 
-    while (!SCM_EOFP(line_str = Scm_ReadLineUnsafe(SCM_PORT(in)))) {
+    // while (!SCM_EOFP(line_str = Scm_ReadLineUnsafe(SCM_PORT(in)))) {
+    skip_regex = Scm_RegComp(SCM_STRING(SCM_MAKE_STR_IMMUTABLE("^# [0-9]+ \"<stdin>\"")), 0);
+    line_str = Scm_ReadLineUnsafe(SCM_PORT(in));
+    next_line_str = Scm_ReadLineUnsafe(SCM_PORT(in));
+    while (!SCM_EOFP(line_str)) {
+        /* skip lines starting with "# " and matching regexp and join with following line */
+        while (!SCM_EOFP(next_line_str)
+               && (SCM_STRING_LENGTH(next_line_str) > 2)
+               && (Scm_StringRef(SCM_STRING(next_line_str), 0, 0) == 35)
+               && (Scm_StringRef(SCM_STRING(next_line_str), 1, 0) == 32)
+               && SCM_REGMATCHP(Scm_RegExec(SCM_REGEXP(skip_regex), SCM_STRING(next_line_str)))) {
+            next_line_str = Scm_ReadLineUnsafe(SCM_PORT(in));
+            if (!SCM_EOFP(next_line_str)) {
+                line_str = Scm_StringAppend2(SCM_STRING(line_str), SCM_STRING(next_line_str));
+                next_line_str = Scm_ReadLineUnsafe(SCM_PORT(in));
+            }
+        }
+        // Scm_Printf(SCM_CURERR, "line_str = %S\n", line_str);
         if (SCM_NULLP(macro_list)) {
-            Scm_Error("[bug] lost macro body");
+            // Scm_Error("[bug] lost macro body");
+            Scm_Error("[bug] more cpp output than expected");
         } else {
             ScmObj pos_name_args = SCM_CDAR(macro_list);
             macro_list = SCM_CDR(macro_list);
             Scm_FilenameSet(SCM_CAAR(pos_name_args));
             Scm_LineNumberSet(SCM_INT_VALUE(SCM_CDAR(pos_name_args)));
             parse_macro_body(SCM_CADR(pos_name_args), SCM_CDDR(pos_name_args), line_str);
+            line_str = next_line_str;
+            next_line_str = Scm_ReadLineUnsafe(SCM_PORT(in));
         }
+    }
+    if (!(SCM_NULLP(macro_list))) {
+        Scm_Error("[bug] less cpp output than expected");
     }
 
     SCM_RETURN(SCM_UNDEFINED);

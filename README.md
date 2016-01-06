@@ -135,6 +135,39 @@
     コンパイル時に CFLAGS の内容を反映するようにした。
     - src/Makefile.in
 
+13. MSYS2/MinGW-w64(64bit)環境でのビルドに暫定対応(実験中)
+    - automake v1.15 の使用
+      - config.guess
+      - config.sub
+      - install-sh
+    - ヘッダファイルのマクロ展開処理の修正
+      - src/c-parser.c ( Scm_ParseMacroCode )  
+        GCCのバージョンアップで出力が変わった件に対応した。  
+        ( https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=777861 )
+    - ヘッダファイルの関数取得処理の修正
+      - lib/c-wrapper/c-parser.scm ( make-define-inline-expr )  
+        c-func-vaargs の処理を追加した。  
+        また warning 時は、空の手続き (lambda ()) を返すようにして、  
+        Segmentation Fault エラーを回避した。
+    - 配列変数の処理でエラー
+      - src/c-ffi.c ( Scm_MakeFFIArrayType )  
+        `__X86_64__` が定義されている場合に特別扱いしている処理をコメントアウトした。
+    - libffi-3.2.1 の修正
+      - src/x86/ffi.c  
+        X86_WIN64 が定義されている場合でも、動作するように条件を修正した。
+    - ドキュメント修正
+      - doc/c-wrapper-ref.texi  
+        文字コード変更 (EUC → UTF-8) とヘッダ情報の追加を行った。
+      - doc/extract.scm  
+        Gauche の doc からコピーした。
+      - doc/Makefile.in
+    - サンプルの修正
+      - examples_mingw  
+        c-load のディレクトリ指定をフルパスに修正した。  
+        SDL.h 内の SDL_cpuinfo.h の読み込みでエラーになるので、  
+        c-load の :cppflags に -D_SDL_cpuinfo_h を追加して読み込まないようにした。  
+        (新しい型の `__int128` や GCC の拡張書式に対応しないと、このファイルは読み込めないもよう)
+
 
 ## インストール方法
 - インストールの方法を以下に示します。
@@ -145,8 +178,8 @@
    http://practical-scheme.net/gauche/download-j.html  
    (すでにインストール済みであれば本手順は不要です)
 
-2. MinGWのインストール  
-   事前に MinGW がインストールされている必要があります。  
+2. MinGW (32bit) のインストール  
+   事前に MinGW (32bit) がインストールされている必要があります。  
    以下のページを参考に、インストールを実施ください。  
    https://gist.github.com/Hamayama/362f2eb14ae26d971ca4  
    (すでにインストール済みであれば本手順は不要です)
@@ -299,7 +332,7 @@
            ↓
          CFLAGS         = -g -O2
 
-       testsuiteフォルダ内のMakefile
+       testsuiteフォルダ内のMakefile (すでに -g がついていれば書き換え不要)
          CFLAGS         = -c -o
            ↓
          CFLAGS         = -g -c -o
@@ -348,7 +381,8 @@
   - Windows XP Home SP3
   - Windows 8.1 (64bit)
 - 環境
-  - MinGW (32bit) v4.8.1
+  - MinGW (32bit) (gcc v4.8.1)
+  - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
   - Gauche v0.9.4
   - Gauche v0.9.5_pe1
@@ -387,6 +421,7 @@
   (doc/Makefile.in を変更したため make clean → ./configure  → make install が必要)
 - 2015-12-20 v0.6.0-mg0017 Makefile修正  
   (src/Makefile.in を変更したため make clean → ./configure  → make install が必要)
+- 2016-1-6   v0.6.0-mg0018 変更点 13. 対応
 
 
-(2015-12-25)
+(2016-1-6)

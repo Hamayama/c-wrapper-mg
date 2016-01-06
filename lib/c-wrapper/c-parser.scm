@@ -930,19 +930,33 @@
          (c-type (vector-ref vec 1))
          (identifier (vector-ref vec 2))
          (function-body (vector-ref vec 3)))
+    ;(display identifier (current-error-port))
+    ;(display c-type (current-error-port))
+    ;(newline (current-error-port))
     (match c-type
       (('c-func ret-type ('list ('list ('quote names) types) ...))
        `((with-module c-wrapper define-inline-cfunc)
          ,identifier ,ret-type ,names ,types
          ,(or function-body
               `(errorf "~a is not supported. Try cwcompile if you want to use." ,identifier))))
+      (('c-func-vaargs ret-type ('list ('list ('quote names) types) ...))
+       `((with-module c-wrapper define-inline-cfunc)
+         ,identifier ,ret-type ,names ,types
+         ,(or function-body
+              `(errorf "~a is not supported. Try cwcompile if you want to use." ,identifier))))
       (('c-func-ptr ret-type ('list ('list ('quote names) types) ...))
-       (warning "'~a' is ignored. It appears in a function definition, but it is a pointer of a function in reality." identifier))
+       (warning "'~a' is ignored. It appears in a function definition, but it is a pointer of a function in reality." identifier)
+       (lambda ())
+       )
       (((? (lambda (v) (memq v '(c-func-vaargs-ptr func-vaargs))) v)
         ret-type ('list ('list ('quote names) types) ...))
-       (warning "The inline function '~a' is ignored, because it gets variable arguments" identifier))
+       (warning "The inline function '~a' is ignored, because it gets variable arguments" identifier)
+       (lambda ())
+       )
       (else
-       (warning "'~a' is ignored, it is not a function." identifier)))))
+       (warning "'~a' is ignored, it is not a function." identifier)
+       (lambda ())
+       ))))
   
 ;; (define (defchunk->sexpr defchunk)
 ;;   (case (defchunk-type defchunk)

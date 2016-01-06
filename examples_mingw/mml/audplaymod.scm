@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2015-8-25 v1.08
+;; 2016-1-6 v1.09
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -9,10 +9,13 @@
 ;;
 ;;   実行するには、Gauche, c-wrapper, SDL2, SDL2_mixer が、
 ;;   適切にインストールされている必要があります。
-;;   (Windowsの場合はMinGW(32bit)環境のインストールも必要です)
+;;   (Windowsの場合はMinGW(32bit)環境のインストールも必要です。
+;;    (MSYS2/MinGW-w64(64bit)環境については実験中です))
 ;;
 ;; ＜インストール方法＞
-;;   audplaymod.scm を Gauche でロード可能なフォルダにコピーします。
+;;   audplaymod.scm, audplaymod_sub_mingw32.scm
+;;   audplaymod_sub_mingw64_64.scm audplaymod_sub_other.scm
+;;   を Gauche でロード可能なフォルダにコピーします。
 ;;   (例えば (gauche-site-library-directory) で表示されるフォルダ等)
 ;;
 ;; ＜使い方＞
@@ -53,17 +56,13 @@
 (cond-expand
  (gauche.os.windows
   (display #\cr)(flush) ; コンソールを割り当てる
-  (set! ignore-libname-list (append ignore-libname-list '("mingw32" "SDL2main")))
-  (set! ignore-library-list (append ignore-library-list '("libmingw32" "libSDL2main"))))
- (else))
-(c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_mixer.h")
-        :cppflags-cmd "bash -c 'sdl2-config --cflags'"
-        :libs-cmd     "bash -c 'sdl2-config --libs; echo \"-lSDL2_mixer\"'"
-        :import (list (lambda (header sym)
-                        ;(print header " " sym)
-                        (#/\/SDL2\/.*\.h$/ header))
-                      'NULL)
-        :compiled-lib "sdl2audlib")
+  (cond
+   ((equal? (gauche-architecture) "x86_64-pc-mingw64")
+    (load "audplaymod_sub_mingw64_64.scm"))
+   (else
+    (load "audplaymod_sub_mingw32.scm"))))
+ (else
+  (load "audplaymod_sub_other.scm")))
 
 
 ;; SDLの初期化

@@ -19,7 +19,7 @@
 
 ## 実行方法
 - ttftest.bat をダブルクリック等で起動します。  
-  (ttftest.bat と ttftest.scm が同一フォルダに存在する必要があります)  
+  (サンプルのファイル一式が同一フォルダに存在する必要があります)  
   しばらくするとウィンドウが表示され、文字が表示されます。  
   ESCキーを押すと終了します。
 
@@ -35,7 +35,8 @@
   - Windows XP Home SP3
   - Windows 8.1 (64bit)
 - 環境
-  - MinGW (32bit) v4.8.1
+  - MinGW (32bit) (gcc v4.8.1)
+  - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
   - Gauche v0.9.4
   - Gauche v0.9.5_pe1
@@ -44,6 +45,7 @@
 - 2014-11-24 v1.00 初版
 - 2014-11-28 v1.01 gosh-noconsoleでも動くようにコンソールの割り当てを追加
 - 2015-8-25  v1.02 cond-expandにelse節を追加
+- 2016-1-6   v1.03 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
 
 
-(2015-12-25)
+(2016-1-6)

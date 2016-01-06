@@ -19,7 +19,7 @@
 
 ## 実行方法
 - test1001.bat をダブルクリック等で起動します。  
-  (test1001.bat, test1001.scm, audplaymod.scm, mmlproc.scm が同一フォルダに存在する必要があります)  
+  (サンプルのファイル一式が同一フォルダに存在する必要があります)
   しばらくすると音楽が鳴ります。演奏が終わると終了します。
 
 
@@ -40,7 +40,8 @@
   - Windows XP Home SP3
   - Windows 8.1 (64bit)
 - 環境
-  - MinGW (32bit) v4.8.1
+  - MinGW (32bit) (gcc v4.8.1)
+  - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
   - Gauche v0.9.4
   - Gauche v0.9.5_pe1
@@ -67,6 +68,7 @@
 - 2014-11-28 v1.18 audplaymod.scmをv1.07に更新(gosh-noconsoleでも動くようにコンソールの割り当てを追加)
 - 2015-1-18  v1.19 mmlproc.scmをv1.14に更新(エラーチェック追加)
 - 2015-8-25  v1.20 audplaymod.scmをv1.08に更新(cond-expandにelse節を追加)
+- 2016-1-6   v1.21 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
 
 
-(2015-12-25)
+(2016-1-6)

@@ -62,8 +62,8 @@ c-wrapper-refe.dvi : c-wrapper-refe.texi
 c-wrapper-refe.pdf : c-wrapper-refe.texi
 	texi2pdf c-wrapper-refe.texi
 
-c-wrapper-refe.texi : $(TEXIS) extract
-	$(GOSH) ./extract -en -o c-wrapper-refe.texi c-wrapper-ref.texi
+c-wrapper-refe.texi : $(TEXIS) extract.scm
+	$(GOSH) ./extract.scm -en -o c-wrapper-refe.texi c-wrapper-ref.texi
 
 c-wrapper-refe.info.gz : c-wrapper-refe.texi
 	if test X$(MAKEINFO) != X -a X$(GZIP_PROGRAM) != X; then \
@@ -76,7 +76,6 @@ c-wrapper-refj.html : c-wrapper-refj.texi
 #	texi2html --init-file=ja-init.pl -number c-wrapper-refj.texi
 #	sed 's/^<body lang="en"/<body lang="ja"/' $@ > $@.t && mv $@.t $@
 	$(MAKEINFO) --html --no-split c-wrapper-refj.texi
-	sed 's/^<html lang="en"/<html lang="ja"/' $@ > $@.t && mv $@.t $@
 
 c-wrapper-refj_toc.html : c-wrapper-refj.texi
 	texi2html --init-file=ja-init.pl -split section -number c-wrapper-refj.texi
@@ -91,8 +90,8 @@ c-wrapper-refj.dvi : c-wrapper-refj.texi
 c-wrapper-refj.pdf : c-wrapper-refj.texi
 	texi2pdf c-wrapper-refj.texi
 
-c-wrapper-refj.texi : $(TEXIS) extract
-	$(GOSH) ./extract -jp -o c-wrapper-refj.texi c-wrapper-ref.texi
+c-wrapper-refj.texi : $(TEXIS) extract.scm
+	$(GOSH) ./extract.scm -jp -o c-wrapper-refj.texi c-wrapper-ref.texi
 
 c-wrapper-refj.info.gz : c-wrapper-refj.texi
 	if test X$(MAKEINFO) != X -a X$(GZIP_PROGRAM) != X; then \

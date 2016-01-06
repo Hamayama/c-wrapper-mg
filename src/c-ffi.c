@@ -241,36 +241,36 @@ ScmObj Scm_MakeFFIArrayType(ffi_type *elem_type, long size)
 {
     ffi_type *array_type = SCM_NEW(ffi_type);
 
-#if defined __x86_64__
-    long i;
-
-    array_type->size = elem_type->size * size;
-    array_type->alignment = elem_type->alignment;
-    array_type->type = FFI_TYPE_STRUCT;
-    if (16 < array_type->size) {
-        array_type->elements = NULL;
-    } else {
-        ffi_type *follow_elem_type = SCM_NEW(ffi_type);
-
-        memcpy(follow_elem_type, elem_type, sizeof(ffi_type));
-        follow_elem_type->alignment = 1;
-
-        array_type->elements = SCM_NEW_ARRAY(ffi_type*, size + 1);
-        for (i = 0; i < size; ++i) {
-            if (i == 0) {
-                array_type->elements[i] = elem_type;
-            } else {
-                array_type->elements[i] = follow_elem_type;
-            }
-        }
-        array_type->elements[size] = NULL;
-    }
-#else
+// #if defined __x86_64__
+//     long i;
+// 
+//     array_type->size = elem_type->size * size;
+//     array_type->alignment = elem_type->alignment;
+//     array_type->type = FFI_TYPE_STRUCT;
+//     if (16 < array_type->size) {
+//         array_type->elements = NULL;
+//     } else {
+//         ffi_type *follow_elem_type = SCM_NEW(ffi_type);
+// 
+//         memcpy(follow_elem_type, elem_type, sizeof(ffi_type));
+//         follow_elem_type->alignment = 1;
+// 
+//         array_type->elements = SCM_NEW_ARRAY(ffi_type*, size + 1);
+//         for (i = 0; i < size; ++i) {
+//             if (i == 0) {
+//                 array_type->elements[i] = elem_type;
+//             } else {
+//                 array_type->elements[i] = follow_elem_type;
+//             }
+//         }
+//         array_type->elements[size] = NULL;
+//     }
+// #else
     array_type->size = elem_type->size * size;
     array_type->alignment = elem_type->alignment;
     array_type->type = elem_type->type;
     array_type->elements = elem_type->elements;
-#endif
+// #endif
 
     SCM_RETURN(SCM_MAKE_FFI_TYPE(array_type));
 }
@@ -891,6 +891,9 @@ ScmObj Scm_FFIPrepClosure(ffi_cif *cif, ScmProcedure *proc)
 
 ScmObj FFI_dlopen(const char *path)
 {
+    // ***** for debug *****
+    // printf("%s\n", path);
+
 #if defined(GAUCHE_WINDOWS)
     void *handle = (void*)LoadLibrary(SCM_MBS2WCS(path));
 #else
@@ -899,6 +902,9 @@ ScmObj FFI_dlopen(const char *path)
     if (handle) {
         SCM_RETURN(MAKE_VOID_POINTER(handle));
     } else {
+        // ***** for debug *****
+        // printf("error code = %d\n", GetLastError());
+
         SCM_RETURN(SCM_FALSE);
     }
 }

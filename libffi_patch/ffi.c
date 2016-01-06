@@ -40,8 +40,9 @@
 #include <stdlib.h>
 
 
-// ***** win32 result check functions *****
-#ifdef X86_WIN32
+#if defined(X86_WIN32) || defined(X86_WIN64)
+// ***** change for c-wrapper *****
+// (add result check functions)
 static int is_result_on_stack_sub(ffi_type *rtype, int *elem_count, int *elem_type);
 static int is_result_on_stack(ffi_type *rtype);
 #endif
@@ -72,7 +73,9 @@ unsigned int ffi_prep_args(char *stack, extended_cif *ecif)
   if ((ecif->cif->flags == FFI_TYPE_STRUCT
        || ecif->cif->flags == FFI_TYPE_MS_STRUCT)
 #ifdef X86_WIN64
-      && ((ecif->cif->rtype->size & (1 | 2 | 4 | 8)) == 0)
+      // ***** change for c-wrapper *****
+      // && ((ecif->cif->rtype->size & (1 | 2 | 4 | 8)) == 0)
+      && (ecif->cif->rtype->size > 8)
 #endif
       )
     {
@@ -115,7 +118,9 @@ unsigned int ffi_prep_args(char *stack, extended_cif *ecif)
 #ifdef X86_WIN64
       if (z > FFI_SIZEOF_ARG
           || ((*p_arg)->type == FFI_TYPE_STRUCT
-              && (z & (1 | 2 | 4 | 8)) == 0)
+              // ***** change for c-wrapper *****
+              // && (z & (1 | 2 | 4 | 8)) == 0)
+              && (z > 8))
 #if FFI_TYPE_DOUBLE != FFI_TYPE_LONGDOUBLE
           || ((*p_arg)->type == FFI_TYPE_LONGDOUBLE)
 #endif
@@ -307,15 +312,20 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
 //          /* allocate space for return value pointer */
 //          cif->bytes += ALIGN(sizeof(void*), FFI_SIZEOF_ARG);
 //        }
-#ifdef X86_WIN32
-      // ***** win32 result check *****
+#if defined(X86_WIN32) || defined(X86_WIN64)
+      // ***** change for c-wrapper *****
+      // (add result check functions)
       ret = is_result_on_stack(cif->rtype);
       if (ret == -1) {
+#ifdef X86_WIN64
+          cif->flags = FFI_TYPE_STRUCT;
+#else
           if (cif->abi == FFI_MS_CDECL) {
               cif->flags = FFI_TYPE_MS_STRUCT;
           } else {
               cif->flags = FFI_TYPE_STRUCT;
           }
+#endif
           /* allocate space for return value pointer */
           cif->bytes += ALIGN(sizeof(void*), FFI_SIZEOF_ARG);
       } else if (ret == -2) {
@@ -336,11 +346,7 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
         }
       else if (cif->rtype->size == 4)
         {
-#ifdef X86_WIN64
-          cif->flags = FFI_TYPE_SMALL_STRUCT_4B;
-#else
           cif->flags = FFI_TYPE_INT; /* same as int type */
-#endif
         }
       else if (cif->rtype->size == 8)
         {
@@ -385,19 +391,18 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
 //#endif
 //    cif->bytes = (cif->bytes + 15) & ~0xF;
 //#endif
-#ifdef X86_WIN32
-    // ***** win32 add space *****
-    cif->bytes = ((cif->bytes + 15) & ~0xF) + 8;
-#else
+#if defined(X86_WIN32) || defined(X86_WIN64)
+    // ***** change for c-wrapper *****
+    // (add space)
 #ifdef X86_WIN64
     /* ensure space for storing four registers */
     cif->bytes += 4 * FFI_SIZEOF_ARG;
+#endif
     cif->bytes = (cif->bytes + 15) & ~0xF;
 #else
     if (cif->abi == FFI_SYSV || cif->abi == FFI_UNIX64) {
         cif->bytes = (cif->bytes + 15) & ~0xF;
     }
-#endif
 #endif
 
   return FFI_OK;
@@ -428,7 +433,9 @@ void ffi_call(ffi_cif *cif, void (*fn)(void), void *rvalue, void **avalue)
 #ifdef X86_WIN64
   if (rvalue == NULL
       && cif->flags == FFI_TYPE_STRUCT
-      && ((cif->rtype->size & (1 | 2 | 4 | 8)) == 0))
+      // ***** change for c-wrapper *****
+      // && ((cif->rtype->size & (1 | 2 | 4 | 8)) == 0))
+      && (cif->rtype->size > 8))
     {
       ecif.rvalue = alloca((cif->rtype->size + 0xF) & ~0xF);
     }
@@ -613,7 +620,9 @@ ffi_prep_incoming_args(char *stack, void **rvalue, void **avalue,
   if ((cif->flags == FFI_TYPE_STRUCT
        || cif->flags == FFI_TYPE_MS_STRUCT)
 #ifdef X86_WIN64
-      && ((cif->rtype->size & (1 | 2 | 4 | 8)) == 0)
+      // ***** change for c-wrapper *****
+      // && ((cif->rtype->size & (1 | 2 | 4 | 8)) == 0)
+      && (cif->rtype->size > 8)
 #endif
       )
     {
@@ -676,7 +685,9 @@ ffi_prep_incoming_args(char *stack, void **rvalue, void **avalue,
 #ifdef X86_WIN64
       if (z > FFI_SIZEOF_ARG
           || ((*p_arg)->type == FFI_TYPE_STRUCT
-              && (z & (1 | 2 | 4 | 8)) == 0)
+              // ***** change for c-wrapper *****
+              // && (z & (1 | 2 | 4 | 8)) == 0)
+              && (z > 8))
 #if FFI_TYPE_DOUBLE != FFI_TYPE_LONGDOUBLE
           || ((*p_arg)->type == FFI_TYPE_LONGDOUBLE)
 #endif
@@ -999,8 +1010,9 @@ ffi_raw_call(ffi_cif *cif, void (*fn)(void), void *rvalue, ffi_raw *fake_avalue)
 
 
 
-// ***** win32 result check functions *****
-#ifdef X86_WIN32
+#if defined(X86_WIN32) || defined(X86_WIN64)
+// ***** change for c-wrapper *****
+// (add result check functions)
 static int is_result_on_stack_sub(ffi_type *rtype, int *elem_count, int *elem_type)
 {
   ffi_type *elem;
@@ -1060,15 +1072,22 @@ static int is_result_on_stack_sub(ffi_type *rtype, int *elem_count, int *elem_ty
             (*elem_count)++;
           } else if (elem->size <= size * 2) {
             // array element (length=2)
-            (*elem_count)+=2;
+            (*elem_count) += 2;
           } else {
             // array element (length>2)
-            return 1;
+            // return 1;
+            (*elem_count) += (elem->size - 1) / size + 1;
           }
           // elements count check
-          if (*elem_count >= 3) {
+#ifdef X86_WIN64
+          if (*elem_count >= 2) {
+            return 0;
+          }
+#else
+          if (*elem_count > 2) {
             return 1;
           }
+#endif
         }
     }
   return 0;

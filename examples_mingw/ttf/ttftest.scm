@@ -1,8 +1,9 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; SDL2_ttfによるフォント表示のテスト
-;; 2015-8-25
+;; 2016-1-6
 ;;
+(add-load-path "." :relative)
 (use c-wrapper)
 (use c-wrapper.config)
 
@@ -10,17 +11,14 @@
 (cond-expand
  (gauche.os.windows
   (print "loading...") ; コンソールを割り当てる
-  (set! ignore-libname-list (append ignore-libname-list '("mingw32" "SDL2main")))
-  (set! ignore-library-list (append ignore-library-list '("libmingw32" "libSDL2main"))))
- (else))
-(c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_ttf.h")
-        :cppflags-cmd "bash -c 'sdl2-config --cflags'"
-        :libs-cmd     "bash -c 'sdl2-config --libs; echo \"-lSDL2_ttf\"'"
-        :import (list (lambda (header sym)
-                        ;(print header " " sym)
-                        (#/\/SDL2\/.*\.h$/ header))
-                      'NULL)
-        :compiled-lib "sdl2ttflib")
+  (cond
+   ((equal? (gauche-architecture) "x86_64-pc-mingw64")
+    (load "ttftest_sub_mingw64_64.scm"))
+   (else
+    (load "ttftest_sub_mingw32.scm"))))
+ (else
+  (load "ttftest_sub_other.scm")))
+
 (cond-expand
  (gauche.os.windows
   (print "complete."))

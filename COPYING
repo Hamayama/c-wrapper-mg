@@ -1,6 +1,6 @@
 c-wrapper-mg
 
-    Modified for MinGW(32bit), by Hamayama (2014-2015).
+    Modified for MinGW(32bit), by Hamayama (2014-2016).
     Licensed under the same license that the original c-wrapper is.
 
     The following included source code is licensed under the MIT License.

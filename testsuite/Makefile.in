@@ -20,8 +20,8 @@ GAUCHE_CONFIG  = "@GAUCHE_CONFIG@"
 GAUCHE_PACKAGE = "@GAUCHE_PACKAGE@"
 INSTALL        = "@GAUCHE_INSTALL@"
 CC             = @CC@
-CFLAGS         = @TESTLIB_CFLAGS@
-#CFLAGS         = -g @TESTLIB_CFLAGS@
+#CFLAGS         = @TESTLIB_CFLAGS@
+CFLAGS         = -g @TESTLIB_CFLAGS@
 LDFLAGS        = @TESTLIB_LDFLAGS@
 
 # Other parameters
