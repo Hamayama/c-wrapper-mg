@@ -8,9 +8,9 @@
 * c-wrapper reference: (c-wrapper-refe.info).	A generic wrapper for C libraries.
 @end direntry
 @c JP
+@setfilename c-wrapper-refj.info
 @documentlanguage ja
 @documentencoding UTF-8
-@setfilename c-wrapper-refj.info
 @settitle c-wrapper リファレンスマニュアル
 @dircategory The Algorithmic Language Scheme
 @direntry

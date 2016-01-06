@@ -422,6 +422,7 @@
 - 2015-12-20 v0.6.0-mg0017 Makefile修正  
   (src/Makefile.in を変更したため make clean → ./configure  → make install が必要)
 - 2016-1-6   v0.6.0-mg0018 変更点 13. 対応
+- 2016-1-6   v0.6.0-mg0019 ドキュメントファイル修正
 
 
 (2016-1-6)
