@@ -329,7 +329,7 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
           /* allocate space for return value pointer */
           cif->bytes += ALIGN(sizeof(void*), FFI_SIZEOF_ARG);
       } else if (ret == -2) {
-          // use two register for return values
+          // use two registers for return values
           cif->flags = FFI_TYPE_SINT64; /* same as int64 type */
       } else {
           // single element
@@ -1018,6 +1018,9 @@ static int is_result_on_stack_sub(ffi_type *rtype, int *elem_count, int *elem_ty
   ffi_type *elem;
   int i;
 
+  if (rtype->elements == NULL) {
+    return 0;
+  }
   for (i = 0; rtype->elements[i] != NULL; ++i)
     {
       elem = rtype->elements[i];
@@ -1062,33 +1065,29 @@ static int is_result_on_stack_sub(ffi_type *rtype, int *elem_count, int *elem_ty
               size = ffi_type_longdouble.size;
               break;
             }
-          // element type set
+          // element type setting
           if (size > 0) {
             *elem_type = elem->type;
           }
-          // element size check
-          if (elem->size <= size) {
-            // single element
-            (*elem_count)++;
-          } else if (elem->size <= size * 2) {
-            // array element (length=2)
-            (*elem_count) += 2;
-          } else {
-            // array element (length>2)
-            // return 1;
+          // element count increment
+          if (elem->size > 0 && size > 0) {
             (*elem_count) += (elem->size - 1) / size + 1;
+          } else {
+            (*elem_count)++;
           }
-          // elements count check
-#ifdef X86_WIN64
-          if (*elem_count >= 2) {
-            return 0;
-          }
-#else
+#ifndef X86_WIN64
+          // element count check
           if (*elem_count > 2) {
             return 1;
           }
 #endif
         }
+#ifdef X86_WIN64
+      // element count check
+      if (*elem_count >= 2) {
+        return 0;
+      }
+#endif
     }
   return 0;
 }
