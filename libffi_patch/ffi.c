@@ -391,13 +391,13 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
 //#endif
 //    cif->bytes = (cif->bytes + 15) & ~0xF;
 //#endif
-#if defined(X86_WIN32) || defined(X86_WIN64)
+#if defined(X86_WIN32)
     // ***** change for c-wrapper *****
-    // (add space)
-#ifdef X86_WIN64
+    // (add space for win32)
+    // cif->bytes = ((cif->bytes + 15) & ~0xF) + 8;
+#elif defined(X86_WIN64)
     /* ensure space for storing four registers */
     cif->bytes += 4 * FFI_SIZEOF_ARG;
-#endif
     cif->bytes = (cif->bytes + 15) & ~0xF;
 #else
     if (cif->abi == FFI_SYSV || cif->abi == FFI_UNIX64) {
