@@ -1,8 +1,8 @@
 ;; -*- coding: utf-8; mode: scheme -*-
 ;;
-;; breakout-mg-mingw64_64.scm
+;; breakout-mg-mingw64_32.scm
 ;;
-;;   Modified for SDL2 + MSYS2/MinGW-w64(64bit), by Hamayama (2016).
+;;   Modified for SDL2 + MSYS2/MinGW-w64(32bit), by Hamayama (2016).
 ;;   Licensed under the same license that the original breakout is.
 ;;
 ;; --
@@ -55,13 +55,13 @@
 ;                      'NULL))
 (display #\cr)(flush) ; コンソールを割り当てる
 (c-load '("SDL.h" "SDL_mixer.h" "stdio.h" "stdlib.h")
-        :cppflags "-Ic:/msys64/mingw64/include/SDL2 -D_SDL_cpuinfo_h"
-        :libs     "-Lc:/msys64/mingw64/bin -lSDL2 -lSDL2_mixer"
+        :cppflags "-Ic:/msys64/mingw32/include/SDL2 -D_SDL_cpuinfo_h"
+        :libs     "-Lc:/msys64/mingw32/bin -lSDL2 -lSDL2_mixer"
         :import (list (lambda (header sym)
                         ;(print header " " sym)
                         (#/\/SDL2\/.*\.h$/ header))
                       'NULL)
-        :compiled-lib "sdllib64_64")
+        :compiled-lib "sdllib64_32")
 
 ;; ***** SDL2対応 *****
 (define *window* #f) ; ウィンドウ

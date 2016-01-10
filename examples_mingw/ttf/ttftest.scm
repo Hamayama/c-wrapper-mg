@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; SDL2_ttfによるフォント表示のテスト
-;; 2016-1-6
+;; 2016-1-10
 ;;
 (add-load-path "." :relative)
 (use c-wrapper)
@@ -11,11 +11,14 @@
 (cond-expand
  (gauche.os.windows
   (print "loading...") ; コンソールを割り当てる
-  (cond
-   ((equal? (gauche-architecture) "x86_64-pc-mingw64")
-    (load "ttftest_sub_mingw64_64.scm"))
-   (else
-    (load "ttftest_sub_mingw32.scm"))))
+  (let1 msystem (sys-getenv "MSYSTEM")
+    (cond 
+     ((equal? msystem "MINGW64")
+      (load "ttftest_sub_mingw64_64.scm"))
+     ((equal? msystem "MINGW32")
+      (load "ttftest_sub_mingw64_32.scm"))
+     (else
+      (load "ttftest_sub_mingw32.scm")))))
  (else
   (load "ttftest_sub_other.scm")))
 

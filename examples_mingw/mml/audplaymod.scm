@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2016-1-6 v1.09
+;; 2016-1-10 v1.10
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -56,11 +56,14 @@
 (cond-expand
  (gauche.os.windows
   (display #\cr)(flush) ; コンソールを割り当てる
-  (cond
-   ((equal? (gauche-architecture) "x86_64-pc-mingw64")
-    (load "audplaymod_sub_mingw64_64.scm"))
-   (else
-    (load "audplaymod_sub_mingw32.scm"))))
+  (let1 msystem (sys-getenv "MSYSTEM")
+    (cond 
+     ((equal? msystem "MINGW64")
+      (load "audplaymod_sub_mingw64_64.scm"))
+     ((equal? msystem "MINGW32")
+      (load "audplaymod_sub_mingw64_32.scm"))
+     (else
+      (load "audplaymod_sub_mingw32.scm")))))
  (else
   (load "audplaymod_sub_other.scm")))
 

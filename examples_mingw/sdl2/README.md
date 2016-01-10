@@ -35,6 +35,7 @@
 - 環境
   - MinGW (32bit) (gcc v4.8.1)
   - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
+  - MSYS2/MinGW-w64 (32bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
   - Gauche v0.9.4
   - Gauche v0.9.5_pe1
@@ -50,6 +51,7 @@
 - 2015-11-21 v1.05 当たり判定修正等
 - 2015-11-24 v1.06 コメント修正のみ
 - 2016-1-6   v1.07 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
+- 2016-1-10  v1.08 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
 
 
-(2016-1-6)
+(2016-1-10)

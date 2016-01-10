@@ -42,6 +42,7 @@
 - 環境
   - MinGW (32bit) (gcc v4.8.1)
   - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
+  - MSYS2/MinGW-w64 (32bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
   - Gauche v0.9.4
   - Gauche v0.9.5_pe1
@@ -69,6 +70,7 @@
 - 2015-1-18  v1.19 mmlproc.scmをv1.14に更新(エラーチェック追加)
 - 2015-8-25  v1.20 audplaymod.scmをv1.08に更新(cond-expandにelse節を追加)
 - 2016-1-6   v1.21 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
+- 2016-1-10  v1.22 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
 
 
-(2016-1-6)
+(2016-1-10)

@@ -136,7 +136,7 @@
     コンパイル時に CFLAGS の内容を反映するようにした。
     - src/Makefile.in
 
-13. MSYS2/MinGW-w64(64bit)環境でのビルドに暫定対応(実験中)
+13. MSYS2/MinGW-w64(64bit/32bit)環境でのビルドに暫定対応(実験中)
     - automake v1.15 の使用
       - config.guess
       - config.sub
@@ -168,6 +168,9 @@
         SDL.h 内の SDL_cpuinfo.h の読み込みでエラーになるので、  
         c-load の :cppflags に -D_SDL_cpuinfo_h を追加して読み込まないようにした。  
         (新しい型の `__int128` や GCC の拡張書式に対応しないと、このファイルは読み込めないもよう)
+    - テストの修正
+      - testsuite/stdio-test_sub.scm  
+        c-include のオプションを追加した。
 
 
 ## インストール方法
@@ -384,6 +387,7 @@
 - 環境
   - MinGW (32bit) (gcc v4.8.1)
   - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
+  - MSYS2/MinGW-w64 (32bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
   - Gauche v0.9.4
   - Gauche v0.9.5_pe1
@@ -426,6 +430,7 @@
 - 2016-1-6   v0.6.0-mg0019 ドキュメントファイル修正
 - 2016-1-7   v0.6.0-mg0020 libffi-3.2.1 の ffi.c を修正
 - 2016-1-8   v0.6.0-mg0021 libffi-3.2.1 の ffi.c を修正
+- 2016-1-10  v0.6.0-mg0022 MSYS2/MinGW-w64(32bit)環境に暫定対応
 
 
-(2016-1-8)
+(2016-1-10)
