@@ -116,7 +116,7 @@ case "$target" in
         fi
         ;;
     *-cygwin*|*-mingw*)
-        dnl Gauche's uvector library file name is changed in v0.9.5_pre1.
+        dnl Gauche's uvector library file name was changed in Gauche v0.9.5_pre1.
         GAUCHE_SYSDIR=`"$GAUCHE_CONFIG" --sysarchdir | sed 's/\\\\/\\//g'`
         GAUCHE_UVECTOR_DLL="$GAUCHE_SYSDIR/gauche--uvector.$SOEXT"
         if test -e "$GAUCHE_UVECTOR_DLL"; then
