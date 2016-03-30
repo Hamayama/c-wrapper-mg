@@ -71,6 +71,7 @@
 - 2015-8-25  v1.20 audplaymod.scmをv1.08に更新(cond-expandにelse節を追加)
 - 2016-1-6   v1.21 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
 - 2016-1-10  v1.22 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
+- 2016-3-31  v1.23 mmlproc.scmをv1.15に更新(get-wav-size手続きを追加)
 
 
-(2016-1-10)
+(2016-3-31)
