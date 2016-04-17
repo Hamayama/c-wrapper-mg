@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymodのテスト1
-;; 2014-11-18
+;; 2016-4-17
 ;;
 (add-load-path "." :relative)
 (use audplaymod)
@@ -38,7 +38,7 @@
 ;; 音声チャンクの再生
 (print "audplay")
 (set! ch (audplay a1))
-(while (not (= (audstat ch) 0))
+(until (= (audstat ch) 0)
   (sdl-sleep 100))
 (print "finished.")
 
