@@ -3,10 +3,10 @@
 ![image](image.png)
 
 ## 概要
-- Gauche 用 の c-wrapper を MinGW (32bit) 上で動くように改造したものです。  
-  c-wrapperは、GacuheからC言語のライブラリを呼び出せるようにするモジュールです。  
+- Gauche 用の c-wrapper を MinGW (32bit) 上で動くように改造したものです。  
+  c-wrapper は、Gacuhe から C 言語のライブラリを呼び出せるようにするモジュールです。  
   正直中身は難しくてあまり理解できていませんが、  
-  どうにかテストは(stdioのsys-fork以外は)通るようになりました。
+  どうにかテストは (stdio の sys-fork 以外は) 通るようになりました。
 
 - オリジナルの情報は、以下にあります。  
   http://www.koguro.net/prog/c-wrapper/index-j.html  
@@ -14,18 +14,18 @@
   https://bitbucket.org/nkoguro/c-wrapper  
   で最新と思われる c-wrapper v0.6.1 (ChangeLog 2012-07-19) をダウンロードしてベースとしました。
 
-- もともと付属していたlibffiは削除して、  
+- もともと付属していた libffi は削除して、  
   https://sourceware.org/libffi/  
   にある libffi-3.2.1 を使うようにしました。  
-  (libffi-3.2.1は同梱していないため別途入手が必要です。  
-  そして、元のlibffiと同様に一部修正を行う必要があります)  
-  (libffiのバージョンが上がって上記のページに存在しない場合は、  
+  (libffi-3.2.1 は同梱していないため別途入手が必要です。  
+  そして、元の libffi と同様に一部修正を行う必要があります)  
+  (libffi のバージョンが上がって上記のページに存在しない場合は、  
    ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)
 
-- またMinGWに存在しないmmap関数については、  
+- また MinGW に存在しない mmap 関数については、  
   https://code.google.com/p/mman-win32/  
   にある mman.h と mman.c をソースに取り込みました。  
-  (1箇所MinGWとバッティングする関数名(mprotect)はリネームしました)
+  (1箇所 MinGW とバッティングする関数名 (mprotect) はリネームしました)
 
 
 ## 変更点
@@ -87,15 +87,15 @@
    stubgen.scm
      compile-wrapper
        c-load-library
-         変数名libsがバッティングしていたのを修正
-         また、regexp-replaceの引数不足を修正
+         変数名libsがバッティングしていたのを修正。
+         また、regexp-replaceの引数不足を修正。
          しかしまだ直らない?
          ライブラリ名の取得に失敗している?
          以下のようにオプションをちゃんと指定したらいけた。
            (c-load-library "./ffitest2" :option "-L.")
            (c-include "./ffitest2.h" :compiled-lib "ffitelib2")
        c-include
-         キーワードhideの定義もれ修正
+         キーワードhideの定義もれ修正。
    ```
 
 7. テストの test_bitfield2 でSegmentation Faultエラー
@@ -298,22 +298,22 @@
 
 ## その他 問題点等
 1. テストの stdio-test.scm で fork failed エラー  
-   → Windows に sys-fork がないので仕方ない  
-   → Windows のときは sys-fork-and-exec を使うようにテストの方を変更した
+   → Windows に sys-fork がないので仕方ない。  
+   → Windows のときは sys-fork-and-exec を使うようにテストの方を変更した。
 
 2. ヘッダファイル(.h)だけを変更した場合にmakeで再コンパイルされない  
-   → make clean してから make すればコンパイルできる  
+   → make clean してから make すればコンパイルできる。  
       (ヘッダファイルだけを変更することはまずないと思うが、はまったので一応メモ)
 
 3. テストの ffitest.h, ffitest.c でマクロの部分がgdbでデバッグ(ステップ実行)しにくい  
-   → いくつかマクロを展開したものを、べたに書いてデバッグした
+   → いくつかマクロを展開したものを、べたに書いてデバッグした。
 
 4. c-wapperを利用したscmファイルを、gosh-noconsole.exe で実行すると動作しない(途中で止まる)  
    (GaucheのWindows用インストーラは、デフォルトでscmファイルを  
     gosh-noconsole.exe に関連付けするので、scmファイルをダブルクリックで実行すると  
     この現象が出る)  
-   → よく分かっていないが、c-wrapperの仕組み上コンソールが必要なもよう  
-   → 基本的には gosh.exe で実行する必要がある  
+   → よく分かっていないが、c-wrapperの仕組み上コンソールが必要なもよう。  
+   → 基本的には gosh.exe で実行する必要がある。  
       (例えばバッチファイルを作成して gosh xxx.scm を実行する等)  
    → 回避策として c-include や c-load を実行する前に  
       (display #\cr)(flush) や (print "XXX") を実行してコンソールを割り当てるようにすれば、  
@@ -323,7 +323,7 @@
       https://github.com/Hamayama/msconalloc
 
 5. 構造体を戻り値とするCの関数を呼び出すと、正常に動作しないケースがある  
-   → 構造体の中の要素数やサイズによって、戻り値の返し方が変わるもよう  
+   → 構造体の中の要素数やサイズによって、戻り値の返し方が変わるもよう。  
    ```
       X86_WIN32 のとき
       ・構造体の中の要素数が3個以上のとき → 戻り値はポインタ渡し
@@ -336,11 +336,11 @@
       ・構造体の中の合計が8バイト以下のとき → 戻り値はレジスタ1個で値渡し
       ・その他のとき → 戻り値はポインタ渡し
    ```
-   → libffi-3.2.1 の ffi.c に判定条件を追加した(2015-7-8)(2016-1-6)(2016-1-7)
+   → libffi-3.2.1 の ffi.c に判定条件を追加した。(2015-7-8)(2016-1-6)(2016-1-7)
 
-6. 構造体のビットフィールドにサイズ0のものがあると、正常にアクセスできない  
-   → ビットフィールドにサイズ0のものがあった場合は、アライメントするように  
-      c-ffi.scm に処理を追加した(2015-7-10)
+6. 構造体のビットフィールドにサイズ 0 のものがあると、正常にアクセスできない  
+   → ビットフィールドにサイズ 0 のものがあった場合は、アライメントするように  
+      c-ffi.scm に処理を追加した。(2015-7-10)
 
 
 ## その他 ノウハウ等
