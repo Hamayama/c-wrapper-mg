@@ -30,7 +30,7 @@
 
 
 ## ファイルについて
-- ttftest.scm の35行目の「 (define *font-file* ... 」  
+- ttftest.scm の35行目の「 (define `*font-file*` ... 」  
   のところで、フォントファイルを指定しています。  
   ここを書き換えることで、他の TrueType フォントを表示できます。
 

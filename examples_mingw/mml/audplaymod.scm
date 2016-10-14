@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2016-1-10 v1.10
+;; 2016-10-14 v1.11
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -9,12 +9,12 @@
 ;;
 ;;   実行するには、Gauche, c-wrapper, SDL2, SDL2_mixer が、
 ;;   適切にインストールされている必要があります。
-;;   (Windowsの場合はMinGW(32bit)環境のインストールも必要です。
-;;    (MSYS2/MinGW-w64(64bit)環境については実験中です))
+;;   (Windowsの場合はMSYS2/MinGW-w64(64bit/32bit)環境のインストールも必要です)
 ;;
 ;; ＜インストール方法＞
-;;   audplaymod.scm, audplaymod_sub_mingw32.scm
-;;   audplaymod_sub_mingw64_64.scm audplaymod_sub_other.scm
+;;   audplaymod.scm, audplaymod_sub_mingw32.scm,
+;;   audplaymod_sub_mingw64_32.scm, audplaymod_sub_mingw64_64.scm,
+;;   audplaymod_sub_other.scm
 ;;   を Gauche でロード可能なフォルダにコピーします。
 ;;   (例えば (gauche-site-library-directory) で表示されるフォルダ等)
 ;;
@@ -57,7 +57,7 @@
  (gauche.os.windows
   (display #\cr)(flush) ; コンソールを割り当てる
   (let1 msystem (sys-getenv "MSYSTEM")
-    (cond 
+    (cond
      ((equal? msystem "MINGW64")
       (load "audplaymod_sub_mingw64_64.scm"))
      ((equal? msystem "MINGW32")
