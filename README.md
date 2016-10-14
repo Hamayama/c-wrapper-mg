@@ -353,7 +353,7 @@
    (コンパイルオプションに -g をつける。また必要に応じて最適化オプションを外す)
    ```
      c-wrapper
-       src フォルダ内 のMakefile (すでに -g がついていれば書き換え不要)
+       src フォルダ内 の Makefile (すでに -g がついていれば書き換え不要)
          CFLAGS         = -O2
            ↓
          CFLAGS         = -g -O2
@@ -370,7 +370,7 @@
          CFLAGS = -g -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
    ```
    変更したら make clean してから再度 make が必要です。  
-   (./configureを実行するとMakefileが元に戻ってしまうので注意してください)
+   (./configure を実行すると Makefile が元に戻ってしまうので注意してください)
 
 2. デバッグのしかた  
    Segmentation Fault 等のエラーが発生した場合は、gdb を使ってデバッグを行います。  
