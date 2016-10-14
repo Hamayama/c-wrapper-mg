@@ -80,6 +80,7 @@
 - 2016-3-31  v1.23 mmlproc.scmをv1.15に更新(get-wav-size手続きを追加)
 - 2016-4-17  v1.24 mmlproc.scmをv1.16に更新
 - 2016-10-14 v1.25 README修正等(Gauche v0.9.5 対応)
+- 2016-10-14 v1.26 mmlproc.scmをv1.17に更新
 
 
 (2016-10-14)
