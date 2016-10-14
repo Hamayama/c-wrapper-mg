@@ -3,7 +3,7 @@
 ![image](image.png)
 
 ## 概要
-- c-wrapperのSDLサンプルのブロック崩しを、SDL2 + MinGW 用に改造したものです。
+- c-wrapper の SDL サンプルのブロック崩しを、SDL2 + MinGW 用に改造したものです。
 
 
 ## 環境のインストール方法
