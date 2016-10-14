@@ -4,7 +4,7 @@ c-wrapper-mg
     Licensed under the same license that the original c-wrapper is.
 
     The following included source code is licensed under the MIT License.
-    mman.h mman.c ( https://code.google.com/p/mman-win32/ )
+    - mman.h mman.c ( https://code.google.com/p/mman-win32/ )
 
 
 -----------------------------------------------------------------------------

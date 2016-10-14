@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymodのテスト1
-;; 2016-4-17
+;; 2016-10-14
 ;;
 (add-load-path "." :relative)
 (use audplaymod)
@@ -30,10 +30,10 @@
 
 ;; MML文字列を読み込んで音声チャンクに変換
 (print "mml->aud")
-(set! a1 (pcm->aud (mml->pcm
-  "!c0 @501 o4 >cc gg aa g&r ff  ee   de32d32c32d16.e16 c2 \
-   !c1 @501 o3 c>c ec fc ec  d<b >c<a fg                c2 "
-  )))
+($ set! a1 $ pcm->aud $ mml->pcm $ string-append
+   "!c0 @501 o4 >cc gg aa g&r ff  ee   de32d32c32d16.e16 c2 "
+   "!c1 @501 o3 c>c ec fc ec  d<b >c<a fg                c2 "
+   )
 
 ;; 音声チャンクの再生
 (print "audplay")

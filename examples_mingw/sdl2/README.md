@@ -3,24 +3,29 @@
 ![image](image.png)
 
 ## 概要
-- c-wrapperのSDLサンプルのブロック崩しを、SDL2 + MinGW(32bit)用に改造したものです。
+- c-wrapperのSDLサンプルのブロック崩しを、SDL2 + MinGW 用に改造したものです。
 
 
 ## 環境のインストール方法
-- Gauche, MinGW(32bit), c-wrapper, SDL2, SDL2_mixerが適切にインストールされている必要があります。
+- Gauche, MinGW, c-wrapper, SDL2, SDL2_mixer が適切にインストールされている必要があります。
 
-- Gauche, MinGW(32bit), c-wrapperについては、  
+- Gauche, MinGW, c-wrapper については、  
   以下のページの「インストール方法」を参考にインストールを実施ください。  
   https://github.com/Hamayama/c-wrapper-mg
 
-- SDL2, SDL2_mixerについては、  
+- SDL2, SDL2_mixer については、  
   以下のページを参考にインストールを実施ください。  
   https://gist.github.com/Hamayama/155b5557db31334ce492
 
 
 ## 実行方法
-- breakout-mg.bat をダブルクリック等で起動します。  
-  (breakout-mg.bat, breakout-mg.scm, cursor5.wav, cursor6.wav が同一フォルダに存在する必要があります)  
+- ＜MinGW (32bit) 環境の場合＞  
+  breakout-mg.bat をダブルクリック等で起動します。  
+  ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
+  breakout-mg-mingw64_64.bat をダブルクリック等で起動します。  
+  ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
+  breakout-mg-mingw64_32.bat をダブルクリック等で起動します。  
+  
   スペースキーでボールを発射します。  
   カーソルキーの左右でパドルを動かします。  
   すべてのブロックを消すか、ボールを3個うしろにそらすと、  
@@ -30,15 +35,15 @@
 
 ## 環境等
 - OS
-  - Windows XP Home SP3
   - Windows 8.1 (64bit)
+  - Windows XP Home SP3
 - 環境
+  - MSYS2/MinGW-w64 (64bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (32bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc v4.8.1)
-  - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
-  - MSYS2/MinGW-w64 (32bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
+  - Gauche v0.9.5
   - Gauche v0.9.4
-  - Gauche v0.9.5_pe1
 - ライセンス
   - オリジナルと同様とします
 
@@ -52,6 +57,7 @@
 - 2015-11-24 v1.06 コメント修正のみ
 - 2016-1-6   v1.07 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
 - 2016-1-10  v1.08 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
+- 2016-10-14 v1.09 README修正等(Gauche v0.9.5 対応)
 
 
-(2016-1-10)
+(2016-10-14)

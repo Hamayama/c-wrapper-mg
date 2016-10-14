@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; SDL2_ttfによるフォント表示のテスト
-;; 2016-1-10
+;; 2016-10-14
 ;;
 (add-load-path "." :relative)
 (use c-wrapper)
@@ -12,7 +12,7 @@
  (gauche.os.windows
   (print "loading...") ; コンソールを割り当てる
   (let1 msystem (sys-getenv "MSYSTEM")
-    (cond 
+    (cond
      ((equal? msystem "MINGW64")
       (load "ttftest_sub_mingw64_64.scm"))
      ((equal? msystem "MINGW32")
@@ -75,9 +75,9 @@
 (SDL_BlitSurface *surface2* NULL *screen* (ptr (make-rect 100 200 0 0)))
 
 ;; イベントループ
-(let ((evt   (make <SDL_Event>))
-      (keys  (cast (c-array <c-uchar> 256) (SDL_GetKeyboardState NULL)))
-      (done  #f))
+(let ((evt  (make <SDL_Event>))
+      (keys (cast (c-array <c-uchar> 256) (SDL_GetKeyboardState NULL)))
+      (done #f))
   (while (not done)
     ;; イベントチェック
     (when (> (SDL_PollEvent (ptr evt)) 0)

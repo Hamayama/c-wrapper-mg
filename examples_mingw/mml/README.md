@@ -1,51 +1,57 @@
 # MML音楽演奏サンプル
 
 ## 概要
-- MinGW(32bit)環境で Gauche, c-wrapper, SDL2, SDL2_mixer を用いて、  
-  MML(Music Macro Language)による音楽演奏を行うサンプルです。
+- MinGW 環境で Gauche, c-wrapper, SDL2, SDL2_mixer を用いて、  
+  MML (Music Macro Language) による音楽演奏を行うサンプルです。
 
 
 ## 環境のインストール方法
-- Gauche, MinGW(32bit), c-wrapper, SDL2, SDL2_mixerが適切にインストールされている必要があります。
+- Gauche, MinGW, c-wrapper, SDL2, SDL2_mixer が適切にインストールされている必要があります。
 
-- Gauche, MinGW(32bit), c-wrapperについては、  
+- Gauche, MinGW, c-wrapper については、  
   以下のページの「インストール方法」を参考にインストールを実施ください。  
   https://github.com/Hamayama/c-wrapper-mg
 
-- SDL2, SDL2_mixerについては、  
+- SDL2, SDL2_mixer については、  
   以下のページを参考にインストールを実施ください。  
   https://gist.github.com/Hamayama/155b5557db31334ce492
 
 
 ## 実行方法
-- test1001.bat をダブルクリック等で起動します。  
-  (サンプルのファイル一式が同一フォルダに存在する必要があります)  
+- ＜MinGW (32bit) 環境の場合＞  
+  test1001.bat をダブルクリック等で起動します。  
+  ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
+  test1001_mingw64_64.bat をダブルクリック等で起動します。  
+  ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
+  test1001_mingw64_32.bat をダブルクリック等で起動します。  
+  
   しばらくすると音楽が鳴ります。演奏が終わると終了します。
 
 
 ## ファイルについて
-- test1001.scm の33行目の「 (set! a1 (pcm->aud (mml->pcm 」の下がMMLの文字列になっています。  
+- test1001.scm の33行目の「 ($ set! a1 $ pcm->aud $ mml->pcm $ string-append 」の下が、  
+  MML の文字列になっています。  
   ここを書き換えることで、いろいろな音楽を演奏できます。
 
 - 音楽の演奏は audplaymod.scm というモジュールで行っています。  
-  (c-wrapper経由でSDLを制御しています)
+  (c-wrapper 経由で SDL を制御しています)
 
-- また、MMLの解釈は mmlproc.scm というモジュールで行っています。  
+- また、MML の解釈は mmlproc.scm というモジュールで行っています。  
   mmlproc の詳細については、以下のページを参照ください。  
   https://github.com/Hamayama/mmlproc
 
 
 ## 環境等
 - OS
-  - Windows XP Home SP3
   - Windows 8.1 (64bit)
+  - Windows XP Home SP3
 - 環境
+  - MSYS2/MinGW-w64 (64bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (32bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc v4.8.1)
-  - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
-  - MSYS2/MinGW-w64 (32bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
+  - Gauche v0.9.5
   - Gauche v0.9.4
-  - Gauche v0.9.5_pe1
 
 ## 履歴
 - 2014-11-1  v1.00 初版
@@ -73,6 +79,7 @@
 - 2016-1-10  v1.22 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
 - 2016-3-31  v1.23 mmlproc.scmをv1.15に更新(get-wav-size手続きを追加)
 - 2016-4-17  v1.24 mmlproc.scmをv1.16に更新
+- 2016-10-14 v1.25 README修正等(Gauche v0.9.5 対応)
 
 
-(2016-4-17)
+(2016-10-14)

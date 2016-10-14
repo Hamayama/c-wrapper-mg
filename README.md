@@ -3,7 +3,7 @@
 ![image](image.png)
 
 ## 概要
-- Gauche 用の c-wrapper を MinGW (32bit) 上で動くように改造したものです。  
+- Gauche 用の c-wrapper を MinGW 上で動くように改造したものです。  
   c-wrapper は、Gacuhe から C 言語のライブラリを呼び出せるようにするモジュールです。  
   正直中身は難しくてあまり理解できていませんが、  
   どうにかテストは (stdio の sys-fork 以外は) 通るようになりました。
@@ -34,27 +34,27 @@
 1. configure.ac の変更  
    `*-mingw*` という場合分けのセクションを追加。
 
-2. Gaucheのインストール先パスの空白対応  
+2. Gaucheの インストール先パスの空白対応  
    configure.ac や Makefile.in の該当箇所をダブルクォートでくくることで対応。  
-   (Gaucheのインストール先パスについてのみ対応)
+   (Gauche のインストール先パスについてのみ対応)
 
-3. libffiの変更  
-   元のlibffiは削除して、  
+3. libffi の変更  
+   元の libffi は削除して、  
    https://sourceware.org/libffi/  
-   からlibffi-3.2.1を別途入手。  
+   から libffi-3.2.1 を別途入手。  
    不具合があるので src/x86 フォルダ内の ffi.c を以下のように修正した。
    ```
    (1)ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更
         X86_WIN32 のときに is_result_on_stack 関数で戻り値がスタックを使うかどうか
         判定するようにした。
-        is_result_on_stack関数は、元のlibffiの src/prep_cif.c からコピーした。
+        is_result_on_stack 関数は、元の libffi の src/prep_cif.c からコピーした。
         この判定がないと Segmentation Fault エラーで落ちるので必須と思われる。
         (その後、判定条件を一部変更しました。問題点の 5. 参照)
 
    (2)ffi.c の ffi_prep_cif_machdep 関数で、スタック確保のサイズにスペースを追加
         X86_WIN32 のときに 以下のようにスペースを追加するようにした。
           cif->bytes = ((cif->bytes + 15) & ~0xF) + 8;
-        これは元のlibffiの src/prep_cif.c の ffi_prep_cif関数で追加していたため
+        これは元の libffi の src/prep_cif.c の ffi_prep_cif 関数で追加していたため
         同じようにした。ただし、これが必須なのかどうかはよく分からない。
         (その後、このスペースの追加はやめてみました (実験中) (2016-1-8))
    ```
@@ -62,24 +62,24 @@
    生成された i686-pc-mingw32 フォルダ内の .lib フォルダと include フォルダを、  
    c-wrapper の src/libffi フォルダの下にコピーした。
 
-4. dlopenの対応  
-   dlopen, dlsym, dlerror等の関数が、MinGWには存在しない。  
-   ただし c-wrapper は、すでにCygwin対応でWin32 APIに切り換え可能になっていたので、  
+4. dlopen の対応  
+   dlopen, dlsym, dlerror 等の関数が、MinGW には存在しない。  
+   ただし c-wrapper は、すでに Cygwin 対応で Win32 API に切り換え可能になっていたので、  
    ほぼそのまま利用できた。  
    1箇所、c-ffi.c で EnumProcessModules で取得したモジュールハンドルを、  
-   CloseHandleしているが、これがあると gdb で unknown signal と出てデバッグができなかった。  
-   CloseHandleしてはいけないようなのでコメントアウトしたところ、gdbでデバッグできるようになった。  
+   CloseHandle しているが、これがあると gdb で unknown signal と出てデバッグができなかった。  
+   CloseHandle してはいけないようなのでコメントアウトしたところ、gdbでデバッグできるようになった。  
    また、インクルードでエラーになったので、  
    `__MINGW32__` が定義済みのときは c-ffi.h で dlfcn.h を インクルードしないようにした。
 
-5. mmapの対応  
-   mmap関数が、MinGWには存在しない。  
+5. mmap の対応  
+   mmap 関数が、MinGW には存在しない。  
    https://code.google.com/p/mman-win32/  
    から mman.h と mman.c を入手。  
    c-wrapper の src フォルダにコピーして取り込むようにした。  
    そして、`__MINGW32__` が定義済みのときは closure_alloc.h で src フォルダの下の mman.h を  
    インクルードするようにした。  
-   あと、1箇所MinGWとバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを変更)。  
+   あと、1箇所 MinGW とバッティングする関数名(mprotect)をリネームした(mman.hとmman.cを変更)。  
    また、configure.ac に FFI_SRC_ADD という定義を追加した。
 
 6. cwcompile で c-load-library の処理に失敗する
@@ -87,22 +87,22 @@
    stubgen.scm
      compile-wrapper
        c-load-library
-         変数名libsがバッティングしていたのを修正。
-         また、regexp-replaceの引数不足を修正。
+         変数名 libs がバッティングしていたのを修正。
+         また、regexp-replace の引数不足を修正。
          しかしまだ直らない?
          ライブラリ名の取得に失敗している?
          以下のようにオプションをちゃんと指定したらいけた。
            (c-load-library "./ffitest2" :option "-L.")
            (c-include "./ffitest2.h" :compiled-lib "ffitelib2")
        c-include
-         キーワードhideの定義もれ修正。
+         キーワード hide の定義もれ修正。
    ```
 
-7. テストの test_bitfield2 でSegmentation Faultエラー
+7. テストの test_bitfield2 で Segmentation Fault エラー
    ```
    c-ffi.scm
      init-decl-alist!
-       構造体にビットフィールドの先頭があらわれたら、シフト値を0にするように変更した。
+       構造体にビットフィールドの先頭があらわれたら、シフト値を 0 にするように変更した。
        本当にこれでよいのかは、よく分からない。
        (その後、さらに一部変更しました。問題点の 6. 参照)
    ```
@@ -123,7 +123,7 @@
     ```
       configure.ac に GAUCHE_UVECTOR_LIBS の定義を追加して、
       ファイルの存在有無によってライブラリファイル名を切り換えるようにした。
-      (Cygwinは動作未確認)
+      (Cygwin は動作未確認)
     ```
 
 11. ドキュメントファイル修正等
@@ -136,14 +136,14 @@
     コンパイル時に CFLAGS の内容を反映するようにした。
     - src/Makefile.in
 
-13. MSYS2/MinGW-w64(64bit/32bit)環境でのビルドに暫定対応(実験中)
+13. MSYS2/MinGW-w64 (64bit/32bit) 環境でのビルドに対応
     - automake v1.15 の使用
       - config.guess
       - config.sub
       - install-sh
     - ヘッダファイルのマクロ展開処理の修正
       - src/c-parser.c ( Scm_ParseMacroCode )  
-        GCCのバージョンアップで出力が変わった件に対応した。  
+        GCC のバージョンアップで出力が変わった件に対応した。  
         ( https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=777861 )
     - ヘッダファイルの関数取得処理の修正
       - lib/c-wrapper/c-parser.scm ( make-define-inline-expr )  
@@ -171,70 +171,64 @@
     - テストの修正
       - testsuite/stdio-test_sub.scm  
         c-include のオプションを追加した。
-    - ビルド方法のメモ(実験中)
-      ```
-       ＜MSYS2/MinGW-w64(64bit/32bit)環境でのビルド方法のメモ(実験中)＞
-
-      ・Gauche本体も、MSYS2/MinGW-w64(64bit/32bit)環境でコンパイルされている必要がある。
-        https://gist.github.com/Hamayama/6666e5d2c8d5167d22f7
-
-      ・MSYS2/MinGW-w64 (32bit) 環境では、libffi-3.2.1 のコンパイルでエラーになる。
-        64bit 環境と間違えて src/x86/win64.S をコンパイルしてしまうため、
-        ./configure --build=i386-pc-mingw32 --host=i386-pc-mingw32 --target=i386-pc-mingw32
-        のようにオプションを指定する必要があった。
-      ```
 
 
 ## インストール方法
-- MinGW (32bit) 環境でのインストール手順を、以下に示します。
+- MSYS2/MinGW-w64 (64bit/32bit) 環境でのインストール手順を、以下に示します。
 
-1. Gaucheのインストール  
+1. Gauche のインストール  
    事前に Gauche がインストールされている必要があります。  
    以下のページに Windows用バイナリインストーラ があるので、インストールを実施ください。  
    http://practical-scheme.net/gauche/download-j.html  
    (すでにインストール済みであれば本手順は不要です)
 
-2. MinGW (32bit) のインストール  
-   事前に MinGW (32bit) がインストールされている必要があります。  
-   以下のページを参考に、インストールを実施ください。  
-   https://gist.github.com/Hamayama/362f2eb14ae26d971ca4  
+2. MSYS2/MinGW-w64 (64bit/32bit) のインストール  
+   事前に MSYS2/MinGW-w64 (64bit/32bit) がインストールされている必要があります。  
+   以下のページを参考に、開発環境のインストールを実施ください。  
+   https://gist.github.com/Hamayama/eb4b4824ada3ac71beee0c9bb5fa546d  
    (すでにインストール済みであれば本手順は不要です)
 
-3. c-wrapperのソースの展開  
+3. c-wrapper のソースの展開  
    本サイト( https://github.com/Hamayama/c-wrapper-mg )のソースを、  
    (Download Zip ボタン等で)ダウンロードして、作業用のフォルダに展開してください。  
    例えば、作業用のフォルダを c:\work とすると、  
-   c:\work\c-wrapper の下にファイルとフォルダ一式が配置されるように展開してください。  
+   c:\work\c-wrapper の下にファイル一式が配置されるように展開してください。  
    (注意) 作業用フォルダのパスには、空白を入れないようにしてください。
 
-4. libffi-3.2.1のダウンロード  
+4. libffi-3.2.1 のダウンロード  
    https://sourceware.org/libffi/  
    から libffi-3.2.1.tar.gz をダウンロードして展開します。  
-   (libffiのバージョンが上がって上記のページに存在しない場合は、  
+   (libffi のバージョンが上がって上記のページに存在しない場合は、  
     ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)  
-   例えば作業用のフォルダを c:\work とすると、このフォルダにファイルを置いて、  
-   コマンドプロンプトを開いて以下を実行すると展開されます。
-   ```
-     bash
-     cd /c/work
-     tar zxvf libffi-3.2.1.tar.gz
-   ```
+   例えば作業用のフォルダを c:\work とすると、  
+   c:\work\libffi-3.2.1 の下にファイル一式が配置されるように展開してください。  
+   (注意) 作業用フォルダのパスには、空白を入れないようにしてください。
 
-5. libffi-3.2.1のファイルの修正  
-   c-wrapper  の libffi_patch フォルダにある ffi.c を、  
+5. libffi-3.2.1 のファイルの修正  
+   c-wrapper の libffi_patch フォルダにある ffi.c を、  
    libffi-3.2.1 の src/x86 フォルダ内の ffi.c に上書きコピーしてください。
 
-6. libffi-3.2.1のコンパイル  
-   コマンドプロンプトを開いて以下を実行します。
+6. libffi-3.2.1 のコンパイル  
+   ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+   ( c:\work にソースを展開した場合)
    ```
-     bash
      cd /c/work/libffi-3.2.1
-     ./configure    # Makefile等を生成します
-     make           # コンパイルを実行します
+     ./configure
+     make
+   ```
+   ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+   ( c:\work にソースを展開した場合)
+   ```
+     cd /c/work/libffi-3.2.1
+     ./configure --build=i686-pc-mingw32
+     make
    ```
 
-7. 生成したライブラリとヘッダをc-wrapperのフォルダにコピー  
-   コンパイルが完了すると libffi-3.2.1 の下に i686-pc-mingw32 というフォルダができます。  
+7. 生成したライブラリとヘッダを c-wrapper のフォルダにコピー  
+   コンパイルが完了すると libffi-3.2.1 の下に x86_64-pc-mingw64 というフォルダができます。  
+   (32bitの場合には、i686-pc-mingw32 というフォルダができます)  
    この中の .libs フォルダと include フォルダ を、  
    c-wrapper の src/libffi フォルダの下にコピーしてください。
    ```
@@ -245,46 +239,56 @@
                      |-- include
    ```
 
-8. c-wrapperのコンパイル  
-   コマンドプロンプトを開いて以下を実行します。  
+8. c-wrapper のコンパイル  
+   ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+   ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+   ( c:\work にソースを展開した場合)
    ```
-     bash
      cd /c/work/c-wrapper
-     ./DIST gen     # configureファイルを生成します
-     ./configure    # Makefile等を生成します
-     make           # コンパイルを実行します
+     ./DIST gen
+     ./configure
+     make
    ```
 
-9. c-wrapperのインストール  
-   コマンドプロンプトを開いて以下を実行します。
+9. c-wrapper のインストール  
+   ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+   ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+   ( c:\work にソースを展開した場合)
    ```
-     bash
      cd /c/work/c-wrapper
      make install
    ```
-   Gaucheのライブラリフォルダに生成したファイルがコピーされます。  
+   Gauche のライブラリフォルダに生成したファイルがコピーされます。  
+   
    (注意) 環境によっては make install を実行すると、  
    「*** ERROR: mkstemp failed」というエラーが発生します。  
    このエラーは c:\Program Files (x86) のフォルダに 書き込み権限がないとき等に発生します。  
-   その場合は、コマンドプロンプトを開くときに、  
-   コマンドプロンプトのアイコンを右クリックして、「管理者として実行」を選択してください。  
+   その場合には、プログラムメニューからの開発環境の起動時に右クリックして、  
+   「管理者として実行」を選択してください。  
    そして再度上記のコマンドを実行してください。
 
-10. c-wrapperのテスト  
-    コマンドプロンプトを開いて以下を実行します。
-    ```
-     bash
+10. c-wrapper のテスト  
+   ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+   ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
+   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+   ( c:\work にソースを展開した場合)
+   ```
      cd /c/work/c-wrapper
      make check
-    ```
-    テスト結果はc-wrapperのtestsuiteフォルダ内のtest.logに記録されます。
+   ```
+   テスト結果は c-wrapper の testsuite フォルダ内の test.log に記録されます。
 
 - 以上です。
 
 
 ##使い方
-- MinGW用の実行サンプルをいくつかexamples_mingwフォルダに格納しました。  
-  (benchmark, examples, experimentフォルダのサンプルは動作未確認です)
+- MinGW 用の実行サンプルをいくつか examples_mingw フォルダに格納しました。  
+  (benchmark, examples, experiment フォルダのサンプルは動作未確認です)
 
 1. SDL2サンプル  
    https://github.com/Hamayama/c-wrapper-mg/tree/master/examples_mingw/sdl2
@@ -301,18 +305,18 @@
    → Windows に sys-fork がないので仕方ない。  
    → Windows のときは sys-fork-and-exec を使うようにテストの方を変更した。
 
-2. ヘッダファイル(.h)だけを変更した場合にmakeで再コンパイルされない  
+2. ヘッダファイル(.h)だけを変更した場合に make で再コンパイルされない  
    → make clean してから make すればコンパイルできる。  
-      (ヘッダファイルだけを変更することはまずないと思うが、はまったので一応メモ)
+      (ヘッダファイルだけを変更することはあまりないと思うが、はまったので一応メモ)
 
-3. テストの ffitest.h, ffitest.c でマクロの部分がgdbでデバッグ(ステップ実行)しにくい  
+3. テストの ffitest.h, ffitest.c でマクロの部分が gdb でデバッグ(ステップ実行)しにくい  
    → いくつかマクロを展開したものを、べたに書いてデバッグした。
 
-4. c-wapperを利用したscmファイルを、gosh-noconsole.exe で実行すると動作しない(途中で止まる)  
-   (GaucheのWindows用インストーラは、デフォルトでscmファイルを  
-    gosh-noconsole.exe に関連付けするので、scmファイルをダブルクリックで実行すると  
+4. c-wapper を利用した scm ファイルを、gosh-noconsole.exe で実行すると動作しない(途中で止まる)  
+   (Gauche の Windows用インストーラ は、デフォルトで scm ファイルを  
+    gosh-noconsole.exe に関連付けするので、scm ファイルをダブルクリックで実行すると  
     この現象が出る)  
-   → よく分かっていないが、c-wrapperの仕組み上コンソールが必要なもよう。  
+   → よく分かっていないが、c-wrapper の仕組み上コンソールが必要なもよう。  
    → 基本的には gosh.exe で実行する必要がある。  
       (例えばバッチファイルを作成して gosh xxx.scm を実行する等)  
    → 回避策として c-include や c-load を実行する前に  
@@ -322,7 +326,7 @@
       どうしてもコマンドプロンプトの画面を出したくない場合には、以下のページを参照のこと。  
       https://github.com/Hamayama/msconalloc
 
-5. 構造体を戻り値とするCの関数を呼び出すと、正常に動作しないケースがある  
+5. 構造体を戻り値とする C の関数を呼び出すと、正常に動作しないケースがある  
    → 構造体の中の要素数やサイズによって、戻り値の返し方が変わるもよう。  
    ```
       X86_WIN32 のとき
@@ -345,22 +349,22 @@
 
 ## その他 ノウハウ等
 1. デバッグ用のコンパイル  
-   以下のように Makefile を書き換えると、gdbでデバッグしやすくなります。  
+   以下のように Makefile を書き換えると、gdb でデバッグしやすくなります。  
    (コンパイルオプションに -g をつける。また必要に応じて最適化オプションを外す)
    ```
      c-wrapper
-       srcフォルダ内のMakefile (すでに -g がついていれば書き換え不要)
+       src フォルダ内 のMakefile (すでに -g がついていれば書き換え不要)
          CFLAGS         = -O2
            ↓
          CFLAGS         = -g -O2
 
-       testsuiteフォルダ内のMakefile (すでに -g がついていれば書き換え不要)
+       testsuite フォルダ内の Makefile (すでに -g がついていれば書き換え不要)
          CFLAGS         = -c -o
            ↓
          CFLAGS         = -g -c -o
 
      libffi-3.2.1
-       i686-pc-mingw32フォルダ内のMakefile
+       i686-pc-mingw32 フォルダ内の Makefile
          CFLAGS = -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
            ↓
          CFLAGS = -g -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
@@ -369,21 +373,20 @@
    (./configureを実行するとMakefileが元に戻ってしまうので注意してください)
 
 2. デバッグのしかた  
-   Segmentation Fault 等のエラーが発生した場合は、gdbを使ってデバッグを行います。  
-   例えば、c:\work フォルダにある test.scm を実行してエラーとなった場合は、  
-   コマンドプロンプトを開いて以下を実行します。
+   Segmentation Fault 等のエラーが発生した場合は、gdb を使ってデバッグを行います。  
+   例えば、c:\work フォルダにある test.scm を実行してエラーとなった場合には、  
+   以下のようにコマンドを実行します。
    ```
-     bash
      cd /c/work
      gdb --args gosh test.scm
    ```
-   以後はgdbの各コマンドを使ってデバッグを行います。
+   以後は gdb の各コマンドを使ってデバッグを行います。
    ```
      r                      実行
      info stack (またはbt)  スタックトレースの表示
                             (エラー発生時に実行すると、スタックフレームにある
-                             C言語の関数の呼び出し履歴が表示されます。
-                             前述のMakefileの設定を行っていれば、
+                             C 言語の関数の呼び出し履歴が表示されます。
+                             前述の Makefile の設定を行っていれば、
                              行番号も表示されます。
                              かなり有力なデバッグの手がかりになります)
      b 関数名               ブレークポイントの設定
@@ -394,24 +397,24 @@
      c                      実行再開
      q                      終了
    ```
-   他にもいろいろなコマンドがあります。gdbのコマンドの詳細については、  
-   gdbの使い方を説明したネット上のページ等を参照ください。
+   他にもいろいろなコマンドがあります。gdb のコマンドの詳細については、  
+   gdb の使い方を説明したネット上のページ等を参照ください。
 
 
 ## 環境等
 - OS
-  - Windows XP Home SP3
   - Windows 8.1 (64bit)
+  - Windows XP Home SP3
 - 環境
+  - MSYS2/MinGW-w64 (64bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (32bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc v4.8.1)
-  - MSYS2/MinGW-w64 (64bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
-  - MSYS2/MinGW-w64 (32bit) (gcc version 5.3.0 (Rev1, Built by MSYS2 project)) (実験中)
 - 言語
+  - Gauche v0.9.5
   - Gauche v0.9.4
-  - Gauche v0.9.5_pe1
 - ライセンス
   - オリジナルと同様とします
-  - 追加した mman.h と mman.c は MITライセンスです
+  - 追加した mman.h と mman.c は MIT ライセンスです
 
 ## 履歴
 - 2014-9-6   v0.6.1-mg0001 MinGW対応
@@ -450,6 +453,7 @@
 - 2016-1-8   v0.6.0-mg0021 libffi-3.2.1 の ffi.c を修正
 - 2016-1-10  v0.6.0-mg0022 MSYS2/MinGW-w64(32bit)環境に暫定対応
 - 2016-1-16  v0.6.0-mg0023 コメント修正のみ
+- 2016-10-14 v0.6.0-mg0024 README修正のみ(Gauche v0.9.5 対応)
 
 
-(2016-4-17)
+(2016-10-14)
