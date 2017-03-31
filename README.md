@@ -275,21 +275,21 @@
    そして再度上記のコマンドを実行してください。
 
 10. c-wrapper のテスト  
-   ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
-   ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
-   ( c:\work にソースを展開した場合)
-   ```
-     cd /c/work/c-wrapper
-     make check
-   ```
-   テスト結果は c-wrapper の testsuite フォルダ内の test.log に記録されます。
+    ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
+    プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+    ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
+    プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+    ( c:\work にソースを展開した場合)
+    ```
+      cd /c/work/c-wrapper
+      make check
+    ```
+    テスト結果は c-wrapper の testsuite フォルダ内の test.log に記録されます。
 
 - 以上です。
 
 
-##使い方
+## 使い方
 - MinGW 用の実行サンプルをいくつか examples_mingw フォルダに格納しました。  
   (benchmark, examples, experiment フォルダのサンプルは動作未確認です)
 
@@ -459,4 +459,4 @@
 - 2016-10-14 v0.6.0-mg0024 README修正のみ(Gauche v0.9.5 対応)
 
 
-(2016-12-7)
+(2017-4-1)
