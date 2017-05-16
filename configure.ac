@@ -31,6 +31,15 @@ AC_SUBST(EXEEXT)
 AC_SUBST(DYLIBEXT)
 
 ac_default_prefix=`"$GAUCHE_CONFIG" --prefix`
+dnl On MSYS2/MinGW-w64, /mingw64/etc/config.site sets prefix=/mingw64
+dnl so we overwrite prefix in this case.
+case $target in
+  *-mingw*)
+    case $prefix in
+      /mingw*)
+        prefix=`"$GAUCHE_CONFIG" --prefix`;;
+    esac;;
+esac
 
 GAUCHE_PKGINCDIR=`"$GAUCHE_CONFIG" --pkgincdir`
 GAUCHE_PKGLIBDIR=`"$GAUCHE_CONFIG" --pkglibdir`
