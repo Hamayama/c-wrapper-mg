@@ -31,8 +31,8 @@ AC_SUBST(EXEEXT)
 AC_SUBST(DYLIBEXT)
 
 ac_default_prefix=`"$GAUCHE_CONFIG" --prefix`
-dnl On MSYS2/MinGW-w64, /mingw64/etc/config.site sets prefix=/mingw64
-dnl so we overwrite prefix in this case.
+dnl On MSYS2/MinGW-w64, we must overwrite prefix because
+dnl /mingw64/etc/config.site sets prefix=/mingw64.
 case $target in
   *-mingw*)
     case $prefix in
