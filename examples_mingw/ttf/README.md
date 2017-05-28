@@ -40,8 +40,8 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
-  - MSYS2/MinGW-w64 (32bit) (gcc version 6.2.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (64bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (32bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc v4.8.1)
 - 言語
   - Gauche v0.9.5
@@ -56,4 +56,4 @@
 - 2016-10-14 v1.05 README修正等(Gauche v0.9.5 対応)
 
 
-(2016-10-14)
+(2017-5-28)
