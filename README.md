@@ -171,6 +171,12 @@
     - テストの修正
       - testsuite/stdio-test_sub.scm  
         c-include のオプションを追加した。
+      - testsuite/stdio_patch.h  
+        MSYS2/MinGW-w64 (64bit/32bit) の gcc (v7.2.0) の stdio.h の更新で、  
+        stdin,stdout,stderr の定義が変わってエラーになっていたため対策した。
+      - testsuite/cwrappertest.scm, testsuite/inline-test.scm  
+        MSYS2/MinGW-w64 (32bit) の gcc (v7.2.0) の stddef.h の更新で、  
+        `__float128` 関連のエラーが出ていたため対策した。
 
 
 ## インストール方法
@@ -409,10 +415,11 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
-  - MSYS2/MinGW-w64 (32bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
-  - MinGW (32bit) (gcc v4.8.1)
+  - MSYS2/MinGW-w64 (64bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (32bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
+  - Gauche v0.9.6_pre5
   - Gauche v0.9.5
   - Gauche v0.9.4
 - ライセンス
@@ -462,6 +469,7 @@
 - 2017-6-3   v0.6.1-mg0027 configure.ac 修正
 - 2018-2-3   v0.6.1-mg0028 バージョン表示ミス修正(v0.6.0→v0.6.1)  
   (mg0015からmg0027まで間違えていた)
+- 2018-2-3   v0.6.1-mg0029 テストの修正
 
 
 (2018-2-3)
