@@ -85,6 +85,7 @@
 - 2016-10-14 v1.27 audplaymod.scmをv1.11に更新(コメント修正のみ)
 - 2018-2-4   v1.28 SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策  
   audplaymod.scmをv1.12に更新(wav->aud追加)
+- 2018-2-4   v1.29 cond-expand追加
 
 
 (2018-2-4)

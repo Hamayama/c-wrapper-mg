@@ -14,7 +14,10 @@
 ;; 初期化
 (set! mml-sample-rate 22050)
 ;; (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策)
-(sys-setenv "SDL_AUDIODRIVER" "directsound" #t)
+(cond-expand
+ (gauche.os.windows
+  (sys-setenv "SDL_AUDIODRIVER" "directsound" #t))
+ (else))
 (sdl-init SDL_INIT_AUDIO)
 (aud-init mml-sample-rate)
 

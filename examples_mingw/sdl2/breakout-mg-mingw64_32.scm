@@ -105,7 +105,10 @@
 (define (init)
   ;; ***** SDL2対応 *****
   ;; (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策)
-  (sys-setenv "SDL_AUDIODRIVER" "directsound" #t)
+  (cond-expand
+   (gauche.os.windows
+    (sys-setenv "SDL_AUDIODRIVER" "directsound" #t))
+   (else))
 
   (SDL_Init (logior SDL_INIT_VIDEO SDL_INIT_AUDIO))
 

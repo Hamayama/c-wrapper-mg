@@ -479,6 +479,7 @@
 - 2018-2-3   v0.6.1-mg0029 テストの修正
 - 2018-2-4   v0.6.1-mg0030 examples_mingwを更新  
   (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策等)
+- 2018-2-4   v0.6.1-mg0031 examples_mingwを更新(cond-expand追加)
 
 
 (2018-2-4)
