@@ -2,7 +2,7 @@
 ;;
 ;; breakout-mg-mingw64_32.scm
 ;;
-;;   Modified for SDL2 + MSYS2/MinGW-w64(32bit), by Hamayama (2016).
+;;   Modified for SDL2 + MSYS2/MinGW-w64(32bit), by Hamayama (2016-2018).
 ;;   Licensed under the same license that the original breakout is.
 ;;
 ;; --
@@ -55,7 +55,7 @@
 ;                      'NULL))
 (display #\cr)(flush) ; コンソールを割り当てる
 (c-load '("SDL.h" "SDL_mixer.h" "stdio.h" "stdlib.h")
-        :cppflags "-Ic:/msys64/mingw32/include/SDL2 -D_SDL_cpuinfo_h"
+        :cppflags "-Ic:/msys64/mingw32/include/SDL2 -D_SDL_cpuinfo_h -DSDL_cpuinfo_h_"
         :libs     "-Lc:/msys64/mingw32/bin -lSDL2 -lSDL2_mixer"
         :import (list (lambda (header sym)
                         ;(print header " " sym)
@@ -103,6 +103,10 @@
 (define *shoot-sound* #f)
 
 (define (init)
+  ;; ***** SDL2対応 *****
+  ;; (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策)
+  (sys-setenv "SDL_AUDIODRIVER" "directsound" #t)
+
   (SDL_Init (logior SDL_INIT_VIDEO SDL_INIT_AUDIO))
 
   ;; ***** SDL2対応 *****

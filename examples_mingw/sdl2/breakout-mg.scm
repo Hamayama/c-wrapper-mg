@@ -2,7 +2,7 @@
 ;;
 ;; breakout-mg.scm
 ;;
-;;   Modified for SDL2 + MinGW(32bit), by Hamayama (2014-2016).
+;;   Modified for SDL2 + MinGW(32bit), by Hamayama (2014-2018).
 ;;   Licensed under the same license that the original breakout is.
 ;;
 ;; --
@@ -103,6 +103,10 @@
 (define *shoot-sound* #f)
 
 (define (init)
+  ;; ***** SDL2対応 *****
+  ;; (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策)
+  (sys-setenv "SDL_AUDIODRIVER" "directsound" #t)
+
   (SDL_Init (logior SDL_INIT_VIDEO SDL_INIT_AUDIO))
 
   ;; ***** SDL2対応 *****

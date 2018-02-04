@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymodのテスト1
-;; 2016-10-14
+;; 2018-2-4
 ;;
 (add-load-path "." :relative)
 (use audplaymod)
@@ -13,6 +13,8 @@
 
 ;; 初期化
 (set! mml-sample-rate 22050)
+;; (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策)
+(sys-setenv "SDL_AUDIODRIVER" "directsound" #t)
 (sdl-init SDL_INIT_AUDIO)
 (aud-init mml-sample-rate)
 
@@ -43,6 +45,7 @@
 (print "finished.")
 
 ;; 終了
+(sdl-sleep 1500) ; 少し待たないとノイズが出る
 (aud-end)
 (sdl-end)
 

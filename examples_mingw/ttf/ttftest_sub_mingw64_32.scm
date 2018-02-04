@@ -1,5 +1,5 @@
 (c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_ttf.h")
-        :cppflags "-Ic:/msys64/mingw32/include/SDL2 -D_SDL_cpuinfo_h"
+        :cppflags "-Ic:/msys64/mingw32/include/SDL2 -D_SDL_cpuinfo_h -DSDL_cpuinfo_h_"
         :libs     "-Lc:/msys64/mingw32/bin -lSDL2 -lSDL2_ttf"
         :import (list (lambda (header sym)
                         ;(print header " " sym)

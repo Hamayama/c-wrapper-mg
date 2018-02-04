@@ -1,5 +1,5 @@
 (c-load '("stdio.h" "stdlib.h" "SDL.h" "SDL_mixer.h")
-        :cppflags "-Ic:/msys64/mingw64/include/SDL2 -D_SDL_cpuinfo_h"
+        :cppflags "-Ic:/msys64/mingw64/include/SDL2 -D_SDL_cpuinfo_h -DSDL_cpuinfo_h_"
         :libs     "-Lc:/msys64/mingw64/bin -lSDL2 -lSDL2_mixer"
         :import (list (lambda (header sym)
                         ;(print header " " sym)

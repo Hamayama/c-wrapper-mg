@@ -38,10 +38,11 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
-  - MSYS2/MinGW-w64 (32bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
-  - MinGW (32bit) (gcc v4.8.1)
+  - MSYS2/MinGW-w64 (64bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (32bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
+  - Gauche v0.9.6_pre5
   - Gauche v0.9.5
   - Gauche v0.9.4
 - ライセンス
@@ -58,6 +59,7 @@
 - 2016-1-6   v1.07 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
 - 2016-1-10  v1.08 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
 - 2016-10-14 v1.09 README修正等(Gauche v0.9.5 対応)
+- 2018-2-4   v1.10 SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策
 
 
-(2017-5-28)
+(2018-2-4)

@@ -29,7 +29,7 @@
 
 
 ## ファイルについて
-- test1001.scm の33行目の「 ($ set! a1 $ pcm->aud $ mml->pcm $ string-append 」の下が、  
+- test1001.scm 内の「 ($ set! a1 $ pcm->aud $ mml->pcm $ string-append 」の行の下が、  
   MML の文字列になっています。  
   ここを書き換えることで、いろいろな音楽を演奏できます。
 
@@ -46,10 +46,11 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
-  - MSYS2/MinGW-w64 (32bit) (gcc version 6.3.0 (Rev2, Built by MSYS2 project))
-  - MinGW (32bit) (gcc v4.8.1)
+  - MSYS2/MinGW-w64 (64bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (32bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
+  - Gauche v0.9.6_pre5
   - Gauche v0.9.5
   - Gauche v0.9.4
 
@@ -82,6 +83,8 @@
 - 2016-10-14 v1.25 README修正等(Gauche v0.9.5 対応)
 - 2016-10-14 v1.26 mmlproc.scmをv1.17に更新
 - 2016-10-14 v1.27 audplaymod.scmをv1.11に更新(コメント修正のみ)
+- 2018-2-4   v1.28 SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策  
+  audplaymod.scmをv1.12に更新(wav->aud追加)
 
 
-(2017-5-28)
+(2018-2-4)

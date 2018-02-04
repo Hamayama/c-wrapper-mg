@@ -1,7 +1,7 @@
 ;; -*- coding: utf-8 -*-
 ;;
 ;; audplaymod.scm
-;; 2016-10-14 v1.11
+;; 2018-2-4 v1.12
 ;;
 ;; ＜内容＞
 ;;   Gauche で 音楽データを演奏するためのモジュールです。
@@ -43,9 +43,9 @@
   (use c-wrapper.config)
   (use gauche.uvector)
   (export
-    sdl-init  sdl-end  sdl-sleep
-    aud-init  aud-end  loadwav    pcm->aud
-    audplay   audstop  audstat    ;audcallback
+    sdl-init sdl-end sdl-sleep
+    aud-init aud-end loadwav pcm->aud wav->aud
+    audplay  audstop audstat ;audcallback
     SDL_INIT_TIMER    SDL_INIT_AUDIO       SDL_INIT_VIDEO
     SDL_INIT_JOYSTICK SDL_INIT_HAPTIC      SDL_INIT_GAMECONTROLLER
     SDL_INIT_EVENTS   SDL_INIT_NOPARACHUTE SDL_INIT_EVERYTHING))
@@ -98,6 +98,11 @@
 (define (pcm->aud pcmdata)
   ;; PCMデータから音声チャンクを生成
   (Mix_QuickLoad_RAW (cast (ptr <c-uchar>) pcmdata) (* 2 (s16vector-length pcmdata))))
+
+;; WAVデータ(u8vector)を読み込んで音声チャンクに変換
+(define (wav->aud wavdata)
+  ;; WAVデータから音声チャンクを生成
+  (Mix_QuickLoad_WAV (cast (ptr <c-uchar>) wavdata)))
 
 ;; 音声チャンクの再生
 ;; (戻り値は再生チャンネルの番号)
