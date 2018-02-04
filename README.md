@@ -59,7 +59,7 @@
         (その後、このスペースの追加はやめてみました (実験中) (2016-1-8))
    ```
    上記修正後、libffi-3.2.1 の ./configure → make を実行し、  
-   生成された i686-pc-mingw32 フォルダ内の .lib フォルダと include フォルダを、  
+   生成された i686-pc-mingw32 フォルダ内の .libs フォルダと include フォルダを、  
    c-wrapper の src/libffi フォルダの下にコピーした。
 
 4. dlopen の対応  
@@ -165,22 +165,24 @@
     - サンプルの修正
       - examples_mingw  
         c-load のディレクトリ指定をフルパスに修正した。  
-        SDL.h 内の SDL_cpuinfo.h の読み込みでエラーになるので、  
-        c-load の :cppflags に -D_SDL_cpuinfo_h を追加して読み込まないようにした。  
-        (c-wrapper が `__int128` 型や GCC の拡張書式に対応していないため、このファイルは読み込めない)  
-        SDL2 v2.0.7 で、上記マクロ名が `_SDL_cpuinfo_h` から `SDL_cpuinfo_h_` に変わったので対応。  
+        SDL.h 内の SDL_cpuinfo.h の読み込みでエラーが出ていたため対策した。  
+        (c-wrapper が `__int128` 型や GCC の拡張書式の一部に対応していないため、  
+        このファイルを読み込めないもよう。  
+        このため、c-load の :cppflags に -D_SDL_cpuinfo_h オプションを追加して、  
+        このファイルの処理をスキップするようにした)  
+        SDL2 v2.0.7 で、マクロ名が `_SDL_cpuinfo_h` から `SDL_cpuinfo_h_` に変わったので対応。  
         SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策を追加。  
-        (SDL2 v2.0.6 から音声再生に WASAPI を使うようになったが、うまく再生できない。  
-        環境変数 SDL_AUDIODRIVER に directsound をセットすることで、元の動作に戻した)
+        (SDL2 v2.0.6 から音声再生に WASAPI を使うようになったが、うまく再生できなかった。  
+        このため、環境変数 SDL_AUDIODRIVER に directsound をセットすることで 元の動作に戻した)
     - テストの修正
       - testsuite/stdio-test_sub.scm  
         c-include のオプションを追加した。
       - testsuite/stdio-test_sub.scm, testsuite/stdio_patch.h  
-        MSYS2/MinGW-w64 (64bit/32bit) の gcc (v7.2.0) の stdio.h の更新で、  
-        stdin,stdout,stderr の定義が変わってエラーになっていたため対策した。  
+        MSYS2/MinGW-w64 (64bit/32bit) の gcc (v7.2.0) の stdio.h の更新により、  
+        stdin,stdout,stderr の定義が変わってエラーが出ていたため対策した。  
         (`__acrt_iob_func` を使うように変更されていたが `__iob_func` を使うように戻した)
       - testsuite/cwrappertest.scm, testsuite/inline-test.scm  
-        MSYS2/MinGW-w64 (32bit) の gcc (v7.2.0) の stddef.h の更新で、  
+        MSYS2/MinGW-w64 (32bit) の gcc (v7.2.0) の stddef.h の更新により、  
         `__float128` 関連のエラーが出ていたため対策した。  
         (c-wrapper が `__float128` 型に対応していないため、  
         -D_GCC_MAX_ALIGN_T オプションを追加して、該当箇所をスキップするようにした)
@@ -248,7 +250,7 @@
      c-wrapper
          |-- src
               |-- libffi
-                     |-- .lib
+                     |-- .libs
                      |-- include
    ```
 
@@ -482,4 +484,4 @@
 - 2018-2-4   v0.6.1-mg0031 examples_mingwを更新(cond-expand追加)
 
 
-(2018-2-4)
+(2018-2-5)
