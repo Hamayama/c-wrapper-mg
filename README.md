@@ -167,20 +167,23 @@
         c-load のディレクトリ指定をフルパスに修正した。  
         SDL.h 内の SDL_cpuinfo.h の読み込みでエラーになるので、  
         c-load の :cppflags に -D_SDL_cpuinfo_h を追加して読み込まないようにした。  
-        (新しい型の `__int128` や GCC の拡張書式に対応しないと、このファイルは読み込めないもよう)  
-        SDL2 v2.0.7 で、上記シンボル名が `_SDL_cpuinfo_h` から `SDL_cpuinfo_h_` に変わったので対応。  
+        (c-wrapper が `__int128` 型や GCC の拡張書式に対応していないため、このファイルは読み込めない)  
+        SDL2 v2.0.7 で、上記マクロ名が `_SDL_cpuinfo_h` から `SDL_cpuinfo_h_` に変わったので対応。  
         SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策を追加。  
         (SDL2 v2.0.6 から音声再生に WASAPI を使うようになったが、うまく再生できない。  
-        環境変数 SDL_AUDIODRIVER に directsound をセットすることで元の動作に戻した)
+        環境変数 SDL_AUDIODRIVER に directsound をセットすることで、元の動作に戻した)
     - テストの修正
       - testsuite/stdio-test_sub.scm  
         c-include のオプションを追加した。
-      - testsuite/stdio_patch.h  
+      - testsuite/stdio-test_sub.scm, testsuite/stdio_patch.h  
         MSYS2/MinGW-w64 (64bit/32bit) の gcc (v7.2.0) の stdio.h の更新で、  
-        stdin,stdout,stderr の定義が変わってエラーになっていたため対策した。
+        stdin,stdout,stderr の定義が変わってエラーになっていたため対策した。  
+        (`__acrt_iob_func` を使うように変更されていたが `__iob_func` を使うように戻した)
       - testsuite/cwrappertest.scm, testsuite/inline-test.scm  
         MSYS2/MinGW-w64 (32bit) の gcc (v7.2.0) の stddef.h の更新で、  
-        `__float128` 関連のエラーが出ていたため対策した。
+        `__float128` 関連のエラーが出ていたため対策した。  
+        (c-wrapper が `__float128` 型に対応していないため、  
+        -D_GCC_MAX_ALIGN_T オプションを追加して、該当箇所をスキップするようにした)
 
 
 ## インストール方法
