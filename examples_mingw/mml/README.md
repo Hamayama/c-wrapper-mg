@@ -46,11 +46,10 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
-  - MSYS2/MinGW-w64 (32bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 7.3.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
-  - Gauche v0.9.6_pre5
+  - Gauche v0.9.6
   - Gauche v0.9.5
   - Gauche v0.9.4
 
@@ -80,12 +79,13 @@
 - 2016-1-10  v1.22 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
 - 2016-3-31  v1.23 mmlproc.scmをv1.15に更新(get-wav-size手続きを追加)
 - 2016-4-17  v1.24 mmlproc.scmをv1.16に更新
-- 2016-10-14 v1.25 README修正等(Gauche v0.9.5 対応)
+- 2016-10-14 v1.25 README修正等(Gauche v0.9.5 で動作確認)
 - 2016-10-14 v1.26 mmlproc.scmをv1.17に更新
 - 2016-10-14 v1.27 audplaymod.scmをv1.11に更新(コメント修正のみ)
 - 2018-2-4   v1.28 SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策  
   audplaymod.scmをv1.12に更新(wav->aud追加)
 - 2018-2-4   v1.29 cond-expand追加
+- 2018-7-9   v1.29 README修正のみ(Gauche v0.9.6 で動作確認)
 
 
-(2018-2-4)
+(2018-7-9)

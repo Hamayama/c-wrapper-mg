@@ -40,11 +40,10 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
-  - MSYS2/MinGW-w64 (32bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 7.3.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
-  - Gauche v0.9.6_pre5
+  - Gauche v0.9.6
   - Gauche v0.9.5
   - Gauche v0.9.4
 
@@ -54,8 +53,9 @@
 - 2015-8-25  v1.02 cond-expandにelse節を追加
 - 2016-1-6   v1.03 MSYS2/MinGW-w64 (64bit) 環境に暫定対応(実験中)
 - 2016-1-10  v1.04 MSYS2/MinGW-w64 (32bit) 環境に暫定対応(実験中)
-- 2016-10-14 v1.05 README修正等(Gauche v0.9.5 対応)
+- 2016-10-14 v1.05 README修正等(Gauche v0.9.5 で動作確認)
 - 2018-2-4   v1.06 SDL2 v2.0.7 対応
+- 2018-7-9   v1.06 README修正のみ(Gauche v0.9.6 で動作確認)
 
 
-(2018-2-5)
+(2018-7-9)

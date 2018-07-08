@@ -204,8 +204,8 @@
    (すでにインストール済みであれば本手順は不要です)
 
 3. c-wrapper のソースの展開  
-   本サイト( https://github.com/Hamayama/c-wrapper-mg )のソースを、  
-   (Download Zip ボタン等で)ダウンロードして、作業用のフォルダに展開してください。  
+   本サイト ( https://github.com/Hamayama/c-wrapper-mg ) のソースを、  
+   (Download Zip ボタン等で) ダウンロードして、作業用のフォルダに展開してください。  
    例えば、作業用のフォルダを c:\work とすると、  
    c:\work\c-wrapper の下にファイル一式が配置されるように展開してください。  
    (注意) 作業用フォルダのパスには、空白を入れないようにしてください。
@@ -225,7 +225,7 @@
 
 6. libffi-3.2.1 のコンパイル  
    ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+   プログラムメニューから MSYS2 の MinGW 64bit Shell を起動して、以下のコマンドを実行してください。  
    ( c:\work にソースを展開した場合)
    ```
      cd /c/work/libffi-3.2.1
@@ -233,7 +233,7 @@
      make
    ```
    ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+   プログラムメニューから MSYS2 の MinGW 32bit Shell を起動して、以下のコマンドを実行してください。  
    ( c:\work にソースを展開した場合)
    ```
      cd /c/work/libffi-3.2.1
@@ -256,9 +256,9 @@
 
 8. c-wrapper のコンパイル  
    ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+   プログラムメニューから MSYS2 の MinGW 64bit Shell を起動して、以下のコマンドを実行してください。  
    ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+   プログラムメニューから MSYS2 の MinGW 32bit Shell を起動して、以下のコマンドを実行してください。  
    ( c:\work にソースを展開した場合)
    ```
      cd /c/work/c-wrapper
@@ -272,9 +272,9 @@
 
 9. c-wrapper のインストール  
    ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+   プログラムメニューから MSYS2 の MinGW 64bit Shell を起動して、以下のコマンドを実行してください。  
    ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
-   プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+   プログラムメニューから MSYS2 の MinGW 32bit Shell を起動して、以下のコマンドを実行してください。  
    ( c:\work にソースを展開した場合)
    ```
      cd /c/work/c-wrapper
@@ -291,9 +291,9 @@
 
 10. c-wrapper のテスト  
     ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
-    プログラムメニューから MSYS2 の MinGW-w64 Win64 Shell を起動して、以下のコマンドを実行してください。  
+    プログラムメニューから MSYS2 の MinGW 64bit Shell を起動して、以下のコマンドを実行してください。  
     ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
-    プログラムメニューから MSYS2 の MinGW-w64 Win32 Shell を起動して、以下のコマンドを実行してください。  
+    プログラムメニューから MSYS2 の MinGW 32bit Shell を起動して、以下のコマンドを実行してください。  
     ( c:\work にソースを展開した場合)
     ```
       cd /c/work/c-wrapper
@@ -424,11 +424,10 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
-  - MSYS2/MinGW-w64 (32bit) (gcc version 7.2.0 (Rev1, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 7.3.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
-  - Gauche v0.9.6_pre5
+  - Gauche v0.9.6
   - Gauche v0.9.5
   - Gauche v0.9.4
 - ライセンス
@@ -472,7 +471,7 @@
 - 2016-1-8   v0.6.1-mg0021 libffi-3.2.1 の ffi.c を修正
 - 2016-1-10  v0.6.1-mg0022 MSYS2/MinGW-w64(32bit)環境に暫定対応
 - 2016-1-16  v0.6.1-mg0023 コメント修正のみ
-- 2016-10-14 v0.6.1-mg0024 README修正のみ(Gauche v0.9.5 対応)
+- 2016-10-14 v0.6.1-mg0024 README修正のみ(Gauche v0.9.5 で動作確認)
 - 2017-5-17  v0.6.1-mg0025 configure.ac 修正
 - 2017-5-26  v0.6.1-mg0026 コメント修正のみ
 - 2017-6-3   v0.6.1-mg0027 configure.ac 修正
@@ -482,6 +481,7 @@
 - 2018-2-4   v0.6.1-mg0030 examples_mingwを更新  
   (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策等)
 - 2018-2-4   v0.6.1-mg0031 examples_mingwを更新(cond-expand追加)
+- 2018-7-9   v0.6.1-mg0031 README修正のみ(Gauche v0.9.6 で動作確認)
 
 
-(2018-2-5)
+(2018-7-9)
