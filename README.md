@@ -42,22 +42,22 @@
    元の libffi は削除して、  
    https://sourceware.org/libffi/  
    から libffi-3.2.1 を別途入手。  
-   不具合があるので src/x86 フォルダ内の ffi.c を以下のように修正した。
-   ```
-   (1)ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更
-        X86_WIN32 のときに is_result_on_stack 関数で戻り値がスタックを使うかどうか
-        判定するようにした。
-        is_result_on_stack 関数は、元の libffi の src/prep_cif.c からコピーした。
-        この判定がないと Segmentation Fault エラーで落ちるので必須と思われる。
-        (その後、判定条件を一部変更しました。問題点の 5. 参照)
-
-   (2)ffi.c の ffi_prep_cif_machdep 関数で、スタック確保のサイズにスペースを追加
-        X86_WIN32 のときに 以下のようにスペースを追加するようにした。
-          cif->bytes = ((cif->bytes + 15) & ~0xF) + 8;
-        これは元の libffi の src/prep_cif.c の ffi_prep_cif 関数で追加していたため
-        同じようにした。ただし、これが必須なのかどうかはよく分からない。
-        (その後、このスペースの追加はやめてみました (実験中) (2016-1-8))
-   ```
+   不具合があるので src/x86 フォルダ内の ffi.c を以下のように修正した。  
+   
+   - ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更  
+     X86_WIN32 のときに is_result_on_stack 関数で戻り値がスタックを使うかどうか  
+     判定するようにした。  
+     is_result_on_stack 関数は、元の libffi の src/prep_cif.c からコピーした。  
+     この判定がないと Segmentation Fault エラーで落ちるので必須と思われる。  
+     (その後、判定条件を一部変更しました。問題点の 5. 参照)  
+   
+   - ffi.c の ffi_prep_cif_machdep 関数で、スタック確保のサイズにスペースを追加  
+     X86_WIN32 のときに 以下のようにスペースを追加するようにした。  
+     `cif->bytes = ((cif->bytes + 15) & ~0xF) + 8;`  
+     これは元の libffi の src/prep_cif.c の ffi_prep_cif 関数で追加していたため  
+     同じようにした。ただし、これが必須なのかどうかはよく分からない。  
+     (その後、このスペースの追加はやめてみました (実験中) (2016-1-8))  
+   
    上記修正後、libffi-3.2.1 の ./configure → make を実行し、  
    生成された i686-pc-mingw32 フォルダ内の .libs フォルダと include フォルダを、  
    c-wrapper の src/libffi フォルダの下にコピーした。
@@ -108,33 +108,27 @@
    ```
 
 8. config.scm.in に MinGW 用の場合分けを追加
-   ```
-     lib/c-wrapper/config.scm.in に (when @MINGW_FLAG@ という場合分けを追加した。
+   - lib/c-wrapper/config.scm.in に `(when @MINGW_FLAG@` という場合分けを追加した。  
      configure.ac に MINGW_FLAG の定義を追加した。
-   ```
 
 9. cwcompileの先頭行の変更(空白のパスが入るので対策)
-   ```
-     src/cwcompile.in の先頭行の記述を変更。
+   - src/cwcompile.in の先頭行の記述を変更。  
      configure.ac に CWCOMPILE_SHEBANG の定義を追加した。
-   ```
 
 10. Gauche v0.9.5_pre1 で uvector のライブラリファイル名が変わったので対応
-    ```
-      configure.ac に GAUCHE_UVECTOR_LIBS の定義を追加して、
-      ファイルの存在有無によってライブラリファイル名を切り換えるようにした。
+    - configure.ac に GAUCHE_UVECTOR_LIBS の定義を追加して、  
+      ファイルの存在有無によってライブラリファイル名を切り換えるようにした。  
       (Cygwin は動作未確認)
-    ```
 
 11. ドキュメントファイル修正等
-    - texi2html が MinGW になかったので、makeinfo --html に変更
+    - texi2html が MinGW になかったので、`makeinfo --html` に変更
       - doc/Makefile.in
     - ドキュメントファイルのインデックス追加
       - doc/c-wrapper-ref.texi
 
 12. Makefile修正  
-    コンパイル時に CFLAGS の内容を反映するようにした。
-    - src/Makefile.in
+    - コンパイル時に CFLAGS の内容を反映するようにした。
+      - src/Makefile.in
 
 13. MSYS2/MinGW-w64 (64bit/32bit) 環境でのビルドに対応
     - automake v1.15 の使用
@@ -338,7 +332,7 @@
    → 基本的には gosh.exe で実行する必要がある。  
       (例えばバッチファイルを作成して gosh xxx.scm を実行する等)  
    → 回避策として c-include や c-load を実行する前に  
-      (display #\cr)(flush) や (print "XXX") を実行してコンソールを割り当てるようにすれば、  
+      `(display #\cr)(flush)` や `(print "XXX")` を実行してコンソールを割り当てるようにすれば、  
       gosh-noconsole.exe でも動かすことができた。  
       ただし、コマンドプロンプトの画面が出る。  
       どうしてもコマンドプロンプトの画面を出したくない場合には、以下のページを参照のこと。  
@@ -400,20 +394,20 @@
    ```
    以後は gdb の各コマンドを使ってデバッグを行います。
    ```
-     r                      実行
-     info stack (またはbt)  スタックトレースの表示
-                            (エラー発生時に実行すると、スタックフレームにある
-                             C言語の関数の呼び出し履歴が表示されます。
-                             前述の Makefile の設定を行っていれば、
-                             行番号も表示されます。
-                             かなり有力なデバッグの手がかりになります)
-     b 関数名               ブレークポイントの設定
-     b ファイル名:行番号    ブレークポイントの設定
-     p 変数名               変数の内容の表示
-     s                      ステップ実行(関数の中まで追いかけるとき)
-     n                      ステップ実行(関数の中までは追いかけないとき)
-     c                      実行再開
-     q                      終了
+     r                    実行
+     bt                   バックトレースの表示
+                           (エラー発生時に実行すると、スタックフレームにある
+                            C言語の関数の呼び出し履歴が表示されます。
+                            前述の Makefile の設定を行っていれば、
+                            行番号も表示されます。
+                            かなり有力なデバッグの手がかりになります)
+     b 関数名             ブレークポイントの設定
+     b ファイル名:行番号  ブレークポイントの設定
+     p 変数名             変数の内容の表示
+     s                    ステップ実行(関数の中まで追いかけるとき)
+     n                    ステップ実行(関数の中までは追いかけないとき)
+     c                    実行再開
+     q                    終了
    ```
    他にもいろいろなコマンドがあります。gdb のコマンドの詳細については、  
    gdb の使い方を説明したネット上のページ等を参照ください。
