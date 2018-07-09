@@ -86,6 +86,7 @@
   audplaymod.scmをv1.12に更新(wav->aud追加)
 - 2018-2-4   v1.29 cond-expand追加
 - 2018-7-9   v1.29 README修正のみ(Gauche v0.9.6 で動作確認)
+- 2018-7-9   v1.30 mmlproc.scmをv1.18に更新
 
 
 (2018-7-9)
