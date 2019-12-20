@@ -46,9 +46,12 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 7.3.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 9.2.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
+  - Gauche v0.9.9
+  - Gauche v0.9.8
+  - Gauche v0.9.7
   - Gauche v0.9.6
   - Gauche v0.9.5
   - Gauche v0.9.4
@@ -87,6 +90,7 @@
 - 2018-2-4   v1.29 cond-expand追加
 - 2018-7-9   v1.29 README修正のみ(Gauche v0.9.6 で動作確認)
 - 2018-7-9   v1.30 mmlproc.scmをv1.18に更新
+- 2019-12-20 v1.30 README修正のみ(Gauche v0.9.9 で動作確認)
 
 
-(2018-7-9)
+(2019-12-20)

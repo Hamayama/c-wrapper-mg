@@ -883,8 +883,12 @@ ScmObj Scm_MakeFFIClosure(ffi_closure *data)
 ScmObj Scm_FFIPrepClosure(ffi_cif *cif, ScmProcedure *proc)
 {
     ffi_closure *closure = closure_alloc();
-    ffi_status status = ffi_prep_closure(closure, cif, closure_func,
-                                         (void*) proc);
+
+    // ffi_prep_closure is deprecated in libffi-3.3
+    //ffi_status status = ffi_prep_closure(closure, cif, closure_func,
+    //                                     (void*) proc);
+    ffi_status status = ffi_prep_closure_loc(closure, cif, closure_func,
+                                         (void*) proc, closure);
 
     SCM_RETURN(Scm_Values2(SCM_MAKE_INT(status), Scm_MakeFFIClosure(closure)));
 }

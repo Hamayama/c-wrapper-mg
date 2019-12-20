@@ -1694,7 +1694,13 @@ ScmObj Scm_ParseMacroCode(ScmObj in, ScmObj macro_list)
                && (SCM_STRING_LENGTH(next_line_str) > 2)
                && (Scm_StringRef(SCM_STRING(next_line_str), 0, 0) == 35)
                && (Scm_StringRef(SCM_STRING(next_line_str), 1, 0) == 32)
+#if defined(SCM_REGEXP_MULTI_LINE)
+               // for Gauche 0.9.9 or later
+               && SCM_REGMATCHP(Scm_RegExec(SCM_REGEXP(skip_regex), SCM_STRING(next_line_str), SCM_UNDEFINED, SCM_UNDEFINED))) {
+#else
+               // for Gauche 0.9.8 or earlier
                && SCM_REGMATCHP(Scm_RegExec(SCM_REGEXP(skip_regex), SCM_STRING(next_line_str)))) {
+#endif
             next_line_str = Scm_ReadLineUnsafe(SCM_PORT(in));
             if (!SCM_EOFP(next_line_str)) {
                 line_str = Scm_StringAppend2(SCM_STRING(line_str), SCM_STRING(next_line_str));

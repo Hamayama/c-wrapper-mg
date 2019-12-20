@@ -16,8 +16,8 @@
 
 - もともと付属していた libffi は削除して、  
   https://sourceware.org/libffi/  
-  にある libffi-3.2.1 を使うようにしました。  
-  (libffi-3.2.1 は同梱していないため別途入手が必要です。  
+  にある libffi-3.3 を使うようにしました。  
+  (libffi-3.3 は同梱していないため別途入手が必要です。  
   そして、元の libffi と同様に一部修正を行う必要があります)  
   (libffi のバージョンが上がって上記のページに存在しない場合は、  
    ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)
@@ -41,7 +41,7 @@
 3. libffi の変更  
    元の libffi は削除して、  
    https://sourceware.org/libffi/  
-   から libffi-3.2.1 を別途入手。  
+   から libffi を別途入手。  
    不具合があるので src/x86 フォルダ内の ffi.c を以下のように修正した。  
    
    - ffi.c の ffi_prep_cif_machdep 関数で、戻り値のスタック確保の条件を変更  
@@ -58,8 +58,8 @@
      同じようにした。ただし、これが必須なのかどうかはよく分からない。  
      (その後、このスペースの追加はやめてみました (実験中) (2016-1-8))  
    
-   上記修正後、libffi-3.2.1 の ./configure → make を実行し、  
-   生成された i686-pc-mingw32 フォルダ内の .libs フォルダと include フォルダを、  
+   上記修正後、libffi の ./configure → make を実行し、  
+   生成された i686-w64-mingw32 フォルダ内の .libs フォルダと include フォルダを、  
    c-wrapper の src/libffi フォルダの下にコピーした。
 
 4. dlopen の対応  
@@ -126,7 +126,7 @@
     - ドキュメントファイルのインデックス追加
       - doc/c-wrapper-ref.texi
 
-12. Makefile修正  
+12. Makefile修正
     - コンパイル時に CFLAGS の内容を反映するようにした。
       - src/Makefile.in
 
@@ -181,6 +181,14 @@
         (c-wrapper が `__float128` 型に対応していないため、  
         -D_GCC_MAX_ALIGN_T オプションを追加して、該当箇所をスキップするようにした)
 
+14. Gauche v0.9.9 対応
+    - src/c-parser.c で使っていた Scm_RegExec 関数の引数の数が、  
+      Gauche v0.9.9 で 2 個増えていたため対応。
+
+15. libffi-3.3 対応
+    - src/c-ffi.c で使っていた ffi_prep_closure 関数が非推奨になったため、  
+      ffi_prep_closure_loc 関数に変更。
+
 
 ## インストール方法
 - MSYS2/MinGW-w64 (64bit/32bit) 環境でのインストール手順を、以下に示します。
@@ -204,40 +212,34 @@
    c:\work\c-wrapper の下にファイル一式が配置されるように展開してください。  
    (注意) 作業用フォルダのパスには、空白を入れないようにしてください。
 
-4. libffi-3.2.1 のダウンロード  
+4. libffi-3.3 のダウンロード  
    https://sourceware.org/libffi/  
-   から libffi-3.2.1.tar.gz をダウンロードして展開します。  
+   から libffi-3.3.tar.gz をダウンロードして展開します。  
    (libffi のバージョンが上がって上記のページに存在しない場合は、  
     ftp://sourceware.org/pub/libffi/ から旧バージョンを取得可能です)  
    例えば作業用のフォルダを c:\work とすると、  
-   c:\work\libffi-3.2.1 の下にファイル一式が配置されるように展開してください。  
+   c:\work\libffi-3.3 の下にファイル一式が配置されるように展開してください。  
    (注意) 作業用フォルダのパスには、空白を入れないようにしてください。
 
-5. libffi-3.2.1 のファイルの修正  
+5. libffi-3.3 のファイルの修正  
    c-wrapper の libffi_patch フォルダにある ffi.c を、  
-   libffi-3.2.1 の src/x86 フォルダ内の ffi.c に上書きコピーしてください。
+   libffi-3.3 の src/x86 フォルダ内の ffi.c に上書きコピーしてください。
 
-6. libffi-3.2.1 のコンパイル  
+6. libffi-3.3 のコンパイル  
    ＜MSYS2/MinGW-w64 (64bit) 環境の場合＞  
    プログラムメニューから MSYS2 の MinGW 64bit Shell を起動して、以下のコマンドを実行してください。  
-   ( c:\work にソースを展開した場合)
-   ```
-     cd /c/work/libffi-3.2.1
-     ./configure
-     make
-   ```
    ＜MSYS2/MinGW-w64 (32bit) 環境の場合＞  
    プログラムメニューから MSYS2 の MinGW 32bit Shell を起動して、以下のコマンドを実行してください。  
    ( c:\work にソースを展開した場合)
    ```
-     cd /c/work/libffi-3.2.1
-     ./configure --build=i686-pc-mingw32
+     cd /c/work/libffi-3.3
+     ./configure
      make
    ```
 
 7. 生成したライブラリとヘッダを c-wrapper のフォルダにコピー  
-   コンパイルが完了すると libffi-3.2.1 の下に x86_64-pc-mingw64 というフォルダができます。  
-   (32bit環境の場合には、i686-pc-mingw32 というフォルダができます)  
+   コンパイルが完了すると libffi-3.3 の下に x86_64-w64-mingw64 というフォルダができます。  
+   (32bit環境の場合には、i686-w64-mingw32 というフォルダができます)  
    この中の .libs フォルダと include フォルダ を、  
    c-wrapper の src/libffi フォルダの下にコピーしてください。
    ```
@@ -277,6 +279,7 @@
    Gauche のライブラリフォルダに生成したファイルがコピーされます。  
    
    (注意) 環境によっては、make install を実行すると  
+   「gauche-install: no write permission of ...」もしくは  
    「*** ERROR: mkstemp failed」というエラーが発生します。  
    このエラーは、インストール先のフォルダに書き込み権限がないとき等に発生します。  
    その場合には、プログラムメニューからの開発環境の起動時に右クリックして、  
@@ -352,7 +355,8 @@
       ・構造体の中の合計が8バイト以下のとき → 戻り値はレジスタ1個で値渡し
       ・その他のとき → 戻り値はポインタ渡し
    ```
-   → libffi-3.2.1 の ffi.c に判定条件を追加した。(2015-7-8)(2016-1-6)(2016-1-7)
+   → libffi-3.2.1 の ffi.c に判定条件を追加した。(2015-7-8)(2016-1-6)(2016-1-7)  
+   → libffi-3.3 で、X86_WIN64 の修正は不要になった。(2019-12-20)
 
 6. 構造体のビットフィールドにサイズ 0 のものがあると、正常にアクセスできない  
    → ビットフィールドにサイズ 0 のものがあった場合は、アライメントするように  
@@ -375,8 +379,8 @@
            ↓
          CFLAGS         = -g -c -o
 
-     libffi-3.2.1
-       i686-pc-mingw32 フォルダ内の Makefile
+     libffi-3.3
+       i686-w64-mingw32 フォルダ内の Makefile
          CFLAGS = -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
            ↓
          CFLAGS = -g -O3 -fomit-frame-pointer -fstrict-aliasing -ffast-math -march=core2  -Wall -fexceptions
@@ -418,9 +422,12 @@
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 7.3.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 9.2.0 (Rev2, Built by MSYS2 project))
   - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
+  - Gauche v0.9.9
+  - Gauche v0.9.8
+  - Gauche v0.9.7
   - Gauche v0.9.6
   - Gauche v0.9.5
   - Gauche v0.9.4
@@ -476,6 +483,7 @@
   (SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策等)
 - 2018-2-4   v0.6.1-mg0031 examples_mingwを更新(cond-expand追加)
 - 2018-7-9   v0.6.1-mg0031 README修正のみ(Gauche v0.9.6 で動作確認)
+- 2019-12-20 v0.6.1-mg0032 Gauche v0.9.9 対応。libffi-3.2.1 を libffi-3.3 に更新
 
 
-(2018-8-15)
+(2019-12-20)
