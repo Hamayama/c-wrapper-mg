@@ -10,8 +10,9 @@
 (test-module 'c-wrapper)
 
 (c-load-library "./ffitest")
-;; On MSYS2/MinGW-w64 (32bit), "-D_GCC_MAX_ALIGN_T" option is required.
-(c-include "./ffitest.h" :option "-D_GCC_MAX_ALIGN_T")
+;; On MSYS2/MinGW-w64 (32bit), stddef_patch.h is required.
+;(c-include "./ffitest.h")
+(c-include '("./stddef_patch.h" "./ffitest.h"))
 
 (define-syntax test-cfunc
   (syntax-rules ()

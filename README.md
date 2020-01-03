@@ -180,7 +180,8 @@
         MSYS2/MinGW-w64 (32bit) の gcc (v7.2.0) の stddef.h の更新により、  
         `__float128` 関連のエラーが出ていたため対策した。  
         (c-wrapper が `__float128` 型に対応していないため、  
-        -D_GCC_MAX_ALIGN_T オプションを追加して、該当箇所をスキップするようにした)
+        -D_GCC_MAX_ALIGN_T オプションを追加して、該当箇所をスキップするようにした)  
+        (その後、ダミーの float128 構造体を定義する方式に変更しました)
 
 14. Gauche v0.9.9 対応
     - src/c-parser.c で使っていた Scm_RegExec 関数の引数の数が、  
@@ -487,6 +488,7 @@
 - 2018-2-4   v0.6.1-mg0031 examples_mingwを更新(cond-expand追加)
 - 2018-7-9   v0.6.1-mg0031 README修正のみ(Gauche v0.9.6 で動作確認)
 - 2019-12-20 v0.6.1-mg0032 Gauche v0.9.9 対応。libffi-3.2.1 を libffi-3.3 に更新
+- 2020-1-3   v0.6.1-mg0033 テストの変更(testsuite/cwrappertest.scm)
 
 
-(2019-12-23)
+(2020-1-3)
