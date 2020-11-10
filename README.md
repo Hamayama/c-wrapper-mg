@@ -113,7 +113,7 @@
    - lib/c-wrapper/config.scm.in に `(when @MINGW_FLAG@` という場合分けを追加した。  
      configure.ac に MINGW_FLAG の定義を追加した。
 
-9. cwcompileの先頭行の変更(空白のパスが入るので対策)
+9. cwcompile の先頭行の変更 (空白のパスが入るので対策)
    - src/cwcompile.in の先頭行の記述を変更。  
      configure.ac に CWCOMPILE_SHEBANG の定義を追加した。
 
@@ -128,7 +128,7 @@
     - ドキュメントファイルのインデックス追加
       - doc/c-wrapper-ref.texi
 
-12. Makefile修正
+12. Makefile 修正
     - コンパイル時に CFLAGS の内容を反映するようにした。
       - src/Makefile.in
 
@@ -175,23 +175,24 @@
       - testsuite/stdio-test_sub.scm  
         c-include のオプションを追加した。
       - testsuite/stdio-test_sub.scm, testsuite/stdio_patch.h  
-        MSYS2/MinGW-w64 (64bit/32bit) の gcc (v7.2.0) の stdio.h の更新により、  
+        MSYS2/MinGW-w64 (64bit/32bit) (gcc v7.2.0) の stdio.h の更新により、  
         stdin,stdout,stderr の定義が変わってエラーが出ていたため対策した。  
         (`__acrt_iob_func` を使うように変更されていたが `__iob_func` を使うように戻した)
       - testsuite/cwrappertest.scm, testsuite/inline-test.scm  
-        MSYS2/MinGW-w64 (32bit) の gcc (v7.2.0) の stddef.h の更新により、  
+        MSYS2/MinGW-w64 (32bit) (gcc v7.2.0) の stddef.h の更新により、  
         `__float128` 関連のエラーが出ていたため対策した。  
         (c-wrapper が `__float128` 型に対応していないため、  
         -D_GCC_MAX_ALIGN_T オプションを追加して、該当箇所をスキップするようにした)  
         (その後、cwrappertest.scm については、  
-        ダミーの float128 構造体を定義する方式に変更しました)
+        ダミーの float128 構造体を定義する方式に変更した)
       - testsuite/stdio-test.scm, testsuite/stdio-test-sub.scm, testsuite/inline-test.scm  
-        MSYS2/MinGW-w64 の gcc (v10.2.0) の stdio.h の更新により、  
+        MSYS2/MinGW-w64 (gcc v10.2.0) の stdio.h の更新により、  
         printf 関数等が使用できなくなっていたため対策した。  
-        -D__USE_MINGW_ANSI_STDIO=0 オプションを追加して、  
+        (関数の inline 化が原因?)  
+        とりあえず、-D__USE_MINGW_ANSI_STDIO=0 オプションを追加して、  
         MSVCRT の printf 関数等を使用するようにした。
       - testsuite/ffitest.h  
-        MSYS2/MinGW-w64 の gcc (v10.2.0) の stdio.h の更新により、  
+        MSYS2/MinGW-w64 (gcc v10.2.0) の stdio.h の更新により、  
         sscanf 関数が static 関数になっており、  
         ffitest.h の inline 関数内で使用できなくなっていたため対策した。  
         ffitest.h の inline 関数を static inline 関数に変更した。
@@ -337,14 +338,14 @@
    → Windows に sys-fork がないので仕方ない。  
    → Windows のときは sys-fork-and-exec を使うようにテストの方を変更した。
 
-2. ヘッダファイル(.h)だけを変更した場合に make で再コンパイルされない  
+2. ヘッダファイル (.h) だけを変更した場合に make で再コンパイルされない  
    → make clean してから make すればコンパイルできる。  
       (ヘッダファイルだけを変更することはあまりないと思うが、はまったので一応メモ)
 
-3. テストの ffitest.h, ffitest.c でマクロの部分が gdb でデバッグ(ステップ実行)しにくい  
+3. テストの ffitest.h, ffitest.c でマクロの部分が gdb でデバッグ (ステップ実行) しにくい  
    → いくつかマクロを展開したものを、べたに書いてデバッグした。
 
-4. c-wapper を利用した scm ファイルを、gosh-noconsole.exe で実行すると動作しない(途中で止まる)  
+4. c-wapper を利用した scm ファイルを、gosh-noconsole.exe で実行すると動作しない (途中で止まる)  
    (Gauche の Windows用インストーラ は、デフォルトで scm ファイルを  
     gosh-noconsole.exe に関連付けするので、scm ファイルをダブルクリックで実行すると  
     この現象が出る)  
