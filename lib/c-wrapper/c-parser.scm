@@ -1144,6 +1144,17 @@
                    report-parse-error))
 
 (define (parse-source include-dirs headers options)
+
+  ;; ***** for debug *****
+  ;(call-with-gcc-io include-dirs headers options
+  ;                  (lambda (in out)
+  ;                    (close-output-port out)
+  ;                    (call-with-output-file
+  ;                        (string-append "c:\\work\\c-wrapper-log\\cpp_output_"
+  ;                                       (number->string (sys-time))
+  ;                                       ".txt")
+  ;                      (lambda (out) (copy-port in out)))))
+
   (call-with-gcc-io include-dirs headers options
                     (lambda (in out)
                       (close-output-port out)

@@ -420,7 +420,9 @@ inline int unary_bitneg(int a)
     return ~a;
 }
 
-inline int unary_ref()
+// ***** add static *****
+//inline int unary_ref()
+static inline int unary_ref()
 {
     int a;
     sscanf("123", "%d", &a);

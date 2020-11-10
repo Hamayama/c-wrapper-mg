@@ -12,7 +12,8 @@
   http://www.koguro.net/prog/c-wrapper/index-j.html  
   ただし、ソースコードは、  
   https://bitbucket.org/nkoguro/c-wrapper  
-  で最新と思われる c-wrapper v0.6.1 (ChangeLog 2012-07-19) をダウンロードしてベースとしました。
+  で最新と思われる c-wrapper v0.6.1 (ChangeLog 2012-07-19) (コミット 608d0bf) を  
+  ダウンロードしてベースとしました。
 
 - もともと付属していた libffi は削除して、  
   https://sourceware.org/libffi/  
@@ -181,7 +182,13 @@
         `__float128` 関連のエラーが出ていたため対策した。  
         (c-wrapper が `__float128` 型に対応していないため、  
         -D_GCC_MAX_ALIGN_T オプションを追加して、該当箇所をスキップするようにした)  
-        (その後、ダミーの float128 構造体を定義する方式に変更しました)
+        (その後、cwrappertest.scm については、  
+        ダミーの float128 構造体を定義する方式に変更しました)
+      - testsuite/stdio-test.scm, testsuite/stdio-test-sub.scm, testsuite/inline-test.scm  
+        MSYS2/MinGW-w64 の gcc (v10.2.0) の stdio.h の更新により、  
+        printf() 等が使用できなくなっていたため対策した。  
+        -D__USE_MINGW_ANSI_STDIO=0 オプションを追加して、  
+        MSVCRT の printf() 等を使用するようにした。
 
 14. Gauche v0.9.9 対応
     - src/c-parser.c で使っていた Scm_RegExec 関数の引数の数が、  
@@ -423,12 +430,15 @@
 
 ## 環境等
 - OS
+  - Windows 10 (version 1909) (64bit)
   - Windows 8.1 (64bit)
   - Windows XP Home SP3
 - 環境
-  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 9.2.0 (Rev2, Built by MSYS2 project))
+  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 10.2.0 (Rev5, Built by MSYS2 project)) (Windows 10)
+  - MSYS2/MinGW-w64 (64bit/32bit) (gcc version 9.2.0 (Rev2, Built by MSYS2 project)) (Windows 8.1)
   - MinGW (32bit) (gcc version 6.3.0 (MinGW.org GCC-6.3.0-1))
 - 言語
+  - Gauche v0.9.10_rc1
   - Gauche v0.9.9
   - Gauche v0.9.8
   - Gauche v0.9.7
@@ -489,6 +499,7 @@
 - 2018-7-9   v0.6.1-mg0031 README修正のみ(Gauche v0.9.6 で動作確認)
 - 2019-12-20 v0.6.1-mg0032 Gauche v0.9.9 対応。libffi-3.2.1 を libffi-3.3 に更新
 - 2020-1-3   v0.6.1-mg0033 テストの変更(testsuite/cwrappertest.scm)
+- 2020-11-10 v0.6.1-mg0034 Gauche v0.9.10_rc1 対応。gcc v10.2.0 対応
 
 
-(2020-1-3)
+(2020-11-10)

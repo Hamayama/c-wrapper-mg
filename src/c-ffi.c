@@ -888,7 +888,7 @@ ScmObj Scm_FFIPrepClosure(ffi_cif *cif, ScmProcedure *proc)
     //ffi_status status = ffi_prep_closure(closure, cif, closure_func,
     //                                     (void*) proc);
     ffi_status status = ffi_prep_closure_loc(closure, cif, closure_func,
-                                         (void*) proc, closure);
+                                             (void*) proc, closure);
 
     SCM_RETURN(Scm_Values2(SCM_MAKE_INT(status), Scm_MakeFFIClosure(closure)));
 }

@@ -9,7 +9,8 @@
 (test-start "c-wrapper (include stdio.h)")
 (use c-wrapper)
 
-(c-include '("stdio.h" "unistd.h"))
+;; On MSYS2/MinGW-w64, "-D__USE_MINGW_ANSI_STDIO=0" option is required.
+(c-include '("stdio.h" "unistd.h") :option "-D__USE_MINGW_ANSI_STDIO=0")
 
 (test "printf & fprintf"
       '("Hello, world" "error!")

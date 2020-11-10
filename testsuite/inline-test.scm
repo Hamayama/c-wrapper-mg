@@ -9,8 +9,10 @@
 
 (c-load-library "libc")
 (c-load-library "./ffitest")
+
 ;; On MSYS2/MinGW-w64 (32bit), "-D_GCC_MAX_ALIGN_T" option is required.
-(c-include '("stdio.h" "stdlib.h" "./ffitest.h") :option "-D_GCC_MAX_ALIGN_T")
+;; On MSYS2/MinGW-w64, "-D__USE_MINGW_ANSI_STDIO=0" option is required.
+(c-include '("stdio.h" "stdlib.h" "./ffitest.h") :option "-D_GCC_MAX_ALIGN_T -D__USE_MINGW_ANSI_STDIO=0")
 
 (test "constant"
       1
