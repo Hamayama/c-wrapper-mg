@@ -12,7 +12,7 @@
   http://www.koguro.net/prog/c-wrapper/index-j.html  
   ただし、ソースコードは、  
   https://bitbucket.org/nkoguro/c-wrapper  
-  で最新と思われる c-wrapper v0.6.1 (ChangeLog 2012-07-19) (コミット 608d0bf) を  
+  で最新と思われる c-wrapper v0.6.1 (ChangeLog 2012-07-19) (コミット 608d0bf) を、  
   ダウンロードしてベースとしました。
 
 - もともと付属していた libffi は削除して、  
@@ -169,7 +169,8 @@
         SDL2 v2.0.7 で、マクロ名が `_SDL_cpuinfo_h` から `SDL_cpuinfo_h_` に変わったので対応。  
         SDL2 v2.0.7, SDL2_mixer v2.0.2 の音声不具合対策を追加。  
         (SDL2 v2.0.6 から音声再生に WASAPI を使うようになったが、うまく再生できなかった。  
-        このため、環境変数 SDL_AUDIODRIVER に directsound をセットすることで 元の動作に戻した)
+        このため、環境変数 SDL_AUDIODRIVER に directsound をセットすることで、  
+        元の動作に戻した)
     - テストの修正
       - testsuite/stdio-test_sub.scm  
         c-include のオプションを追加した。
@@ -186,9 +187,14 @@
         ダミーの float128 構造体を定義する方式に変更しました)
       - testsuite/stdio-test.scm, testsuite/stdio-test-sub.scm, testsuite/inline-test.scm  
         MSYS2/MinGW-w64 の gcc (v10.2.0) の stdio.h の更新により、  
-        printf() 等が使用できなくなっていたため対策した。  
+        printf 関数等が使用できなくなっていたため対策した。  
         -D__USE_MINGW_ANSI_STDIO=0 オプションを追加して、  
-        MSVCRT の printf() 等を使用するようにした。
+        MSVCRT の printf 関数等を使用するようにした。
+      - testsuite/ffitest.h  
+        MSYS2/MinGW-w64 の gcc (v10.2.0) の stdio.h の更新により、  
+        sscanf 関数が static 関数になっており、  
+        ffitest.h の inline 関数内で使用できなくなっていたため対策した。  
+        ffitest.h の inline 関数を static inline 関数に変更した。
 
 14. Gauche v0.9.9 対応
     - src/c-parser.c で使っていた Scm_RegExec 関数の引数の数が、  
@@ -499,7 +505,7 @@
 - 2018-7-9   v0.6.1-mg0031 README修正のみ(Gauche v0.9.6 で動作確認)
 - 2019-12-20 v0.6.1-mg0032 Gauche v0.9.9 対応。libffi-3.2.1 を libffi-3.3 に更新
 - 2020-1-3   v0.6.1-mg0033 テストの変更(testsuite/cwrappertest.scm)
-- 2020-11-10 v0.6.1-mg0034 Gauche v0.9.10_rc1 対応。gcc v10.2.0 対応
+- 2020-11-10 v0.6.1-mg0034 Gauche v0.9.10_rc1 対応 (gcc v10.2.0)
 
 
 (2020-11-10)
